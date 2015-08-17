@@ -5,19 +5,22 @@
 #include <GLFW/glfw3.h> //Include GLFW
 
 #include "Model.h"
+#include "GameModel.h"
 #include "GameModel2D.h"
 #include "GameModelLevel1.h"
 #include "GameModelLevel2.h"
 #include "View.h"
+#include "GameView.h"
 #include "GameView2D.h"
 #include "Controller.h"
 #include "GameController2D.h"
+#include "GameController.h"
 
 void main( void )
 {
-	Model* model = new GameModelLevel1();
-	View* view = new GameView2D(model);
-	Controller* controller = new GameController2D(model, view);
+	Model* model = new GameModel();
+	View* view = new GameView(model);
+	Controller* controller = new GameController(model, view);
 
 	// Initialize GLFW
 	if (!glfwInit()) exit(EXIT_FAILURE);

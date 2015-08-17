@@ -83,6 +83,15 @@
     <ClCompile Include="Source\GameModelLevel1.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameController.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameModel.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameView.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Geometry.h">
@@ -164,6 +173,15 @@
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameModelLevel2.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameController.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameModel.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameView.h">
       <Filter>MVC</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,10 +15,13 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
+    <ClCompile Include="Source\GameController.cpp" />
     <ClCompile Include="Source\GameController2D.cpp" />
+    <ClCompile Include="Source\GameModel.cpp" />
     <ClCompile Include="Source\GameModel2D.cpp" />
     <ClCompile Include="Source\GameModelLevel1.cpp" />
     <ClCompile Include="Source\GameModelLevel2.cpp" />
+    <ClCompile Include="Source\GameView.cpp" />
     <ClCompile Include="Source\GameView2D.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -40,10 +43,13 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Controller.h" />
+    <ClInclude Include="Source\GameController.h" />
     <ClInclude Include="Source\GameController2D.h" />
+    <ClInclude Include="Source\GameModel.h" />
     <ClInclude Include="Source\GameModel2D.h" />
     <ClInclude Include="Source\GameModelLevel1.h" />
     <ClInclude Include="Source\GameModelLevel2.h" />
+    <ClInclude Include="Source\GameView.h" />
     <ClInclude Include="Source\GameView2D.h" />
     <ClInclude Include="Source\Geometry.h" />
     <ClInclude Include="Source\Light.h" />
