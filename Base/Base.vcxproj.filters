@@ -83,15 +83,6 @@
     <ClCompile Include="Source\GameModelLevel1.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MenuModel.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MenuController.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MenuView.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Geometry.h">
@@ -166,9 +157,6 @@
     <ClInclude Include="Source\GameController2D.h">
       <Filter>MVC</Filter>
     </ClInclude>
-    <ClInclude Include="KeyBinds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MouseCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -176,15 +164,6 @@
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameModelLevel2.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MenuModel.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MenuController.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MenuView.h">
       <Filter>MVC</Filter>
     </ClInclude>
   </ItemGroup>

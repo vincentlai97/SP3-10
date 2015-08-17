@@ -1,5 +1,36 @@
-﻿Build started 14/8/2015 10:36:04 PM.
+﻿Build started 17/8/2015 10:44:02 AM.
+     1>Project "C:\Users\User\Documents\GitRepo\SP3-10\Base\Base.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Documents\GitRepo\SP3-10\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\User\Documents\GitRepo\SP3-10\Debug" /LIBPATH:"C:\Users\User\Documents\GitRepo\SP3-10\/glfw/lib-msvc100" /LIBPATH:"C:\Users\User\Documents\GitRepo\SP3-10\/glew/lib" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Base.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\User\Documents\GitRepo\SP3-10\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\User\Documents\GitRepo\SP3-10\Debug\Base.lib" /MACHINE:X86 Debug\Camera.obj
+         Debug\Camera3.obj
+         Debug\Character.obj
+         Debug\Controller.obj
+         Debug\GameController2D.obj
+         Debug\GameModel2D.obj
+         Debug\GameModelLevel1.obj
+         Debug\GameModelLevel2.obj
+         Debug\GameView2D.obj
+         Debug\LoadHmap.obj
+         Debug\LoadOBJ.obj
+         Debug\LoadTGA.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\Model.obj
+         Debug\MouseCharacter.obj
+         Debug\PlayerCharacter.obj
+         Debug\shader.obj
+         Debug\SpriteAnimation.obj
+         Debug\TileMap.obj
+         Debug\Utility.obj
+         Debug\View.obj
+     1>Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Base.vcxproj -> C:\Users\User\Documents\GitRepo\SP3-10\Debug\Base.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\User\Documents\GitRepo\SP3-10\Debug\Base.exe;#1" /manifest Debug\Base.exe.intermediate.manifest
+     1>Done Building Project "C:\Users\User\Documents\GitRepo\SP3-10\Base\Base.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.48
+Time Elapsed 00:00:00.36
