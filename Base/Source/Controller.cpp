@@ -6,6 +6,7 @@
 
 #include "timer.h"
 #include <map>
+bool Controller::ExitKey = false;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -64,7 +65,7 @@ StopWatch m_timer;
 void Controller::RunLoop()
 {
 	m_timer.startTimer();
-	while (!glfwWindowShouldClose(glfwGetCurrentContext()) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(glfwGetCurrentContext()) && !ExitKey)
 	{
 		// Get the elapsed time
 		m_dElapsedTime = m_timer.getElapsedTime();

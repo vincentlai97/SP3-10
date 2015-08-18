@@ -21,6 +21,7 @@ public:
 
 	virtual void Init();
 	virtual void RunLoop();
+	static bool ExitKey;
 };
 
 #endif

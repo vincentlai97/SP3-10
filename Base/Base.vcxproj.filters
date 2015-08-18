@@ -83,6 +83,15 @@
     <ClCompile Include="Source\GameModelLevel1.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MainMenuController.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainMenuModel.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainMenuView.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
     <ClCompile Include="Source\GameController.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
@@ -173,6 +182,24 @@
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameModelLevel2.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMenuController.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMenuModel.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMenuView.h">
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameController.h">
