@@ -1,6 +1,11 @@
 #include "GameView.h"
 
-GameView::GameView(Model *model) : View(model)
+#pragma comment(lib, "irrKlang.lib")
+using namespace irrklang;
+ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
+GameView::GameView(Model *model) : View(model) 
+, BGMusic(true)
 {
 }
 
@@ -20,6 +25,8 @@ void GameView::Render()
 
 	modelStack.PushMatrix(); {
 		RenderTileMap();
+		RenderPlayer();
+		RenderMusic();
 	} modelStack.PopMatrix();
 }
 
@@ -48,5 +55,34 @@ void GameView::RenderTileMap()
 		}
 	}
 }
-
 #undef tileMap
+
+#define player model->getPlayer()
+
+void GameView::RenderPlayer()
+{
+	GameModel* model = dynamic_cast<GameModel *>(m_model);
+
+	float mapOffset_x, mapOffset_y;
+	model->getOffset(mapOffset_x, mapOffset_y);
+
+	modelStack.Translate(0, 0, 1);
+	modelStack.PushMatrix(); {
+		modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
+		modelStack.Translate(player->getPosition());
+		modelStack.Translate(0.5, 0.5, 0);
+
+		RenderMesh(model->getPlayerMesh(), false, 6 * player->getSpriteState(), 6);
+	} modelStack.PopMatrix();
+}
+#undef player
+
+void GameView::RenderMusic()
+{
+	if (BGMusic)
+	{
+		BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
+		BGMusic = false;
+	}
+}
+	

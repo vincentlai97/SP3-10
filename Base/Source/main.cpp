@@ -3,7 +3,6 @@
 
 #include <GL/glew.h> //Include GLEW
 #include <GLFW/glfw3.h> //Include GLFW
-
 #include "Model.h"
 #include "MainMenuModel.h"
 #include "GameModel.h"
@@ -21,6 +20,7 @@
 
 void main( void )
 {
+	
 	Model* model = new GameModel();
 	View* view = new GameView(model);
 	Controller* controller = new GameController(model, view);

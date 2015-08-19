@@ -1,7 +1,7 @@
 #include "PlayerCharacter.h"
 
 PlayerCharacter::PlayerCharacter(Vector3 position, Mesh* sprite)
-: m_acceleration(0, -9.8, 0)
+: m_acceleration(0, 0, 0)
 , m_jumpState(NOT_JUMPING)
 , m_jumpHeight(0)
 , Character(position, sprite)
@@ -22,13 +22,6 @@ void PlayerCharacter::UpdateVelocity(double dt)
 		if (m_velocity.x > -0.1 && m_velocity.x < 0.1) m_velocity.x = 0;
 	}
 
-	if (m_jumpState == JUMPING)
-	{
-		m_acceleration.y += 30;
-	}
-	if (m_jumpHeight > 0.5 && m_jumpState == JUMPING)
-		m_jumpState = FALLING;
-
 	m_velocity += m_acceleration * dt;
 	m_velocity.x = Math::Clamp<float>(m_velocity.x, -MAX_SPEED, MAX_SPEED);
 	m_jumpHeight += m_velocity.y * dt;
@@ -42,7 +35,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 		position.x = floor(position.x + (1 - m_size.x));
 	else if (m_velocity.x > 0)
 		position.x = ceil(position.x - (1 - m_size.x));
-	if (tileMap->getTile(position.x, floor(position.y)) || tileMap->getTile(position.x, ceil(position.y)))
+	if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
 	{
 		m_position.x = position.x + (m_velocity.x < -0.0f ? m_size.x : -m_size.x);
 		m_velocity.x = 0;
@@ -54,11 +47,8 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 		position.y = floor(position.y);
 	else if (m_velocity.y > 0)
 		position.y = ceil(position.y);
-	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y))
+	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
 	{
-		if (m_velocity.y < 0) m_jumpState = NOT_JUMPING;
-		else if (m_velocity.y > 0) m_jumpState = FALLING;
-
 		m_position.y = position.y + (m_velocity.y < -0.0f ? 1 : -1);
 		m_velocity.y = 0;
 	}
@@ -116,7 +106,7 @@ void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 	UpdatePosition(dt, tileMap);
 	UpdateSprite();
 
-	m_acceleration.Set(0, -9.8, 0);
+	m_acceleration.Set(0, 0, 0);
 }
 
 void PlayerCharacter::moveUp()

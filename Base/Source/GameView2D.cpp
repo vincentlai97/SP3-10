@@ -39,7 +39,6 @@ void GameView2D::RenderBackground()
 
 		modelStack.PushMatrix(); {
 			modelStack.Translate(1, 0, 0);
-
 			RenderMesh(model->getBackgroundMesh(), false);
 		} modelStack.PopMatrix();
 	} modelStack.PopMatrix();

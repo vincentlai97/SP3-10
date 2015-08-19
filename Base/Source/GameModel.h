@@ -2,6 +2,7 @@
 #define GAMEMODEL_H
 
 #include "Model.h"
+#include "PlayerCharacter.h"
 
 #include "TileMap.h"
 
@@ -18,7 +19,16 @@ public:
 		MOVE_RIGHT,
 		NUM_COMMANDS,
 	};
+protected:
+	enum GEOMETRY_TYPE
+	{
+		PLAYER,
+		NUM_GEOMETRY,
+	};
 
+	Mesh* meshList[NUM_GEOMETRY];
+
+	PlayerCharacter *player;
 private:
 	Mesh *tile;
 
@@ -32,10 +42,14 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
+
 	virtual void setCommands(int command);
 
 	int getWorldWidth() { return worldWidth; }
 	int getWorldHeight() { return worldHeight; }
+
+	PlayerCharacter* getPlayer();
+	Mesh* getPlayerMesh();
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
