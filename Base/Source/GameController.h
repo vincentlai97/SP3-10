@@ -14,6 +14,7 @@ public:
 	GameController(Model* model, View* view);
 	~GameController();
 
+	bool keypressed;
 };
 
 #endif

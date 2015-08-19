@@ -65,7 +65,7 @@ StopWatch m_timer;
 void Controller::RunLoop()
 {
 	m_timer.startTimer();
-	while (!glfwWindowShouldClose(glfwGetCurrentContext()) && !ExitKey)
+	while (!glfwWindowShouldClose(glfwGetCurrentContext()) && !IsKeyPressed(VK_ESCAPE))
 	{
 		// Get the elapsed time
 		m_dElapsedTime = m_timer.getElapsedTime();

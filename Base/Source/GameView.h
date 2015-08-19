@@ -17,6 +17,7 @@ public:
 	void RenderTileMap();
 	void RenderPlayer();
 	void RenderMusic();
+	void RenderInventory();
 };
 
 #endif

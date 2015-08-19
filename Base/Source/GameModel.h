@@ -6,6 +6,8 @@
 
 #include "TileMap.h"
 
+#include "InventoryMenu.h"
+
 #define worldWidth 32
 #define worldHeight 24
 
@@ -17,6 +19,8 @@ public:
 		MOVE_DOWN,
 		MOVE_LEFT,
 		MOVE_RIGHT,
+		INVENT,
+		ACTION,
 		NUM_COMMANDS,
 	};
 protected:
@@ -36,6 +40,7 @@ private:
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
+	Mesh *Text;
 public:
 	GameModel();
 	~GameModel();
@@ -55,6 +60,8 @@ public:
 	TileMap* getTileMap();
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
+	Mesh* getTextMesh();
+	InventoryMenu inventory;
 };
 
 #endif

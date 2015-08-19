@@ -18,8 +18,5 @@ void GameController2D::Update()
 		model->setCommands(GameModel2D::COMMANDS::MOVE_DOWN);
 	if (IsKeyPressed('D'))
 		model->setCommands(GameModel2D::COMMANDS::MOVE_RIGHT);
-	if (IsKeyPressed(VK_SPACE))
-		model->setCommands(GameModel2D::COMMANDS::JUMP);
-
 	Controller::Update();
 }

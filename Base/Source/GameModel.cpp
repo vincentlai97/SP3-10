@@ -38,14 +38,51 @@ void GameModel::Init()
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
 	player = new PlayerCharacter(Vector3 (11, 11, 1));
+
+	Text = MeshBuilder::GenerateText("text",16,16);
+	Text->textureID[0] = LoadTGA("Image//Font.tga");
+
+	inventory.Init();
+
 }
 
 void GameModel::Update(double dt)
 {
-	if (commands[MOVE_UP]) player->moveUp();
-	if (commands[MOVE_DOWN]) player->moveDown();
-	if (commands[MOVE_LEFT]) player->moveLeft();
-	if (commands[MOVE_RIGHT]) player->moveRight();
+	if (commands[INVENT])
+	{
+		inventory.Update();
+	}
+
+	if (inventory.showInvent)
+	{
+		if (commands[MOVE_UP] && inventory.InvCount > 3)
+		{
+			inventory.MoveUp();
+		}
+		if (commands[MOVE_DOWN] && inventory.InvCount < 6)
+		{
+			inventory.MoveDown();
+		}
+		if (commands[MOVE_LEFT] && inventory.InvCount > 0)
+		{
+			inventory.MoveLeft();
+		}
+		if (commands[MOVE_RIGHT] && inventory.InvCount < 9)
+		{
+			inventory.MoveRight();
+		}
+		if (commands[ACTION])
+		{
+			inventory.inventory.UseItem(inventory.InvCount);
+		}
+	}
+	else
+	{
+		if (commands[MOVE_UP]) player->moveUp();
+		if (commands[MOVE_DOWN]) player->moveDown();
+		if (commands[MOVE_LEFT]) player->moveLeft();
+		if (commands[MOVE_RIGHT]) player->moveRight();
+	}
 
 	player->Update(dt, m_tileMap);
 
@@ -84,4 +121,9 @@ void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)
 {
 	mapOffset_x = m_mapOffset_x;
 	mapOffset_y = m_mapOffset_y;
+}
+
+Mesh *GameModel::getTextMesh()
+{
+	return Text;
 }
