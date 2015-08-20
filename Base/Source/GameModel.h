@@ -8,6 +8,8 @@
 
 #include "InventoryMenu.h"
 
+#include "AI.h"
+
 #define worldWidth 32
 #define worldHeight 24
 
@@ -120,6 +122,10 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
+
+
+	AI Aina;
+
 };
 
 #endif

@@ -18,6 +18,9 @@ public:
 	void RenderPlayer();
 	void RenderMusic();
 	void RenderInventory();
+
+	void RenderAI();
+
 };
 
 #endif

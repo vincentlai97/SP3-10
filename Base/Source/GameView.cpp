@@ -5,7 +5,7 @@ using namespace irrklang;
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 GameView::GameView(Model *model) : View(model) 
-, BGMusic(true)
+	, BGMusic(true)
 {
 }
 
@@ -29,6 +29,7 @@ void GameView::Render()
 		RenderMusic();
 		if(model->inventory.getInvent())
 			RenderInventory();
+		RenderAI();
 	} modelStack.PopMatrix();
 }
 
@@ -92,12 +93,13 @@ void GameView::RenderInventory()
 {
 	GameModel* model = dynamic_cast<GameModel *>(m_model);
 
-	modelStack.Translate(model->getWorldWidth() * 0.5 , model->getWorldHeight() * 0.5, 10);
+	modelStack.Translate(model->getWorldWidth() * 0.5 + 2, model->getWorldHeight() * 0.5, 10);
 	modelStack.PushMatrix(); 
 	{
+		//background
 		modelStack.PushMatrix(); 
-		modelStack.Translate(0,1.8,0);
-		modelStack.Scale(15,13,1);
+		modelStack.Translate(-4,1.8,0);
+		modelStack.Scale(22,13,1);
 		RenderMesh(model->inventory.getInventMesh(), false);
 		modelStack.PopMatrix();
 
@@ -105,34 +107,76 @@ void GameView::RenderInventory()
 		{
 			if(model->inventory.inventory.getItem(i)->getID() != -1 && model->inventory.inventory.getItem(i)->getCount() != 0)
 			{
+				//item mesh
 				modelStack.PushMatrix();
 				modelStack.Translate(model->inventory.InventPos[i].x,model->inventory.InventPos[i].y, 1);
 				modelStack.Scale(2,2,2);
 				RenderMesh(model->inventory.inventory.getItem(i)->getMesh(), false);
 				modelStack.PopMatrix();
 
+				//item count
 				modelStack.PushMatrix();
 				std::ostringstream ss;
 				ss << model->inventory.inventory.getItem(i)->getCount() ; 
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 540 - model->getWorldWidth() * 0.5 , model->inventory.InventPos[i].y + 480 - model->getWorldHeight() * 0.5 ,10);
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 570 - model->getWorldWidth() * 0.5 , model->inventory.InventPos[i].y + 480 - model->getWorldHeight() * 0.5 ,10);
 				modelStack.PopMatrix();
 			}
 			else
 				break;
 		}
-
+		// selector*
 		modelStack.PushMatrix();
 		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x,model->inventory.InventPos[model->inventory.InvCount].y, 2);
 		modelStack.Scale(2,2,2);
 		RenderMesh(model->inventory.getborderMesh(), false);
 		modelStack.PopMatrix();
+
+		//Item selected
+		if(model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-11.5,5, 2);
+			modelStack.Scale(4,4,4);
+			RenderMesh(model->inventory.inventory.getItem(model->inventory.InvCount)->getMesh(), false);
+			modelStack.PopMatrix();
+		}
+
 	} 
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	std::ostringstream ss1;
-	ss1 << model->inventory.inventory.getItem(model->inventory.InvCount)->getName() ; 
-	RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 60, 20,0 ,10);
-	modelStack.PopMatrix();
+	if(model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
+	{
+		//print name of item selected
+		modelStack.PushMatrix();
+		std::ostringstream ss1;
+		ss1 << model->inventory.inventory.getItem(model->inventory.InvCount)->getName() ; 
+		RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 22, 130,450,10);
+		modelStack.PopMatrix();
 
+		//print count of item selected
+		modelStack.PushMatrix();
+		std::ostringstream ss2;
+		ss2 << model->inventory.inventory.getItem(model->inventory.InvCount)->getCount() ; 
+		RenderTextOnScreen(model->getTextMesh(), ss2.str(), Color(1, 1, 0), 25, 200,420,10);
+		modelStack.PopMatrix();
+	}
+}
+
+void GameView::RenderAI()
+{
+	GameModel* model = dynamic_cast<GameModel *>(m_model);
+
+	float mapOffset_x, mapOffset_y;
+	model->getOffset(mapOffset_x, mapOffset_y);
+
+	modelStack.Translate(0, 0, 1);
+	modelStack.PushMatrix(); {
+		modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
+		modelStack.Translate(model->Aina.getPos().x,model->Aina.getPos().y,10);
+		modelStack.Translate(0.5, 0.5, 0);
+
+		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
+
+		RenderMesh(model->Aina.getMesh(), false);
+	} modelStack.PopMatrix();
 }

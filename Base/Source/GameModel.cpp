@@ -23,20 +23,6 @@ void GameModel::Init()
 	MeshPlayer();
 	ModelSwitch = 1;
 
-	for (int count = 0; count < BOX_TYPE::NUM_BOX; ++count)
-	{
-		meshBox[count] = new Mesh("null");
-		meshBox[count]->textureID[0] = 0;
-	}
-	MeshBox();
-
-	for (int count = 0; count < ITEM_TYPE::NUM_ITEM; ++count)
-	{
-		meshItem[count] = new Mesh("null");
-		meshItem[count]->textureID[0] = 0;
-	}
-	MeshItem();
-
 	tile = MeshBuilder::GenerateText("tiles", 32, 32);
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
@@ -56,6 +42,8 @@ void GameModel::Init()
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
 
 	inventory.Init();
+
+	Aina.Set(1,"WHY",Vector3(3,4,1));
 }
 
 void GameModel::MeshPlayer()
@@ -112,17 +100,6 @@ void GameModel::MeshPlayer()
 	meshPlayer[WITCH]->textureID[0] = LoadTGA("Image//Sprite//Model//WitchModel.tga");
 }
 
-void GameModel::MeshBox()
-{
-	meshPlayer[PLAYERB] = MeshBuilder::GenerateText("MainBoyModel", 4, 4);
-	meshPlayer[PLAYERB]->textureID[0] = LoadTGA("Image//Sprite//Model//MainBModel.tga");
-}
-
-void GameModel::MeshItem()
-{
-
-}
-
 void GameModel::Update(double dt)
 {
 	if (commands[INVENT])
@@ -155,11 +132,6 @@ void GameModel::Update(double dt)
 	}
 	else
 	{
-		if (commands[MOVE_UP]) player->moveUp();
-		if (commands[MOVE_DOWN]) player->moveDown();
-		if (commands[MOVE_LEFT]) player->moveLeft();
-		if (commands[MOVE_RIGHT]) player->moveRight();
-
 		if (commands[MODEL_UP])
 		{
 			ModelSwitch--;
@@ -173,9 +145,30 @@ void GameModel::Update(double dt)
 			if (ModelSwitch > 17)
 				ModelSwitch = 1;
 		}
+		
+		if (commands[MOVE_UP]) 
+		{
+			player->moveUp();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_DOWN])
+		{
+			player->moveDown();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_LEFT]) 
+		{
+			player->moveLeft();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_RIGHT])
+		{
+			player->moveRight();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+	
+		player->Update(dt, m_tileMap);
 	}
-
-	player->Update(dt, m_tileMap);
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
