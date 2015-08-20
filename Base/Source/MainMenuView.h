@@ -3,7 +3,9 @@
 #include "MainMenuModel.h"
 class CMainMenuView : public View
 {
+
 public:
+
 	CMainMenuView(Model* model = NULL);
 	~CMainMenuView();
 

@@ -23,11 +23,6 @@ void GameModel::Init()
 	MeshPlayer();
 	ModelSwitch = 1;
 
-	for (int count = 0; count < BOX_TYPE::NUM_BOX; ++count)
-	{
-		meshBox[count] = new Mesh("null");
-		meshBox[count]->textureID[0] = 0;
-	}
 	MeshBox();
 
 	for (int count = 0; count < ITEM_TYPE::NUM_ITEM; ++count)

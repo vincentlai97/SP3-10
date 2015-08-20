@@ -9,8 +9,13 @@ private:
 	void Update();
 	bool down;
 	int index;
+
 public:
+
 	CMainMenuController(Model* model, View* view);
 	~CMainMenuController();
+
+
+
 };
 
