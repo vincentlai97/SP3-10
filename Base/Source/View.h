@@ -78,7 +78,7 @@ public:
 
 	void RenderMesh(Mesh *mesh, bool lightEnabled, unsigned offset = 0, unsigned count = 0);
 	void Render2DMesh(Mesh *mesh, bool lightEnabled, unsigned offset = 0, unsigned count = 0);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y,float z =0);
 };
 
 #endif

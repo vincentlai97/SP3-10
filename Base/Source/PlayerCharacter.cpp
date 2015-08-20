@@ -1,7 +1,7 @@
 #include "PlayerCharacter.h"
 
 PlayerCharacter::PlayerCharacter(Vector3 position, Mesh* sprite)
-: m_acceleration(0, -9.8, 0)
+: m_acceleration(0, 0, 0)
 , m_jumpState(NOT_JUMPING)
 , m_jumpHeight(0)
 , Character(position, sprite)
@@ -22,13 +22,6 @@ void PlayerCharacter::UpdateVelocity(double dt)
 		if (m_velocity.x > -0.1 && m_velocity.x < 0.1) m_velocity.x = 0;
 	}
 
-	if (m_jumpState == JUMPING)
-	{
-		m_acceleration.y += 30;
-	}
-	if (m_jumpHeight > 0.5 && m_jumpState == JUMPING)
-		m_jumpState = FALLING;
-
 	m_velocity += m_acceleration * dt;
 	m_velocity.x = Math::Clamp<float>(m_velocity.x, -MAX_SPEED, MAX_SPEED);
 	m_jumpHeight += m_velocity.y * dt;
@@ -36,76 +29,90 @@ void PlayerCharacter::UpdateVelocity(double dt)
 
 void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 {
-	Vector3 position = m_position;
+	Vector3 position = m_VirtualPosition;
 	position.x += m_velocity.x * dt;
 	if (m_velocity.x < 0)
 		position.x = floor(position.x + (1 - m_size.x));
 	else if (m_velocity.x > 0)
 		position.x = ceil(position.x - (1 - m_size.x));
-	if (tileMap->getTile(position.x, floor(position.y)) || tileMap->getTile(position.x, ceil(position.y)))
+		
+	if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
 	{
-		m_position.x = position.x + (m_velocity.x < -0.0f ? m_size.x : -m_size.x);
+		m_VirtualPosition.x = position.x + (m_velocity.x < -0.0f ? m_size.x : -m_size.x);
 		m_velocity.x = 0;
 	}
 
-	position = m_position;
+	position = m_VirtualPosition;
 	position.y += m_velocity.y * dt;
 	if (m_velocity.y < 0)
 		position.y = floor(position.y);
 	else if (m_velocity.y > 0)
 		position.y = ceil(position.y);
-	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y))
+	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
 	{
-		if (m_velocity.y < 0) m_jumpState = NOT_JUMPING;
-		else if (m_velocity.y > 0) m_jumpState = FALLING;
-
-		m_position.y = position.y + (m_velocity.y < -0.0f ? 1 : -1);
+		m_VirtualPosition.y = position.y + (m_velocity.y < -0.0f ? 1 : -1);
 		m_velocity.y = 0;
 	}
 
 	m_position += m_velocity * dt;
+	float speed = 2;
+
+	if (m_VirtualPosition != m_position)
+	{
+		if (m_position.x < m_VirtualPosition.x)
+		{
+			m_position.x += speed * dt;
+			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+			m_spriteState %= WALKING_NUMFRAMES;
+			m_spriteState += WALKING_RIGHT;
+			if (m_position.x >= m_VirtualPosition.x)
+			{
+				m_position.x = m_VirtualPosition.x;
+				m_spriteState = IDLE_RIGHT;
+			}
+		}
+		else if (m_position.x > m_VirtualPosition.x)
+		{
+			m_position.x -= speed * dt;
+			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+			m_spriteState %= WALKING_NUMFRAMES;
+			m_spriteState += WALKING_LEFT;
+			if (m_position.x <= m_VirtualPosition.x)
+			{
+				m_position.x = m_VirtualPosition.x;
+				m_spriteState = IDLE_LEFT;
+			}
+		}
+		else if(m_position.y < m_VirtualPosition.y)
+		{
+			m_position.y += speed * dt;
+			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+			m_spriteState %= WALKING_NUMFRAMES;
+			m_spriteState += WALKING_UP;
+			if (m_position.y >= m_VirtualPosition.y)
+			{
+				m_position.y = m_VirtualPosition.y;
+				m_spriteState = IDLE_UP;
+			}
+		}
+		else if(m_position.y > m_VirtualPosition.y)
+		{
+			m_position.y -= speed * dt;
+			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+			m_spriteState %= WALKING_NUMFRAMES;
+			m_spriteState += WALKING_DOWN;
+			if (m_position.y <= m_VirtualPosition.y)
+			{
+				m_position.y = m_VirtualPosition.y;
+				m_spriteState = IDLE_DOWN;
+			}
+		}
+	}
 }
 
 void PlayerCharacter::UpdateSprite()
 {
-	if (m_jumpState == NOT_JUMPING)
-	{
-		if (m_acceleration.x < 0)
-		{
-			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
-			m_spriteState %= WALKING_NUMFRAMES;
-			m_spriteState += WALKING_LEFT;
-		}
-		else if (m_acceleration.x > 0)
-		{
-			m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
-			m_spriteState %= WALKING_NUMFRAMES;
-			m_spriteState += WALKING_RIGHT;
-		}
-		else
-		{
-			if (m_spriteState >= IDLE_LEFT && m_spriteState <= CROUCHING_LEFT)
-				m_spriteState = IDLE_LEFT;
-			else m_spriteState = IDLE_RIGHT;
-		}
-	}
-	else
-	{
-		if (m_acceleration.x < 0)
-		{
-			m_spriteState = JUMPING_LEFT;
-		}
-		else if (m_acceleration.x > 0)
-		{
-			m_spriteState = JUMPING_RIGHT;
-		}
-		else
-		{
-			if (m_spriteState >= IDLE_LEFT && m_spriteState <= CROUCHING_LEFT)
-				m_spriteState = JUMPING_LEFT;
-			else m_spriteState = JUMPING_RIGHT;
-		}
-	}
+	
 }
 
 void PlayerCharacter::Update(double dt, const TileMap *tileMap)
@@ -116,27 +123,27 @@ void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 	UpdatePosition(dt, tileMap);
 	UpdateSprite();
 
-	m_acceleration.Set(0, -9.8, 0);
+	m_acceleration.Set(0, 0, 0);
 }
 
 void PlayerCharacter::moveUp()
 {
-	m_acceleration.y += 5;
+	m_VirtualPosition.y += 1;
 }
 
 void PlayerCharacter::moveDown()
 {
-	m_acceleration.y -= 5;
+	m_VirtualPosition.y -= 1;
 }
 
 void PlayerCharacter::moveLeft()
 {
-	m_acceleration.x -= 5;
+	m_VirtualPosition.x -= 1;
 }
 
 void PlayerCharacter::moveRight()
 {
-	m_acceleration.x += 5;
+	m_VirtualPosition.x += 1;
 }
 
 void PlayerCharacter::jump()

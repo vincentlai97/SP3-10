@@ -6,6 +6,7 @@
 
 #include "timer.h"
 #include <map>
+bool Controller::ExitKey = false;
 
 //Define an error callback
 static void error_callback(int error, const char* description)

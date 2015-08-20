@@ -3,21 +3,24 @@
 
 #include <GL/glew.h> //Include GLEW
 #include <GLFW/glfw3.h> //Include GLFW
-
 #include "Model.h"
+#include "MainMenuModel.h"
 #include "GameModel.h"
 #include "GameModel2D.h"
 #include "GameModelLevel1.h"
 #include "GameModelLevel2.h"
 #include "View.h"
+#include "MainMenuView.h"
 #include "GameView.h"
 #include "GameView2D.h"
 #include "Controller.h"
+#include "MainMenuController.h"
 #include "GameController2D.h"
 #include "GameController.h"
 
 void main( void )
 {
+	
 	Model* model = new GameModel();
 	View* view = new GameView(model);
 	Controller* controller = new GameController(model, view);

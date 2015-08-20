@@ -239,7 +239,7 @@ void View::Render2DMesh(Mesh *mesh, bool lightEnabled, unsigned offset, unsigned
 	RenderMesh(mesh, lightEnabled, offset, count);
 }
 
-void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y,float z)
 {
 	if (!mesh || mesh->textureID <= 0)
 		return;
@@ -255,7 +255,7 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 0);
+	modelStack.Translate(x, y, z);
 	modelStack.Scale(size, size, size);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
