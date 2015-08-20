@@ -2,6 +2,8 @@
 #define GAMECONTROLLER_H
 
 #include "Controller.h"
+#include "GameModel.h"
+#include "GameView.h"
 
 class GameController : public Controller
 {

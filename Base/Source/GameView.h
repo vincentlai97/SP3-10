@@ -7,13 +7,13 @@
 class GameView : public View
 {
 private:
+	void RenderTileMap();
 
 public:
 	GameView(Model *model);
 	~GameView();
 
 	virtual void Render();
-	void RenderTileMap();
 
 };
 

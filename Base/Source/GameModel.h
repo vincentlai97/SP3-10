@@ -22,7 +22,7 @@ public:
 private:
 	Mesh *tile;
 
-	TileMap* m_tileMap;
+	TileMap *m_tileMap;
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -41,6 +41,15 @@ public:
 	TileMap* getTileMap();
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
+	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
+
+	Mesh* foo;
+	Vector3 pos1;
+	Vector3 pos2;
+
+	std::vector<int> floorTiles;
+
+	Mesh *shadow;
 };
 
 #endif
