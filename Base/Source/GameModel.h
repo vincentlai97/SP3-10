@@ -90,7 +90,7 @@ protected:
 private:
 	Mesh *tile;
 
-	TileMap* m_tileMap;
+	TileMap *m_tileMap;
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -101,7 +101,6 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-
 	virtual void setCommands(int command);
 
 	int getWorldWidth() { return worldWidth; }
@@ -120,6 +119,16 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
+	
+	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
+
+	Mesh* foo;
+	Vector3 pos1;
+	Vector3 pos2;
+
+	std::vector<int> floorTiles;
+
+	Mesh *shadow;
 };
 
 #endif
