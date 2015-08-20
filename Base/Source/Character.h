@@ -8,6 +8,7 @@
 class Character
 {
 protected:
+	Vector3 m_VirtualPosition;
 	Vector3 m_position;
 	Vector3 m_velocity;
 	Vector3 m_size;

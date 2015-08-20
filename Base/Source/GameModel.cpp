@@ -15,17 +15,30 @@ void GameModel::Init()
 {
 	Model::Init();
 
-	for (int count = 0; count < GEOMETRY_TYPE::NUM_GEOMETRY; ++count)
+	for (int count = 0; count < PLAYER_TYPE::NUM_PLAYER; ++count)
 	{
-		meshList[count] = new Mesh("null");
-		meshList[count]->textureID[0] = 0;
+		meshPlayer[count] = new Mesh("null");
+		meshPlayer[count]->textureID[0] = 0;
+	}	
+	MeshPlayer();
+	ModelSwitch = 1;
+
+	for (int count = 0; count < BOX_TYPE::NUM_BOX; ++count)
+	{
+		meshBox[count] = new Mesh("null");
+		meshBox[count]->textureID[0] = 0;
 	}
+	MeshBox();
+
+	for (int count = 0; count < ITEM_TYPE::NUM_ITEM; ++count)
+	{
+		meshItem[count] = new Mesh("null");
+		meshItem[count]->textureID[0] = 0;
+	}
+	MeshItem();
 
 	tile = MeshBuilder::GenerateText("tiles", 32, 32);
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
-
-	meshList[PLAYER] = MeshBuilder::GenerateText("player", 8, 16);
-	meshList[PLAYER]->textureID[0] = LoadTGA("Image//Player.tga");
 
 	m_tileMap = new TileMap();
 	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
@@ -43,6 +56,70 @@ void GameModel::Init()
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
 
 	inventory.Init();
+}
+
+void GameModel::MeshPlayer()
+{
+	meshPlayer[PLAYERB] = MeshBuilder::GenerateText("MainBoyModel", 4, 4);
+	meshPlayer[PLAYERB]->textureID[0] = LoadTGA("Image//Sprite//Model//MainBModel.tga");
+
+	meshPlayer[PLAYERG] = MeshBuilder::GenerateText("MainGirlModel", 4, 4);
+	meshPlayer[PLAYERG]->textureID[0] = LoadTGA("Image//Sprite//Model//MainGModel.tga");
+
+	meshPlayer[BUTLER] = MeshBuilder::GenerateText("ButlerModel", 4, 4);
+	meshPlayer[BUTLER]->textureID[0] = LoadTGA("Image//Sprite//Model//ButlerModel.tga");
+
+	meshPlayer[CAT] = MeshBuilder::GenerateText("CatModel", 4, 4);
+	meshPlayer[CAT]->textureID[0] = LoadTGA("Image//Sprite//Model//CatModel.tga");
+
+	meshPlayer[CHARO] = MeshBuilder::GenerateText("CharoModel", 4, 4);
+	meshPlayer[CHARO]->textureID[0] = LoadTGA("Image//Sprite//Model//CharoModel.tga");
+
+	meshPlayer[CLOWN] = MeshBuilder::GenerateText("ClownModel", 4, 4);
+	meshPlayer[CLOWN]->textureID[0] = LoadTGA("Image//Sprite//Model//ClownModel.tga");
+
+	meshPlayer[DARK] = MeshBuilder::GenerateText("DarkModel", 4, 4);
+	meshPlayer[DARK]->textureID[0] = LoadTGA("Image//Sprite//Model//DarkModel.tga");
+
+	meshPlayer[EYES] = MeshBuilder::GenerateText("EyesModel", 4, 4);
+	meshPlayer[EYES]->textureID[0] = LoadTGA("Image//Sprite//Model//EyesModel.tga");
+
+	meshPlayer[GLOW] = MeshBuilder::GenerateText("GlowModel", 4, 4);
+	meshPlayer[GLOW]->textureID[0] = LoadTGA("Image//Sprite//Model//GlowModel.tga");
+
+	meshPlayer[HORN] = MeshBuilder::GenerateText("HornModel", 4, 4);
+	meshPlayer[HORN]->textureID[0] = LoadTGA("Image//Sprite//Model//HornModel.tga");
+
+	meshPlayer[MAID] = MeshBuilder::GenerateText("MaidModel", 4, 4);
+	meshPlayer[MAID]->textureID[0] = LoadTGA("Image//Sprite//Model//MaidModel.tga");
+
+	meshPlayer[MASK] = MeshBuilder::GenerateText("MaskModel", 4, 4);
+	meshPlayer[MASK]->textureID[0] = LoadTGA("Image//Sprite//Model//MaskModel.tga");
+
+	meshPlayer[NOEYES] = MeshBuilder::GenerateText("NoEyesModel", 4, 4);
+	meshPlayer[NOEYES]->textureID[0] = LoadTGA("Image//Sprite//Model//NoEyesModel.tga");
+
+	meshPlayer[SHINIGAMI] = MeshBuilder::GenerateText("ShinigamiModel", 4, 4);
+	meshPlayer[SHINIGAMI]->textureID[0] = LoadTGA("Image//Sprite//Model//ShinigamiModel.tga");
+
+	meshPlayer[SKELETON] = MeshBuilder::GenerateText("SkeletonModel", 4, 4);
+	meshPlayer[SKELETON]->textureID[0] = LoadTGA("Image//Sprite//Model//SkeletonModel.tga");
+
+	meshPlayer[TURBAN] = MeshBuilder::GenerateText("TurbanModel", 4, 4);
+	meshPlayer[TURBAN]->textureID[0] = LoadTGA("Image//Sprite//Model//TurbanModel.tga");
+
+	meshPlayer[WITCH] = MeshBuilder::GenerateText("WitchModel", 4, 4);
+	meshPlayer[WITCH]->textureID[0] = LoadTGA("Image//Sprite//Model//WitchModel.tga");
+}
+
+void GameModel::MeshBox()
+{
+	meshPlayer[PLAYERB] = MeshBuilder::GenerateText("MainBoyModel", 4, 4);
+	meshPlayer[PLAYERB]->textureID[0] = LoadTGA("Image//Sprite//Model//MainBModel.tga");
+}
+
+void GameModel::MeshItem()
+{
 
 }
 
@@ -82,6 +159,20 @@ void GameModel::Update(double dt)
 		if (commands[MOVE_DOWN]) player->moveDown();
 		if (commands[MOVE_LEFT]) player->moveLeft();
 		if (commands[MOVE_RIGHT]) player->moveRight();
+
+		if (commands[MODEL_UP])
+		{
+			ModelSwitch--;
+			if (ModelSwitch < 1)
+				ModelSwitch = 17;
+		}
+
+		if (commands[MODEL_DOWN])
+		{
+			ModelSwitch++;
+			if (ModelSwitch > 17)
+				ModelSwitch = 1;
+		}
 	}
 
 	player->Update(dt, m_tileMap);
@@ -114,7 +205,74 @@ PlayerCharacter* GameModel::getPlayer()
 
 Mesh* GameModel::getPlayerMesh()
 {
-	return meshList[PLAYER];
+	if (ModelSwitch == 1)
+	{
+		return meshPlayer[PLAYERB];
+	}
+	else if (ModelSwitch == 2)
+	{
+		return meshPlayer[PLAYERG];
+	}
+	else if (ModelSwitch == 3)
+	{
+		return meshPlayer[BUTLER];
+	}
+	else if (ModelSwitch == 4)
+	{
+		return meshPlayer[CAT];
+	}
+	else if (ModelSwitch == 5)
+	{
+		return meshPlayer[CHARO];
+	}
+	else if (ModelSwitch == 6)
+	{
+		return meshPlayer[CLOWN];
+	}
+	else if (ModelSwitch == 7)
+	{
+		return meshPlayer[DARK];
+	}
+	else if (ModelSwitch == 8)
+	{
+		return meshPlayer[EYES];
+	}
+	else if (ModelSwitch == 9)
+	{
+		return meshPlayer[GLOW];
+	}
+	else if (ModelSwitch == 10)
+	{
+		return meshPlayer[HORN];
+	}
+	else if (ModelSwitch == 11)
+	{
+		return meshPlayer[MAID];
+	}
+	else if (ModelSwitch == 12)
+	{
+		return meshPlayer[MASK];
+	}
+	else if (ModelSwitch == 13)
+	{
+		return meshPlayer[NOEYES];
+	}
+	else if (ModelSwitch == 14)
+	{
+		return meshPlayer[SHINIGAMI];
+	}
+	else if (ModelSwitch == 15)
+	{
+		return meshPlayer[SKELETON];
+	}
+	else if (ModelSwitch == 16)
+	{
+		return meshPlayer[TURBAN];
+	}
+	else if (ModelSwitch == 17)
+	{
+		return meshPlayer[WITCH];
+	}
 }
 
 void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)

@@ -1,7 +1,8 @@
 #include "Character.h"
 
 Character::Character(Vector3 position, Mesh* sprite)
-: m_position(position)
+: m_VirtualPosition(position)
+, m_position(position)
 , m_velocity(0, 0, 0)
 , m_size(0, 0, 0)
 , m_sprite(sprite)
