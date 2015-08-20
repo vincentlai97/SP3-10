@@ -5,6 +5,7 @@ PlayerCharacter::PlayerCharacter(Vector3 position, Mesh* sprite)
 , m_jumpState(NOT_JUMPING)
 , m_jumpHeight(0)
 , Character(position, sprite)
+, move(false)
 {
 	m_size = SMALLSIZE;
 }
@@ -44,6 +45,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 
 	if (m_VirtualPosition != m_position)
 	{
+		move = true;
 		if (m_position.x < m_VirtualPosition.x)
 		{
 			m_position.x += speed * dt;
@@ -54,6 +56,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 			{
 				m_position.x = m_VirtualPosition.x;
 				m_spriteState = IDLE_RIGHT;
+				move = false;
 			}
 		}
 		else if (m_position.x > m_VirtualPosition.x)
@@ -66,6 +69,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 			{
 				m_position.x = m_VirtualPosition.x;
 				m_spriteState = IDLE_LEFT;
+				move = false;
 			}
 		}
 		else if(m_position.y < m_VirtualPosition.y)
@@ -78,6 +82,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 			{
 				m_position.y = m_VirtualPosition.y;
 				m_spriteState = IDLE_UP;
+				move = false;
 			}
 		}
 		else if(m_position.y > m_VirtualPosition.y)
@@ -90,6 +95,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 			{
 				m_position.y = m_VirtualPosition.y;
 				m_spriteState = IDLE_DOWN;
+				move = false;
 			}
 		}
 	}
@@ -138,4 +144,9 @@ void PlayerCharacter::jump()
 		m_jumpState = JUMPING;
 		m_jumpHeight = 0;
 	}
+}
+
+bool PlayerCharacter::getMove()
+{
+	return move;
 }

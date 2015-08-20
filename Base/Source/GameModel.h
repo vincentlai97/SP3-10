@@ -40,39 +40,18 @@ protected:
 		EYES,
 		GLOW,
 		HORN,
-		MAID,
 		MASK,
 		NOEYES,
-		SHINIGAMI,
 		SKELETON,
 		TURBAN,
 		WITCH,
+
+		MAID,
+		SHINIGAMI,
 		NUM_PLAYER,
 	};
 	Mesh* meshPlayer[NUM_PLAYER];
 	int ModelSwitch;
-
-	enum BOX_TYPE{
-		PLAYERB_BOX,
-		PLAYERG_BOX,
-		BUTLER_BOX,
-		CAT_BOX,
-		CHARO_BOX,
-		CLOWN_BOX,
-		DARK_BOX,
-		EYES_BOX,
-		GLOW_BOX,
-		HORN_BOX,
-		MAID_BOX,
-		MASK_BOX,
-		NOEYES_BOX,
-		SHINIGAMI_BOX,
-		SKELETON_BOX,
-		TURBAN_BOX,
-		WITCH_BOX,
-		NUM_BOX,
-	};
-	Mesh* meshBox[NUM_BOX];
 
 	enum ITEM_TYPE{
 		GOLD_KEY,
