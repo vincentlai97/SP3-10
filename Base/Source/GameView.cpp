@@ -191,8 +191,6 @@ void GameView::RenderAI()
 		modelStack.Translate(model->Aina.getPos().x,model->Aina.getPos().y,10);
 		modelStack.Translate(0.5, 0.5, 0);
 
-		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
-
 		RenderMesh(model->Aina.getMesh(), false);
 	} modelStack.PopMatrix();
 }

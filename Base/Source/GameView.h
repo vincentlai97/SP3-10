@@ -20,6 +20,8 @@ public:
 	GameView(Model *model);
 	~GameView();
 
+	GameModel *model;
+
 	virtual void Render();
 
 };

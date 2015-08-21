@@ -180,3 +180,40 @@ void PlayerCharacter::idleRight()
 {
 	m_spriteState = IDLE_RIGHT;
 }
+
+bool PlayerCharacter::PlayerDirUp()
+{
+	if (m_spriteState == IDLE_UP)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+bool PlayerCharacter::PlayerDirDown()
+{
+	if (m_spriteState == IDLE_DOWN)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+bool PlayerCharacter::PlayerDirLeft()
+{
+	if (m_spriteState == IDLE_LEFT)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+bool PlayerCharacter::PlayerDirRight()
+{
+	if (m_spriteState == IDLE_RIGHT)
+	{
+		return true;
+	}
+	else
+		return false;
+}

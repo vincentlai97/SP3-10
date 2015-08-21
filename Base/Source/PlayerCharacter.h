@@ -64,6 +64,11 @@ public:
 	void idleRight();
 
 	bool getMove();
+
+	bool PlayerDirUp();
+	bool PlayerDirDown();
+	bool PlayerDirLeft();
+	bool PlayerDirRight();
 };
 
 #endif

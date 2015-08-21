@@ -71,7 +71,9 @@ public:
 	View(Model* model) : m_model(model) {}
 
 	bool createWindow(const int &window_width, const int &window_height, const char *window_title, GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
+	
 	GLFWwindow* getWindow() { return m_window; }
+	GLFWwindow* setWindow();
 
 	virtual void Init();
 	virtual void Render();

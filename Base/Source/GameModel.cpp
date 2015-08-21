@@ -69,6 +69,7 @@ void GameModel::Init()
 	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
 	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
 
+	PlaceItemState = false;
 }
 
 void GameModel::MeshPlayer()
@@ -174,8 +175,42 @@ void GameModel::Update(double dt)
 				ModelSwitch = 1;
 
 			inventory.inventory.UseItem(inventory.InvCount);
+
+			inventory.showInvent = false;
+
+			PlaceItemState = true;
 		}
 	}
+	else if (PlaceItemState == true)
+	{
+
+		if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+		{
+
+			m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID());
+			PlaceItemState = false;
+		}
+		else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+		{
+			m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID());
+			PlaceItemState = false;
+
+		}
+		else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+		{
+			m_itemMap->SetTile(player->getPosition().x -1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID());
+			PlaceItemState = false;
+
+		}
+		else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+		{
+			m_itemMap->SetTile(player->getPosition().x +1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID());
+			PlaceItemState = false;
+
+		}
+	}
+
+
 	else
 	{
 		if (commands[MODEL_UP])
@@ -236,6 +271,7 @@ void GameModel::Update(double dt)
 			inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
 			player->RemoveItem(m_itemMap);
 		}
+
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)

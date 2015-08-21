@@ -80,6 +80,10 @@ private:
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
+	bool PlaceItemState;
+
+	int up, down, left, right;
+
 	Mesh *Text;
 public:
 	GameModel();
@@ -118,7 +122,7 @@ public:
 	std::vector<int> floorTiles;
 
 	Mesh *shadow;
-	
+
 	AI Aina;
 };
 
