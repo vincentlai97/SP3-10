@@ -48,6 +48,9 @@ public:
 
 	void Update(double dt, const TileMap *tileMap);
 
+	int TouchItem(const TileMap *tileMap);
+	void RemoveItem(const TileMap *tileMap);
+
 	void moveUp();
 	void moveDown();
 	void moveLeft();

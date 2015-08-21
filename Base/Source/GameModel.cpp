@@ -168,6 +168,12 @@ void GameModel::Update(double dt)
 		}
 	
 		player->Update(dt, m_tileMap);
+
+		if(player->TouchItem(m_tileMap) > -1 && player->TouchItem(m_tileMap) < 4)
+		{
+			inventory.inventory.AddToInvent(player->TouchItem(m_tileMap));
+			player->RemoveItem(m_tileMap);
+		}
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)

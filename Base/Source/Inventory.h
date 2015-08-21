@@ -8,11 +8,6 @@ class Inventory
 {
 private:
 	Item * PlayerInventory[10];
-
-	Item DefaultItem[4];
-
-	Mesh* meshlist[4];
-
 public:
 
 	enum ITEM
@@ -26,6 +21,9 @@ public:
 
 	Inventory(void);
 	~Inventory(void);
+
+	Item DefaultItem[4];
+	Mesh* meshlist[4];
 
 	void Init();
 

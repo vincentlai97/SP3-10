@@ -52,7 +52,9 @@ void GameView::RenderTileMap()
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
-				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y))
+				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < 4 && tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
+					RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()] , false);
+				else if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y))
 					RenderMesh(model->getTileMesh(), false, 6 * tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y), 6);
 			} modelStack.PopMatrix();
 		}
@@ -140,7 +142,6 @@ void GameView::RenderInventory()
 			RenderMesh(model->inventory.inventory.getItem(model->inventory.InvCount)->getMesh(), false);
 			modelStack.PopMatrix();
 		}
-
 	} 
 	modelStack.PopMatrix();
 

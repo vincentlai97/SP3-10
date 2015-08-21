@@ -66,6 +66,11 @@ int TileMap::getTile(unsigned col, unsigned row) const
 	return m_tileMap[col][row];
 }
 
+void TileMap::SetTile(unsigned col, unsigned row,int num) const
+{
+	m_tileMap[col][row] = num;
+}
+
 unsigned TileMap::getMapWidth() const
 {
 	return m_mapWidth;

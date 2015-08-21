@@ -23,6 +23,7 @@ public:
 	bool LoadMap(const std::string& mapName);
 
 	int getTile(unsigned col, unsigned row) const;
+	void SetTile(unsigned col, unsigned row,int num) const;
 
 	unsigned getMapWidth() const;
 	unsigned getMapHeight() const;

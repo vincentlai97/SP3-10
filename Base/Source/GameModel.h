@@ -93,6 +93,7 @@ private:
 	Mesh *tile;
 
 	TileMap* m_tileMap;
+
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -118,6 +119,7 @@ public:
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
+
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
 	Mesh* getTextMesh();

@@ -84,6 +84,11 @@ bool Inventory::UseItem(int num)
 			for(int i = 0 ; PlayerInventory[num+i]->getID() != -1 ; i++)
 			{
 				PlayerInventory[num+i] = PlayerInventory[num+i+1];
+
+				if(PlayerInventory[num+i+1]->getID() == -1)
+				{
+					PlayerInventory[num+i] = new Item();
+				}
 			}
 		}
 

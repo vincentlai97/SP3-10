@@ -24,7 +24,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	Vector3 position = m_position;
 	position.x += m_velocity.x ;
 	
-	if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
+	if (tileMap->getTile(position.x, floor(position.y)) > 4 || tileMap->getTile(position.x, ceil(position.y)) > 4)
 	{
 		m_velocity.x = 0;
 	}
@@ -32,11 +32,11 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	position = m_position;
 	position.y += m_velocity.y;
 	
-	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
+	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 4 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 4)
 	{
 		m_velocity.y = 0;
 	}
-
+	
 	m_position += m_velocity * dt;
 	m_VirtualPosition += m_velocity;
 
@@ -94,21 +94,16 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 		}
 	}
 	
+	UpdateVelocity(dt);
 }
 
 void PlayerCharacter::UpdateSprite()
 {
-
 }
 
 void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 {
-	Character::Update(dt, tileMap);
-
 	UpdatePosition(dt, tileMap);
-	UpdateVelocity(dt);
-	UpdateSprite();
-
 }
 
 void PlayerCharacter::moveUp()
@@ -138,4 +133,14 @@ void PlayerCharacter::jump()
 		m_jumpState = JUMPING;
 		m_jumpHeight = 0;
 	}
+}
+
+int PlayerCharacter::TouchItem(const TileMap *tileMap)
+{
+	return tileMap->getTile(m_position.x, floor(m_position.y));
+}
+
+void PlayerCharacter::RemoveItem(const TileMap *tileMap)
+{
+	tileMap->SetTile(m_position.x, floor(m_position.y),-1);
 }
