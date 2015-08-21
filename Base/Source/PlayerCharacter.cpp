@@ -41,7 +41,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	m_position += m_velocity * dt;
 	m_VirtualPosition += m_velocity;
 
-	float speed = 2;
+	float speed = 3;
 
 	if (m_VirtualPosition != m_position)
 	{
@@ -58,6 +58,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 				m_spriteState = IDLE_RIGHT;
 				move = false;
 			}
+
 		}
 		else if (m_position.x > m_VirtualPosition.x)
 		{

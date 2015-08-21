@@ -52,7 +52,7 @@ void Controller::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-	view->createWindow(1024, 800, "Scene");
+	view->createWindow(1280, 800, "Scene",glfwGetPrimaryMonitor());
 }
 
 const unsigned char FPS = 60; // FPS of this game

@@ -26,7 +26,7 @@ void GameView::Render()
 	modelStack.PushMatrix(); {
 		RenderTileMap();
 		RenderPlayer();
-		RenderMusic();
+		//RenderMusic();
 		if(model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
