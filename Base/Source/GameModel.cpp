@@ -23,12 +23,25 @@ void GameModel::Init()
 	MeshPlayer();
 	ModelSwitch = 1;
 
+	MeshBox();
+
+	for (int count = 0; count < ITEM_TYPE::NUM_ITEM; ++count)
+	{
+		meshItem[count] = new Mesh("null");
+		meshItem[count]->textureID[0] = 0;
+	}
+	MeshItem();
+
 	tile = MeshBuilder::GenerateText("tiles", 32, 32);
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
 	m_tileMap = new TileMap();
 	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
 	m_tileMap->LoadMap("Image//map.csv");
+
+	m_itemMap = new TileMap();
+	m_itemMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_itemMap->LoadMap("Image//ItemMap.csv");
 
 	commands = new bool[NUM_COMMANDS];
 	for (int count = 0; count < NUM_COMMANDS; ++count)
@@ -41,9 +54,21 @@ void GameModel::Init()
 	Text = MeshBuilder::GenerateText("text",16,16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
 
+	floorTiles.push_back(112);
+	floorTiles.push_back(309);
+	floorTiles.push_back(402);
+	floorTiles.push_back(405);
+
+	shadow = MeshBuilder::GenerateQuad("shadow", Color());
+	shadow->textureID[0] = LoadTGA("Image//shadow.tga");
+
 	inventory.Init();
 
 	Aina.Set(1,"WHY",Vector3(3,4,1));
+
+	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
+	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
+
 }
 
 void GameModel::MeshPlayer()
@@ -100,6 +125,18 @@ void GameModel::MeshPlayer()
 	meshPlayer[WITCH]->textureID[0] = LoadTGA("Image//Sprite//Model//WitchModel.tga");
 }
 
+void GameModel::MeshBox()
+{
+	meshPlayer[PLAYERB] = MeshBuilder::GenerateText("MainBoyModel", 4, 4);
+	meshPlayer[PLAYERB]->textureID[0] = LoadTGA("Image//Sprite//Model//MainBModel.tga");
+}
+
+void GameModel::MeshItem()
+{
+}
+
+bool b_buttonDown = false;
+
 void GameModel::Update(double dt)
 {
 	if (commands[INVENT])
@@ -127,6 +164,15 @@ void GameModel::Update(double dt)
 		}
 		if (commands[ACTION])
 		{
+			if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 4 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 18)
+				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+
+			if (ModelSwitch < 1)
+				ModelSwitch = 15;
+
+			if (ModelSwitch > 15)
+				ModelSwitch = 1;
+
 			inventory.inventory.UseItem(inventory.InvCount);
 		}
 	}
@@ -146,39 +192,38 @@ void GameModel::Update(double dt)
 				ModelSwitch = 1;
 		}
 		
-		if (commands[MOVE_UP]) 
+		if (commands[MOVE_UP] && !player->getMove()) 
 		{
 			player->moveUp();
 			Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_DOWN])
+		if (commands[MOVE_DOWN] && !player->getMove())
 		{
 			player->moveDown();
 			Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_LEFT]) 
+		if (commands[MOVE_LEFT] && !player->getMove()) 
 		{
 			player->moveLeft();
 			Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_RIGHT])
+		if (commands[MOVE_RIGHT] && !player->getMove())
 		{
 			player->moveRight();
 			Aina.Update(player->getPosition(),m_tileMap);
 		}
-	
+		
 		player->Update(dt, m_tileMap);
 
-		if(player->TouchItem(m_tileMap) > -1 && player->TouchItem(m_tileMap) < 4)
+		if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
 		{
-			inventory.inventory.AddToInvent(player->TouchItem(m_tileMap));
-			player->RemoveItem(m_tileMap);
+			inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
+			player->RemoveItem(m_itemMap);
 		}
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
-
 }
 
 Mesh *GameModel::getTileMesh()
@@ -195,6 +240,11 @@ void GameModel::setCommands(int command)
 TileMap* GameModel::getTileMap()
 {
 	return m_tileMap;
+}
+
+TileMap* GameModel::getItemMap()
+{
+	return m_itemMap;
 }
 
 PlayerCharacter* GameModel::getPlayer()
@@ -246,31 +296,32 @@ Mesh* GameModel::getPlayerMesh()
 	}
 	else if (ModelSwitch == 11)
 	{
-		return meshPlayer[MAID];
+		return meshPlayer[MASK];
 	}
 	else if (ModelSwitch == 12)
 	{
-		return meshPlayer[MASK];
+		return meshPlayer[NOEYES];
 	}
 	else if (ModelSwitch == 13)
 	{
-		return meshPlayer[NOEYES];
+		return meshPlayer[SKELETON];
 	}
 	else if (ModelSwitch == 14)
 	{
-		return meshPlayer[SHINIGAMI];
+		return meshPlayer[TURBAN];
 	}
 	else if (ModelSwitch == 15)
 	{
-		return meshPlayer[SKELETON];
+		return meshPlayer[WITCH];
 	}
+
 	else if (ModelSwitch == 16)
 	{
-		return meshPlayer[TURBAN];
+		return meshPlayer[MAID];
 	}
 	else if (ModelSwitch == 17)
 	{
-		return meshPlayer[WITCH];
+		return meshPlayer[SHINIGAMI];
 	}
 }
 
@@ -278,6 +329,56 @@ void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)
 {
 	mapOffset_x = m_mapOffset_x;
 	mapOffset_y = m_mapOffset_y;
+}
+
+bool GameModel::checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap)
+{
+	if (point == target) return true;
+	Vector3 view = (target - point).Normalized();
+	if (view.x < 0)
+	{
+		point += target;
+		target = point - target;
+		point -= target;
+		(view = target - point).Normalize();
+	}
+
+	Vector3 temp(point);
+	/*float diff_x = ceil(temp.x) - temp.x;
+	temp.x = ceil(temp.x);
+	temp.y += view.y * diff_x * (1 / view.x);*/
+	while (temp.x < floor(target.x))
+	{
+		if (temp.y - (int) temp.y)
+		if (tileMap->getTile(temp.x, floor(temp.y)) > 0)
+			return false;
+		++temp.x;
+		temp.y += view.y * (1 / view.x);
+	}
+
+	view = (target - point).Normalized();
+	if (view.y < 0)
+	{
+		point += target;
+		target = point - target;
+		point -= target;
+		(view = target - point).Normalize();
+	}
+
+	temp = point;
+	/*float diff_y = ceil(temp.y) - temp.y;
+	temp.y = ceil(temp.y);
+	temp.x += view.x * diff_y * (1 / view.y);*/
+	while (temp.y < floor(target.y))
+	{
+		if (temp.x - (int)temp.x)
+		if (tileMap->getTile(floor(temp.x), temp.y) > 0)
+			return false;
+		++temp.y;
+		temp.x += view.x * (1 / view.y);
+	}
+
+	return true;
 }
 
 Mesh *GameModel::getTextMesh()

@@ -9,17 +9,18 @@ class GameView : public View
 {
 private:
 	bool BGMusic;
+	
+	void RenderTileMap();
+	void RenderPlayer();
+	void RenderMusic();
+	void RenderInventory();
+	void RenderAI();
+
 public:
 	GameView(Model *model);
 	~GameView();
 
 	virtual void Render();
-	void RenderTileMap();
-	void RenderPlayer();
-	void RenderMusic();
-	void RenderInventory();
-
-	void RenderAI();
 
 };
 

@@ -40,39 +40,17 @@ protected:
 		EYES,
 		GLOW,
 		HORN,
-		MAID,
 		MASK,
 		NOEYES,
-		SHINIGAMI,
 		SKELETON,
 		TURBAN,
 		WITCH,
+		MAID,
+		SHINIGAMI,
 		NUM_PLAYER,
 	};
 	Mesh* meshPlayer[NUM_PLAYER];
 	int ModelSwitch;
-
-	enum BOX_TYPE{
-		PLAYERB_BOX,
-		PLAYERG_BOX,
-		BUTLER_BOX,
-		CAT_BOX,
-		CHARO_BOX,
-		CLOWN_BOX,
-		DARK_BOX,
-		EYES_BOX,
-		GLOW_BOX,
-		HORN_BOX,
-		MAID_BOX,
-		MASK_BOX,
-		NOEYES_BOX,
-		SHINIGAMI_BOX,
-		SKELETON_BOX,
-		TURBAN_BOX,
-		WITCH_BOX,
-		NUM_BOX,
-	};
-	Mesh* meshBox[NUM_BOX];
 
 	enum ITEM_TYPE{
 		GOLD_KEY,
@@ -91,9 +69,10 @@ protected:
 	PlayerCharacter *player;
 private:
 	Mesh *tile;
-
+	
 	TileMap* m_tileMap;
-
+	TileMap* m_itemMap;
+	
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -104,7 +83,6 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-
 	virtual void setCommands(int command);
 
 	int getWorldWidth() { return worldWidth; }
@@ -120,14 +98,24 @@ public:
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
 
+	TileMap* getItemMap();
+
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
+	
+	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
 
+	Mesh* foo;
+	Vector3 pos1;
+	Vector3 pos2;
 
+	std::vector<int> floorTiles;
+
+	Mesh *shadow;
+	
 	AI Aina;
-
 };
 
 #endif

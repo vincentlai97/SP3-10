@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AI.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Character.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="MainMenuController.h" />
     <ClInclude Include="MainMenuModel.h" />
     <ClInclude Include="MainMenuView.h" />
+    <ClInclude Include="Source\AI.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Character.h" />

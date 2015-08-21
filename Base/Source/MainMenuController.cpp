@@ -6,9 +6,8 @@ CMainMenuController::CMainMenuController(Model* model, View* view) : Controller(
 , index(0)
 
 {
+
 }
-
-
 CMainMenuController::~CMainMenuController()
 {
 }
@@ -35,9 +34,10 @@ void CMainMenuController::Update()
 	{
 		down = true;
 	}
-	if (IsKeyPressed(VK_RETURN) && index == 2)
+
+	if (IsKeyPressed(VK_RETURN) )
 	{
-		Controller::ExitKey = true;
+		throw index;
 	}
 		
 	Controller::Update();

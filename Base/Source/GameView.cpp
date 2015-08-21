@@ -5,7 +5,7 @@ using namespace irrklang;
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 GameView::GameView(Model *model) : View(model) 
-	, BGMusic(true)
+, BGMusic(true)
 {
 }
 
@@ -34,6 +34,7 @@ void GameView::Render()
 }
 
 #define tileMap model->getTileMap()
+#define itemMap model->getItemMap()
 
 void GameView::RenderTileMap()
 {
@@ -43,19 +44,33 @@ void GameView::RenderTileMap()
 	model->getOffset(mapOffset_x, mapOffset_y);
 
 	modelStack.Translate(0, 0, 1);
+		static int seed = rand();
+	srand(seed);
 	for (int ccount = 0; ccount < tileMap->getNumOfTilesWidth() + 1; ++ccount)
 	{
 		for (int rcount = 0; rcount < tileMap->getNumOfTilesHeight() + 1; ++rcount)
 		{
 			modelStack.PushMatrix(); {
-				modelStack.Translate(-(mapOffset_x - (int)mapOffset_x), -(mapOffset_y - (int)mapOffset_y), 0);
+				modelStack.Translate(int(-(mapOffset_x - (int)mapOffset_x)), int(-(mapOffset_y - (int)mapOffset_y)), 0);
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
-				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < 4 && tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
-					RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()] , false);
-				else if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y))
+				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) >= 0)
 					RenderMesh(model->getTileMesh(), false, 6 * tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y), 6);
+				else
+				{
+					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6);
+					if (model->checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap) == 0)
+					{
+						modelStack.Translate(0, 0, 1);
+						RenderMesh(model->shadow, false);
+					}
+				}
+				
+				modelStack.Translate(0,0,1);
+				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM && itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
+					RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()] , false);
+
 			} modelStack.PopMatrix();
 		}
 	}
@@ -120,7 +135,7 @@ void GameView::RenderInventory()
 				modelStack.PushMatrix();
 				std::ostringstream ss;
 				ss << model->inventory.inventory.getItem(i)->getCount() ; 
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 570 - model->getWorldWidth() * 0.5 , model->inventory.InventPos[i].y + 480 - model->getWorldHeight() * 0.5 ,10);
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 570 - model->getWorldWidth() * 0.5 , model->inventory.InventPos[i].y * 37 + 370 - model->getWorldHeight() * 0.5 ,10);
 				modelStack.PopMatrix();
 			}
 			else

@@ -6,32 +6,51 @@
 
 class Inventory
 {
-private:
-	Item * PlayerInventory[10];
 public:
 
-	enum ITEM
+	enum ITEM_TYPE
 	{
 		MIRROR,
 		TRAP,
 		HOLOGRAM,
 		THROWABLE,
+		PLAYERB_BOX,
+		PLAYERG_BOX,
+		BUTLER_BOX,
+		CAT_BOX,
+		CHARO_BOX,
+		CLOWN_BOX,
+		DARK_BOX,
+		EYES_BOX,
+		GLOW_BOX,
+		HORN_BOX,
+		MASK_BOX,
+		NOEYES_BOX,
+		SKELETON_BOX,
+		TURBAN_BOX,
+		WITCH_BOX,
 		TOTAL_ITEM,
 	};
 
 	Inventory(void);
 	~Inventory(void);
 
-	Item DefaultItem[4];
-	Mesh* meshlist[4];
-
 	void Init();
 
 	bool AddToInvent(Item a);
 	bool AddToInvent(int ID);
 
+	void MeshBox();
+
 	bool UseItem(int num);
 
 	Item* getItem(int num);
+
+	Item DefaultItem[TOTAL_ITEM];
+
+	Mesh* meshlist[TOTAL_ITEM];
+
+private:
+	Item * PlayerInventory[10];
 };
 
