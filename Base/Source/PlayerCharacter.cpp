@@ -109,6 +109,7 @@ void PlayerCharacter::UpdateSprite()
 
 void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 {
+	Character::Update(dt, tileMap);
 	UpdatePosition(dt, tileMap);
 }
 
