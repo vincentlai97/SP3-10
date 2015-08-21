@@ -37,6 +37,7 @@ private:
 	Vector3 m_acceleration;
 	JUMP_STATE m_jumpState;
 	float m_jumpHeight;
+	bool move;
 
 	void UpdateVelocity(double dt);
 	void UpdatePosition(double dt, const TileMap *tileMap);
@@ -54,6 +55,7 @@ public:
 	void moveRight();
 	void jump();
 
+	bool getMove();
 };
 
 #endif

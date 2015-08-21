@@ -54,12 +54,6 @@ void GameModel::Init()
 
 	Text = MeshBuilder::GenerateText("text",16,16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
-	
-	pos1.Set(21, 10, 0);
-	pos2.Set(25, 12, 0);
-	//pos2.Set(21, 12, 0);
-	//pos2.Set(14, 19, 0);
-	//pos2.Set(14, 5, 0);
 
 	floorTiles.push_back(112);
 	floorTiles.push_back(309);
@@ -70,6 +64,12 @@ void GameModel::Init()
 	shadow->textureID[0] = LoadTGA("Image//shadow.tga");
 
 	inventory.Init();
+
+	Aina.Set(1,"WHY",Vector3(3,4,1));
+
+	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
+	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
+
 }
 
 void GameModel::MeshPlayer()
@@ -165,16 +165,20 @@ void GameModel::Update(double dt)
 		}
 		if (commands[ACTION])
 		{
+			if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 4 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 18)
+				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+
+			if (ModelSwitch < 1)
+				ModelSwitch = 15;
+
+			if (ModelSwitch > 15)
+				ModelSwitch = 1;
+
 			inventory.inventory.UseItem(inventory.InvCount);
 		}
 	}
 	else
 	{
-		if (commands[MOVE_UP]) player->moveUp();
-		if (commands[MOVE_DOWN]) player->moveDown();
-		if (commands[MOVE_LEFT]) player->moveLeft();
-		if (commands[MOVE_RIGHT]) player->moveRight();
-
 		if (commands[MODEL_UP])
 		{
 			ModelSwitch--;
@@ -188,9 +192,30 @@ void GameModel::Update(double dt)
 			if (ModelSwitch > 17)
 				ModelSwitch = 1;
 		}
+		
+		if (commands[MOVE_UP] && !player->getMove()) 
+		{
+			player->moveUp();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_DOWN] && !player->getMove())
+		{
+			player->moveDown();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_LEFT] && !player->getMove()) 
+		{
+			player->moveLeft();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+		if (commands[MOVE_RIGHT] && !player->getMove())
+		{
+			player->moveRight();
+			Aina.Update(player->getPosition(),m_tileMap);
+		}
+	
+		player->Update(dt, m_tileMap);
 	}
-
-	player->Update(dt, m_tileMap);
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
@@ -261,31 +286,32 @@ Mesh* GameModel::getPlayerMesh()
 	}
 	else if (ModelSwitch == 11)
 	{
-		return meshPlayer[MAID];
+		return meshPlayer[MASK];
 	}
 	else if (ModelSwitch == 12)
 	{
-		return meshPlayer[MASK];
+		return meshPlayer[NOEYES];
 	}
 	else if (ModelSwitch == 13)
 	{
-		return meshPlayer[NOEYES];
+		return meshPlayer[SKELETON];
 	}
 	else if (ModelSwitch == 14)
 	{
-		return meshPlayer[SHINIGAMI];
+		return meshPlayer[TURBAN];
 	}
 	else if (ModelSwitch == 15)
 	{
-		return meshPlayer[SKELETON];
+		return meshPlayer[WITCH];
 	}
+
 	else if (ModelSwitch == 16)
 	{
-		return meshPlayer[TURBAN];
+		return meshPlayer[MAID];
 	}
 	else if (ModelSwitch == 17)
 	{
-		return meshPlayer[WITCH];
+		return meshPlayer[SHINIGAMI];
 	}
 }
 
