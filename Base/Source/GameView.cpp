@@ -35,14 +35,14 @@ void GameView::Render()
 		modelStack.Translate(model->pos1);
 		modelStack.Translate(0.5f, 0.5f, 5);
 
-		RenderMesh(model->foo, false);
+		RenderMesh(model->getPlayerMesh(), false);
 	} modelStack.PopMatrix();
 
 	modelStack.PushMatrix(); {
 		modelStack.Translate(model->pos2);
 		modelStack.Translate(0.5f, 0.5f, 5);
 
-		RenderMesh(model->foo, false);
+		RenderMesh(model->getPlayerMesh(), false);
 	} modelStack.PopMatrix();
 }
 
@@ -72,7 +72,7 @@ void GameView::RenderTileMap()
 				else
 				{
 					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6);
-					if (model->checkLineOfSight(model->pos1 + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap) == 0)
+					if (model->checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap) == 0)
 					{
 						modelStack.Translate(0, 0, 1);
 						RenderMesh(model->shadow, false);

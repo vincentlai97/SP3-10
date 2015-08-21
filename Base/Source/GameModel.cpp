@@ -133,6 +133,7 @@ void GameModel::MeshBox()
 }
 
 void GameModel::MeshItem()
+{
 }
 
 bool b_buttonDown = false;
