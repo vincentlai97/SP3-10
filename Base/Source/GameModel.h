@@ -25,6 +25,10 @@ public:
 		ACTION,
 		MODEL_UP,
 		MODEL_DOWN,
+		IDLE_UP,
+		IDLE_DOWN,
+		IDLE_LEFT,
+		IDLE_RIGHT,
 		NUM_COMMANDS,
 	};
 protected:

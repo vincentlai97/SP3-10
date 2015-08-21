@@ -116,31 +116,34 @@ void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 
 void PlayerCharacter::moveUp()
 {
-	m_velocity.y += 1;
+	if (m_spriteState != IDLE_UP)
+		m_spriteState = IDLE_UP;
+	else
+		m_velocity.y += 1;
 }
 
 void PlayerCharacter::moveDown()
 {
-	m_velocity.y -= 1;
+	if (m_spriteState != IDLE_DOWN)
+		m_spriteState = IDLE_DOWN;
+	else
+		m_velocity.y -= 1;
 }
 
 void PlayerCharacter::moveLeft()
 {
-	m_velocity.x -= 1;
+	if (m_spriteState != IDLE_LEFT)
+		m_spriteState = IDLE_LEFT;
+	else
+		m_velocity.x -= 1;
 }
 
 void PlayerCharacter::moveRight()
 {
-	m_velocity.x += 1;
-}
-
-void PlayerCharacter::jump()
-{
-	if (m_jumpState == NOT_JUMPING)
-	{
-		m_jumpState = JUMPING;
-		m_jumpHeight = 0;
-	}
+	if (m_spriteState != IDLE_RIGHT)
+		m_spriteState = IDLE_RIGHT;
+	else
+		m_velocity.x += 1;
 }
 
 int PlayerCharacter::TouchItem(const TileMap *tileMap)
@@ -156,4 +159,24 @@ void PlayerCharacter::RemoveItem(const TileMap *tileMap)
 bool PlayerCharacter::getMove()
 {
 	return move;
+}
+
+void PlayerCharacter::idleUp()
+{
+	m_spriteState = IDLE_UP;
+}
+
+void PlayerCharacter::idleDown()
+{
+	m_spriteState = IDLE_DOWN;
+}
+
+void PlayerCharacter::idleLeft()
+{
+	m_spriteState = IDLE_LEFT;
+}
+
+void PlayerCharacter::idleRight()
+{
+	m_spriteState = IDLE_RIGHT;
 }

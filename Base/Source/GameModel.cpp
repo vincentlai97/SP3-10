@@ -212,7 +212,23 @@ void GameModel::Update(double dt)
 			player->moveRight();
 			Aina.Update(player->getPosition(),m_tileMap);
 		}
-		
+		if (commands[IDLE_UP])
+		{
+			player->idleUp();
+		}
+		if (commands[IDLE_DOWN])
+		{
+			player->idleDown();
+		}
+		if (commands[IDLE_LEFT])
+		{
+			player->idleLeft();
+		}
+		if (commands[IDLE_RIGHT])
+		{
+			player->idleRight();
+		}
+
 		player->Update(dt, m_tileMap);
 
 		if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)

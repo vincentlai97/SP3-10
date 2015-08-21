@@ -44,7 +44,7 @@ void GameModel2D::Update(double dt)
 	if (commands[MOVE_DOWN]) player->moveDown();
 	if (commands[MOVE_LEFT]) player->moveLeft();
 	if (commands[MOVE_RIGHT]) player->moveRight();
-	if (commands[JUMP]) player->jump();
+	//if (commands[JUMP]) player->jump();
 
 	player->Update(dt, m_tileMap);
 

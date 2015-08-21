@@ -56,7 +56,12 @@ public:
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-	void jump();
+	
+
+	void idleUp();
+	void idleDown();
+	void idleLeft();
+	void idleRight();
 
 	bool getMove();
 };
