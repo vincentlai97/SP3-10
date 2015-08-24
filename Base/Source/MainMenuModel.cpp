@@ -25,6 +25,15 @@ void CMainMenuModel::Init()
 	meshList[EXIT_BUTTON] = MeshBuilder::GenerateQuad("EXIT_BUTTON", Color());
 	meshList[EXIT_BUTTON]->textureID[0] = LoadTGA("Image\\Exitbtn.tga");
 
+	meshList[START_BUTTON2] = MeshBuilder::GenerateQuad("Start", Color());
+	meshList[START_BUTTON2]->textureID[0] = LoadTGA("Image\\Startbtn2.tga");
+
+	meshList[LOAD_BUTTON2] = MeshBuilder::GenerateQuad("LOAD_BUTTON", Color());
+	meshList[LOAD_BUTTON2]->textureID[0] = LoadTGA("Image\\Loadbtn2.tga");
+
+	meshList[EXIT_BUTTON2] = MeshBuilder::GenerateQuad("EXIT_BUTTON", Color());
+	meshList[EXIT_BUTTON2]->textureID[0] = LoadTGA("Image\\Exitbtn2.tga");
+
 
 	commands = new bool[NUM_COMMANDS];
 
@@ -57,6 +66,19 @@ Mesh* CMainMenuModel::getExitMesh()
 	return meshList[EXIT_BUTTON];
 }
 
+Mesh* CMainMenuModel::getStartMesh2()
+{
+	return meshList[START_BUTTON2];
+}
+Mesh* CMainMenuModel::getLoadMesh2()
+{
+	return meshList[LOAD_BUTTON2];
+}
+Mesh* CMainMenuModel::getExitMesh2()
+{
+	return meshList[EXIT_BUTTON2];
+}
+
 void CMainMenuModel::Update(double dt)
 {
 	if (countminus == true)
@@ -87,12 +109,6 @@ void CMainMenuModel::Update(double dt)
 	{
 		countplus = true;
 		commands[MOVE_DOWN] = false;
-		std::cout << counter << std:: endl;
-	}
-	if (commands[ENTER] && counter == 2)
-	{
-		
-		std::cout << "Exit" << std::endl;
 	}
 
 }

@@ -18,6 +18,11 @@ protected:
 		START_BUTTON,
 		LOAD_BUTTON,
 		EXIT_BUTTON,
+
+		START_BUTTON2,
+		LOAD_BUTTON2,
+		EXIT_BUTTON2,
+
 		NUM_MENU,
 	};
 
@@ -33,6 +38,10 @@ public:
 	Mesh* getStartMesh();
 	Mesh* getLoadMesh();
 	Mesh* getExitMesh();
+
+	Mesh* getStartMesh2();
+	Mesh* getLoadMesh2();
+	Mesh* getExitMesh2();
 
 	int getCount(void);
 private:

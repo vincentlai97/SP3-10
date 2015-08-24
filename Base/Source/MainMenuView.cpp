@@ -45,28 +45,33 @@ void CMainMenuView::RenderButton()
 		modelStack.Scale(windowWidth / 12, windowHeight / 12, 1);
 		
 		modelStack.PushMatrix();
-		modelStack.Translate(0, -1, 0);
+		modelStack.Translate(2, -0.5, 0);
+		modelStack.Scale(2.2, 1.5, 1);
 		if (model->getCount() == 0)
 		{
+			Render2DMesh(model->getStartMesh2(), false);
 			modelStack.Scale(1.2, 1.2, 1);
 		}
 		Render2DMesh(model->getStartMesh(), false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(0, -2.3, 0);
+		modelStack.Translate(2, -2.5, 0);
+		modelStack.Scale(2.2, 1.5, 1);
 		if (model->getCount() == 1)
 		{
+			Render2DMesh(model->getLoadMesh2(), false);
 			modelStack.Scale(1.2, 1.2, 1);
 		}
 		Render2DMesh(model->getLoadMesh(), false);
 		modelStack.PopMatrix();
 
-
 		modelStack.PushMatrix();
-		modelStack.Translate(0, -3.5, 0);
+		modelStack.Translate(2, -4.5, 0);
+		modelStack.Scale(2.2, 1.5, 1);
 		if (model->getCount() == 2)
 		{
+			Render2DMesh(model->getExitMesh2(), false);
 			modelStack.Scale(1.2, 1.2, 1);
 		}
 		Render2DMesh(model->getExitMesh(), false);
