@@ -25,7 +25,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	Vector3 position = m_position;
 	position.x += m_velocity.x ;
 	
-	if (tileMap->getTile(position.x, floor(position.y)) > 4 || tileMap->getTile(position.x, ceil(position.y)) > 4)
+	if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
 	{
 		m_velocity.x = 0;
 	}
@@ -33,7 +33,7 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	position = m_position;
 	position.y += m_velocity.y;
 	
-	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 4 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 4)
+	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
 	{
 		m_velocity.y = 0;
 	}
@@ -114,36 +114,55 @@ void PlayerCharacter::Update(double dt, const TileMap *tileMap)
 	UpdatePosition(dt, tileMap);
 }
 
-void PlayerCharacter::moveUp()
+bool PlayerCharacter::moveUp()
 {
 	if (m_spriteState != IDLE_UP)
 		m_spriteState = IDLE_UP;
 	else
+	{
 		m_velocity.y += 1;
+		return true;
+	}
+
+	return false;
 }
 
-void PlayerCharacter::moveDown()
+bool PlayerCharacter::moveDown()
 {
 	if (m_spriteState != IDLE_DOWN)
 		m_spriteState = IDLE_DOWN;
 	else
+	{
 		m_velocity.y -= 1;
+		return true;
+	}
+
+	return false;
 }
 
-void PlayerCharacter::moveLeft()
+bool PlayerCharacter::moveLeft()
 {
 	if (m_spriteState != IDLE_LEFT)
 		m_spriteState = IDLE_LEFT;
 	else
+	{
 		m_velocity.x -= 1;
+		return true;
+	}
+	return false;
 }
 
-void PlayerCharacter::moveRight()
+bool PlayerCharacter::moveRight()
 {
 	if (m_spriteState != IDLE_RIGHT)
 		m_spriteState = IDLE_RIGHT;
 	else
+	{
 		m_velocity.x += 1;
+		return true;
+	}
+
+	return false;
 }
 
 int PlayerCharacter::TouchItem(const TileMap *tileMap)

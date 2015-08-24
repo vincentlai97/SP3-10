@@ -52,10 +52,10 @@ public:
 	int TouchItem(const TileMap *tileMap);
 	void RemoveItem(const TileMap *tileMap);
 
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
+	bool moveUp();
+	bool moveDown();
+	bool moveLeft();
+	bool moveRight();
 	
 
 	void idleUp();

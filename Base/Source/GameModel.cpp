@@ -140,7 +140,7 @@ bool b_buttonDown = false;
 
 void GameModel::Update(double dt)
 {
-	if (commands[INVENT])
+	if (commands[INVENT] && !player->getMove())
 	{
 		inventory.Update();
 	}
@@ -186,27 +186,27 @@ void GameModel::Update(double dt)
 
 		if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
 		{
-
-			m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID());
+			if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
+				m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
 			PlaceItemState = false;
 		}
 		else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
 		{
-			m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID());
+			if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
+				m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
 			PlaceItemState = false;
-
 		}
 		else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
 		{
-			m_itemMap->SetTile(player->getPosition().x -1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID());
+			if(m_itemMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0)
+				m_itemMap->SetTile(player->getPosition().x -1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
 			PlaceItemState = false;
-
 		}
 		else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
 		{
-			m_itemMap->SetTile(player->getPosition().x +1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID());
+			if(m_itemMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0)
+				m_itemMap->SetTile(player->getPosition().x +1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
 			PlaceItemState = false;
-
 		}
 	}
 
@@ -227,25 +227,29 @@ void GameModel::Update(double dt)
 				ModelSwitch = 1;
 		}
 		
-		if (commands[MOVE_UP] && !player->getMove()) 
+		if (commands[MOVE_UP] )
 		{
-			player->moveUp();
-			Aina.Update(player->getPosition(),m_tileMap);
+			if(!player->getMove())
+				if(player->moveUp())
+					Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_DOWN] && !player->getMove())
+		if (commands[MOVE_DOWN] )
 		{
-			player->moveDown();
-			Aina.Update(player->getPosition(),m_tileMap);
+			if(!player->getMove())
+				if(player->moveDown())
+					Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_LEFT] && !player->getMove()) 
+		if (commands[MOVE_LEFT] )
 		{
-			player->moveLeft();
-			Aina.Update(player->getPosition(),m_tileMap);
+			if(!player->getMove())
+				if(player->moveLeft())
+					Aina.Update(player->getPosition(),m_tileMap);
 		}
-		if (commands[MOVE_RIGHT] && !player->getMove())
+		if (commands[MOVE_RIGHT]  )
 		{
-			player->moveRight();
-			Aina.Update(player->getPosition(),m_tileMap);
+			if(!player->getMove())
+				if(player->moveRight())
+					Aina.Update(player->getPosition(),m_tileMap);
 		}
 		if (commands[IDLE_UP])
 		{
@@ -266,10 +270,17 @@ void GameModel::Update(double dt)
 
 		player->Update(dt, m_tileMap);
 
-		if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
+		if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
 		{
-			inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
-			player->RemoveItem(m_itemMap);
+			if( player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
+			{
+				inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
+				player->RemoveItem(m_itemMap);
+			}
+			else
+			{
+				cout << inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap) - inventory.inventory.TOTAL_ITEM )].getName() << endl;
+			}
 		}
 
 	}
@@ -306,75 +317,7 @@ PlayerCharacter* GameModel::getPlayer()
 
 Mesh* GameModel::getPlayerMesh()
 {
-	if (ModelSwitch == 1)
-	{
-		return meshPlayer[PLAYERB];
-	}
-	else if (ModelSwitch == 2)
-	{
-		return meshPlayer[PLAYERG];
-	}
-	else if (ModelSwitch == 3)
-	{
-		return meshPlayer[BUTLER];
-	}
-	else if (ModelSwitch == 4)
-	{
-		return meshPlayer[CAT];
-	}
-	else if (ModelSwitch == 5)
-	{
-		return meshPlayer[CHARO];
-	}
-	else if (ModelSwitch == 6)
-	{
-		return meshPlayer[CLOWN];
-	}
-	else if (ModelSwitch == 7)
-	{
-		return meshPlayer[DARK];
-	}
-	else if (ModelSwitch == 8)
-	{
-		return meshPlayer[EYES];
-	}
-	else if (ModelSwitch == 9)
-	{
-		return meshPlayer[GLOW];
-	}
-	else if (ModelSwitch == 10)
-	{
-		return meshPlayer[HORN];
-	}
-	else if (ModelSwitch == 11)
-	{
-		return meshPlayer[MASK];
-	}
-	else if (ModelSwitch == 12)
-	{
-		return meshPlayer[NOEYES];
-	}
-	else if (ModelSwitch == 13)
-	{
-		return meshPlayer[SKELETON];
-	}
-	else if (ModelSwitch == 14)
-	{
-		return meshPlayer[TURBAN];
-	}
-	else if (ModelSwitch == 15)
-	{
-		return meshPlayer[WITCH];
-	}
-
-	else if (ModelSwitch == 16)
-	{
-		return meshPlayer[MAID];
-	}
-	else if (ModelSwitch == 17)
-	{
-		return meshPlayer[SHINIGAMI];
-	}
+	return meshPlayer[ModelSwitch - 1];
 }
 
 void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)
