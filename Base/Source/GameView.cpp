@@ -4,6 +4,8 @@
 using namespace irrklang;
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
+#include "LoS.h"
+
 GameView::GameView(Model *model) : View(model) 
 , BGMusic(true)
 {
@@ -26,7 +28,7 @@ void GameView::Render()
 	modelStack.PushMatrix(); {
 		RenderTileMap();
 		RenderPlayer();
-		//RenderMusic();
+		RenderMusic();
 		if(model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
@@ -60,7 +62,7 @@ void GameView::RenderTileMap()
 				else
 				{
 					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6);
-					if (model->checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap) == 0)
+					if (!checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap))
 					{
 						modelStack.Translate(0, 0, 1);
 						RenderMesh(model->shadow, false);
@@ -191,10 +193,12 @@ void GameView::RenderAI()
 
 	modelStack.Translate(0, 0, 1);
 	modelStack.PushMatrix(); {
-		modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
-		modelStack.Translate(model->Aina.getPos().x,model->Aina.getPos().y,10);
+		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
+		modelStack.Translate(model->Aina->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
 
-		RenderMesh(model->Aina.getMesh(), false);
+		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
+
+		RenderMesh(model->getPlayerMesh(), false);
 	} modelStack.PopMatrix();
 }

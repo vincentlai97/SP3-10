@@ -10,22 +10,22 @@ GameController::~GameController()
 
 void GameController::Update()
 {
-	if (IsKeyPressed('W') && keypressed)
+	if (IsKeyPressed('W'))
 	{
 		keypressed = false;
 		model->setCommands(GameModel::COMMANDS::MOVE_UP);
 	}
-	if (IsKeyPressed('A') && keypressed)
+	if (IsKeyPressed('A'))
 	{
 		keypressed = false;
 		model->setCommands(GameModel::COMMANDS::MOVE_LEFT);
 	}
-	if (IsKeyPressed('S') && keypressed)
+	if (IsKeyPressed('S'))
 	{
 		keypressed = false;
 		model->setCommands(GameModel::COMMANDS::MOVE_DOWN);
 	}
-	if (IsKeyPressed('D') && keypressed)
+	if (IsKeyPressed('D'))
 	{
 		keypressed = false;
 		model->setCommands(GameModel::COMMANDS::MOVE_RIGHT);

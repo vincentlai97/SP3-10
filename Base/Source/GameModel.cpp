@@ -23,8 +23,6 @@ void GameModel::Init()
 	MeshPlayer();
 	ModelSwitch = 1;
 
-	MeshBox();
-
 	for (int count = 0; count < ITEM_TYPE::NUM_ITEM; ++count)
 	{
 		meshItem[count] = new Mesh("null");
@@ -37,7 +35,7 @@ void GameModel::Init()
 
 	m_tileMap = new TileMap();
 	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
-	m_tileMap->LoadMap("Image//map.csv");
+	m_tileMap->LoadMap("Image//mylevel.csv");
 
 	m_itemMap = new TileMap();
 	m_itemMap->Init(25, 32, 24, worldWidth, worldHeight);
@@ -49,7 +47,7 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3 (11, 11, 1));
+	player = new PlayerCharacter(Vector3 (20, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text",16,16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
@@ -64,7 +62,7 @@ void GameModel::Init()
 
 	inventory.Init();
 
-	Aina.Set(1,"WHY",Vector3(3,4,1));
+	Aina = new AI(Vector3(3, 4, 0));
 
 	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
 	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
@@ -128,8 +126,6 @@ void GameModel::MeshPlayer()
 
 void GameModel::MeshBox()
 {
-	meshPlayer[PLAYERB] = MeshBuilder::GenerateText("MainBoyModel", 4, 4);
-	meshPlayer[PLAYERB]->textureID[0] = LoadTGA("Image//Sprite//Model//MainBModel.tga");
 }
 
 void GameModel::MeshItem()
@@ -202,25 +198,25 @@ void GameModel::Update(double dt)
 		{
 			if(!player->getMove())
 				if(player->moveUp())
-					Aina.Update(player->getPosition(),m_tileMap);
+					Aina->Update(player->getPosition(),m_tileMap);
 		}
 		if (commands[MOVE_DOWN] )
 		{
 			if(!player->getMove())
 				if(player->moveDown())
-					Aina.Update(player->getPosition(),m_tileMap);
+					Aina->Update(player->getPosition(),m_tileMap);
 		}
 		if (commands[MOVE_LEFT] )
 		{
 			if(!player->getMove())
 				if(player->moveLeft())
-					Aina.Update(player->getPosition(),m_tileMap);
+					Aina->Update(player->getPosition(),m_tileMap);
 		}
 		if (commands[MOVE_RIGHT]  )
 		{
 			if(!player->getMove())
 				if(player->moveRight())
-					Aina.Update(player->getPosition(),m_tileMap);
+					Aina->Update(player->getPosition(),m_tileMap);
 		}
 		if (commands[IDLE_UP])
 		{
@@ -340,56 +336,6 @@ void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)
 {
 	mapOffset_x = m_mapOffset_x;
 	mapOffset_y = m_mapOffset_y;
-}
-
-bool GameModel::checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap)
-{
-	if (point == target) return true;
-	Vector3 view = (target - point).Normalized();
-	if (view.x < 0)
-	{
-		point += target;
-		target = point - target;
-		point -= target;
-		(view = target - point).Normalize();
-	}
-
-	Vector3 temp(point);
-	/*float diff_x = ceil(temp.x) - temp.x;
-	temp.x = ceil(temp.x);
-	temp.y += view.y * diff_x * (1 / view.x);*/
-	while (temp.x < floor(target.x))
-	{
-		if (temp.y - (int) temp.y)
-		if (tileMap->getTile(temp.x, floor(temp.y)) > 0)
-			return false;
-		++temp.x;
-		temp.y += view.y * (1 / view.x);
-	}
-
-	view = (target - point).Normalized();
-	if (view.y < 0)
-	{
-		point += target;
-		target = point - target;
-		point -= target;
-		(view = target - point).Normalize();
-	}
-
-	temp = point;
-	/*float diff_y = ceil(temp.y) - temp.y;
-	temp.y = ceil(temp.y);
-	temp.x += view.x * diff_y * (1 / view.y);*/
-	while (temp.y < floor(target.y))
-	{
-		if (temp.x - (int)temp.x)
-		if (tileMap->getTile(floor(temp.x), temp.y) > 0)
-			return false;
-		++temp.y;
-		temp.x += view.x * (1 / view.y);
-	}
-
-	return true;
 }
 
 Mesh *GameModel::getTextMesh()

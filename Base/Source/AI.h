@@ -1,27 +1,11 @@
 #ifndef AI_H
 #define AI_H
 
-#include "Model.h"
-#include <string>
-#include <iostream>
+#include "Character.h"
 
-#include "LoadTGA.h"
-#include "MeshBuilder.h"
-#include "TileMap.h"
-
-class AI
+class AI : public Character
 {
-private:
-	int ID;
-	std::string Name;
-
-	Vector3 Pos,Destination,OriginalPos;
-
-	Mesh* mesh;
-
-	int AI_State;
 public:
-
 	enum AI_STATES
 	{
 		IDLE,
@@ -29,13 +13,15 @@ public:
 		NUM_STATES,
 	};
 
-	AI(void);
-	~AI(void);
+private:
+	Vector3 m_target;
+	int AI_State;
 
-	AI(int,std::string,Vector3);
+public:
+	AI(Vector3 position = Vector3(), Mesh* sprite = NULL);
+	~AI();
 
-	void Set(int,std::string,Vector3);
-	void Update(Vector3,const TileMap *tileMap);
+	void Update(Vector3 playerPos, const TileMap *tileMap);
 
 	Vector3 getPos();
 	Mesh* getMesh();

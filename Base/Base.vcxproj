@@ -30,6 +30,7 @@
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
+    <ClCompile Include="Source\LoS.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MainMenuController.cpp" />
     <ClCompile Include="Source\MainMenuModel.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
+    <ClInclude Include="Source\LoS.h" />
     <ClInclude Include="Source\MainMenuController.h" />
     <ClInclude Include="Source\MainMenuModel.h" />
     <ClInclude Include="Source\MainMenuView.h" />

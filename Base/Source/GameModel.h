@@ -76,7 +76,6 @@ private:
 	
 	TileMap* m_tileMap;
 	TileMap* m_itemMap;
-	
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -105,15 +104,11 @@ public:
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
-
 	TileMap* getItemMap();
-
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
-	
-	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
 
 	Mesh* foo;
 	Vector3 pos1;
@@ -122,8 +117,8 @@ public:
 	std::vector<int> floorTiles;
 
 	Mesh *shadow;
-
-	AI Aina;
+	
+	AI *Aina;
 };
 
 #endif
