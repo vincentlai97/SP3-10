@@ -15,6 +15,7 @@ private:
 	void RenderMusic();
 	void RenderInventory();
 	void RenderAI();
+	void RenderSpeech();
 	void RenderWin();
 
 public:
@@ -24,7 +25,9 @@ public:
 	GameModel *model;
 
 	virtual void Render();
-
+	std::ostringstream strcopy;
+	std::ostringstream strcopy2;
+	std::ostringstream strcopy3;
 };
 
 #endif

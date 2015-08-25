@@ -9,6 +9,7 @@
 #include "InventoryMenu.h"
 
 #include "AI.h"
+#include "ReadFromText.h"
 
 #define worldWidth 32
 #define worldHeight 24
@@ -29,6 +30,7 @@ public:
 		IDLE_DOWN,
 		IDLE_LEFT,
 		IDLE_RIGHT,
+		SPEECH_NEXTLINE,
 		NUM_COMMANDS,
 	};
 protected:
@@ -49,6 +51,7 @@ protected:
 		SKELETON,
 		TURBAN,
 		WITCH,
+
 		MAID,
 		SHINIGAMI,
 		NUM_PLAYER,
@@ -70,13 +73,34 @@ protected:
 	};
 	Mesh* meshItem[NUM_ITEM];
 
+	enum SPEECH_TYPE{
+		PLAYERB_FACE,
+		PLAYERG_FACE,
+		BUTLER_FACE,
+		CAT_FACE,
+		CHARO_FACE,
+		CLOWN_FACE,
+		DARK_FACE,
+		EYES_FACE,
+		GLOW_FACE,
+		HORN_FACE,
+		MASK_FACE,
+		NOEYES_FACE,
+		SKELETON_FACE,
+		TURBAN_FACE,
+		WITCH_FACE,
+		CHARACTER_FACE,
+		TEXTBOX,
+		NUM_SPEECH,
+	};
+	Mesh* meshSpeech[NUM_SPEECH];
+
 	PlayerCharacter *player;
 private:
 	Mesh *tile;
 	
 	TileMap* m_tileMap;
 	TileMap* m_itemMap;
-	
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -99,23 +123,19 @@ public:
 	int getWorldHeight() { return worldHeight; }
 
 	void MeshPlayer();
-	void MeshBox();
-	void MeshItem();
+	string GetTextSpeech();
+	int GetLineParagraph();
 
 	PlayerCharacter* getPlayer();
 	Mesh* getPlayerMesh();
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
-
 	TileMap* getItemMap();
-
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
-	
-	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
 
 	Mesh* foo;
 	Vector3 pos1;
@@ -125,7 +145,13 @@ public:
 
 	Mesh *shadow;
 
-	AI Aina;
+	AI *Aina;
+	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
+
+	ReadFromText speech;
+	void MeshSpeech();
+	Mesh* getFaceMesh();
+	Mesh* getSpeechMesh();
 
 	bool getwin();
 };
