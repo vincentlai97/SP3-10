@@ -30,6 +30,8 @@ void GameView::Render()
 		if(model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
+		if(model->getwin())
+			RenderWin();
 	} modelStack.PopMatrix();
 }
 
@@ -51,7 +53,7 @@ void GameView::RenderTileMap()
 		for (int rcount = 0; rcount < tileMap->getNumOfTilesHeight() + 1; ++rcount)
 		{
 			modelStack.PushMatrix(); {
-				modelStack.Translate(int(-(mapOffset_x - (int)mapOffset_x)), int(-(mapOffset_y - (int)mapOffset_y)), 0);
+				modelStack.Translate(-(mapOffset_x - (int)mapOffset_x), -(mapOffset_y - (int)mapOffset_y), 0);
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
@@ -148,7 +150,7 @@ void GameView::RenderInventory()
 		// selector*
 		modelStack.PushMatrix();
 		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x,model->inventory.InventPos[model->inventory.InvCount].y, 2);
-		modelStack.Scale(2,2,2);
+		modelStack.Scale(2.5,2.5,2.5);
 		RenderMesh(model->inventory.getborderMesh(), false);
 		modelStack.PopMatrix();
 
@@ -197,4 +199,15 @@ void GameView::RenderAI()
 
 		RenderMesh(model->Aina.getMesh(), false);
 	} modelStack.PopMatrix();
+}
+
+void GameView::RenderWin()
+{
+	GameModel* model = dynamic_cast<GameModel *>(m_model);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 10);
+	modelStack.Scale(model->getWorldWidth(),model->getWorldHeight(),10);
+	RenderMesh(model->inventory.getInventMesh(),false);
+	modelStack.PopMatrix();
 }

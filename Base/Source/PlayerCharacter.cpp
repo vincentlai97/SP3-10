@@ -6,6 +6,7 @@ PlayerCharacter::PlayerCharacter(Vector3 position, Mesh* sprite)
 , m_jumpHeight(0)
 , Character(position, sprite)
 , move(false)
+, gamewin(false)
 {
 	m_size = SMALLSIZE;
 }
@@ -25,7 +26,11 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	Vector3 position = m_position;
 	position.x += m_velocity.x ;
 	
-	if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
+	if(tileMap->getTile(position.x, floor(position.y)) == 176 || tileMap->getTile(position.x, ceil(position.y)) == 176 )
+	{
+		gamewin = true;
+	}
+	else if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
 	{
 		m_velocity.x = 0;
 	}
@@ -235,4 +240,9 @@ bool PlayerCharacter::PlayerDirRight()
 	}
 	else
 		return false;
+}
+
+bool PlayerCharacter::getWin()
+{
+	return gamewin;
 }

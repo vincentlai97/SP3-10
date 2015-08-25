@@ -36,7 +36,7 @@ void GameModel::Init()
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
 	m_tileMap = new TileMap();
-	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_tileMap->Init(25, 64, 48, worldWidth, worldHeight);
 	m_tileMap->LoadMap("Image//map.csv");
 
 	m_itemMap = new TileMap();
@@ -70,6 +70,8 @@ void GameModel::Init()
 	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
 
 	PlaceItemState = false;
+
+	win = false;
 }
 
 void GameModel::MeshPlayer()
@@ -140,165 +142,181 @@ bool b_buttonDown = false;
 
 void GameModel::Update(double dt)
 {
-	if (commands[INVENT] && !player->getMove())
+	if(!player->getWin())
 	{
-		inventory.Update();
-	}
+		m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
+		m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));
 
-	if (inventory.showInvent)
-	{
-		if (commands[MOVE_UP] && inventory.InvCount > 3)
+		m_mapOffset_y = player->getPosition().y - (float)m_tileMap->getNumOfTilesHeight() / 2.f;
+		m_mapOffset_y = Math::Clamp(m_mapOffset_y, 0.f, (float)(m_tileMap->getMapHeight() - m_tileMap->getNumOfTilesHeight()));
+
+		if (commands[INVENT] && !player->getMove())
 		{
-			inventory.MoveUp();
+			inventory.Update();
 		}
-		if (commands[MOVE_DOWN] && inventory.InvCount < 6)
+
+		if (inventory.showInvent)
 		{
-			inventory.MoveDown();
-		}
-		if (commands[MOVE_LEFT] && inventory.InvCount > 0)
-		{
-			inventory.MoveLeft();
-		}
-		if (commands[MOVE_RIGHT] && inventory.InvCount < 9)
-		{
-			inventory.MoveRight();
-		}
-		if (commands[ACTION])
-		{
-			if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 4 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 18)
+			if (commands[MOVE_UP] && inventory.InvCount > 3)
 			{
-				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
-				inventory.inventory.UseItem(inventory.InvCount);
-				inventory.showInvent = false;
+				inventory.MoveUp();
+			}
+			if (commands[MOVE_DOWN] && inventory.InvCount < 6)
+			{
+				inventory.MoveDown();	
+			}
+			if (commands[MOVE_LEFT] && inventory.InvCount > 0)
+			{
+				inventory.MoveLeft();
+			}
+			if (commands[MOVE_RIGHT] && inventory.InvCount < 9)
+			{
+				inventory.MoveRight();
+			}
+			if (commands[ACTION])
+			{
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 4 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 18)
+				{
+					ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+					inventory.inventory.UseItem(inventory.InvCount);
+					inventory.showInvent = false;
+				}
+
+				if (ModelSwitch < 1)
+					ModelSwitch = 15;
+
+				if (ModelSwitch > 15)
+					ModelSwitch = 1;
+
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 0 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 3)
+					PlaceItemState = true;
+			}
+		}
+		else
+		{
+			if (commands[MODEL_UP])
+			{
+				ModelSwitch--;
+				if (ModelSwitch < 1)
+					ModelSwitch = 17;
 			}
 
-			if (ModelSwitch < 1)
-				ModelSwitch = 15;
+			if (commands[MODEL_DOWN])
+			{
+				ModelSwitch++;
+				if (ModelSwitch > 17)
+					ModelSwitch = 1;
+			}
 
-			if (ModelSwitch > 15)
-				ModelSwitch = 1;
+			if (commands[MOVE_UP] )
+			{
+				if(!player->getMove())
+					if(player->moveUp())
+						Aina.Update(player->getPosition(),m_tileMap);
+			}
+			if (commands[MOVE_DOWN] )
+			{
+				if(!player->getMove())
+					if(player->moveDown())
+						Aina.Update(player->getPosition(),m_tileMap);
+			}
+			if (commands[MOVE_LEFT] )
+			{
+				if(!player->getMove())
+					if(player->moveLeft())
+						Aina.Update(player->getPosition(),m_tileMap);
+			}
+			if (commands[MOVE_RIGHT]  )
+			{
+				if(!player->getMove())
+					if(player->moveRight())
+						Aina.Update(player->getPosition(),m_tileMap);
+			}
+			if (commands[IDLE_UP])
+			{
+				player->idleUp();
+			}
+			if (commands[IDLE_DOWN])
+			{
+				player->idleDown();
+			}
+			if (commands[IDLE_LEFT])
+			{
+				player->idleLeft();
+			}
+			if (commands[IDLE_RIGHT])
+			{
+				player->idleRight();
+			}
 
-			if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 0 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 3)
-				PlaceItemState = true;
+			player->Update(dt, m_tileMap);
+
+			if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
+			{
+				if( player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
+				{
+					inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
+					player->RemoveItem(m_itemMap);
+				}
+				else
+				{
+					cout << inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap) - inventory.inventory.TOTAL_ITEM )].getName() << endl;
+				}
+			}
+
 		}
+
+		if (PlaceItemState == true)
+		{
+
+			if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			{
+				if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
+				{
+					m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+					inventory.inventory.UseItem(inventory.InvCount);
+					inventory.showInvent = false;
+				}
+				PlaceItemState = false;
+			}
+			else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			{
+				if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
+				{
+					m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+					inventory.inventory.UseItem(inventory.InvCount);
+					inventory.showInvent = false;
+				}
+				PlaceItemState = false;
+			}
+			else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			{
+				if(m_itemMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0)
+				{
+					m_itemMap->SetTile(player->getPosition().x -1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+					inventory.inventory.UseItem(inventory.InvCount);
+					inventory.showInvent = false;
+				}
+				PlaceItemState = false;
+			}
+			else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			{
+				if(m_itemMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0)
+				{
+					m_itemMap->SetTile(player->getPosition().x +1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+					inventory.inventory.UseItem(inventory.InvCount);
+					inventory.showInvent = false;
+				}
+				PlaceItemState = false;
+			}
+		}
+
+
 	}
 	else
 	{
-		if (commands[MODEL_UP])
-		{
-			ModelSwitch--;
-			if (ModelSwitch < 1)
-				ModelSwitch = 17;
-		}
-
-		if (commands[MODEL_DOWN])
-		{
-			ModelSwitch++;
-			if (ModelSwitch > 17)
-				ModelSwitch = 1;
-		}
-		
-		if (commands[MOVE_UP] )
-		{
-			if(!player->getMove())
-				if(player->moveUp())
-					Aina.Update(player->getPosition(),m_tileMap);
-		}
-		if (commands[MOVE_DOWN] )
-		{
-			if(!player->getMove())
-				if(player->moveDown())
-					Aina.Update(player->getPosition(),m_tileMap);
-		}
-		if (commands[MOVE_LEFT] )
-		{
-			if(!player->getMove())
-				if(player->moveLeft())
-					Aina.Update(player->getPosition(),m_tileMap);
-		}
-		if (commands[MOVE_RIGHT]  )
-		{
-			if(!player->getMove())
-				if(player->moveRight())
-					Aina.Update(player->getPosition(),m_tileMap);
-		}
-		if (commands[IDLE_UP])
-		{
-			player->idleUp();
-		}
-		if (commands[IDLE_DOWN])
-		{
-			player->idleDown();
-		}
-		if (commands[IDLE_LEFT])
-		{
-			player->idleLeft();
-		}
-		if (commands[IDLE_RIGHT])
-		{
-			player->idleRight();
-		}
-
-		player->Update(dt, m_tileMap);
-
-		if(player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
-		{
-			if( player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
-			{
-				inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
-				player->RemoveItem(m_itemMap);
-			}
-			else
-			{
-				cout << inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap) - inventory.inventory.TOTAL_ITEM )].getName() << endl;
-			}
-		}
-
-	}
-
-	if (PlaceItemState == true)
-	{
-
-		if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
-		{
-			if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
-			{
-				m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-				inventory.inventory.UseItem(inventory.InvCount);
-				inventory.showInvent = false;
-			}
-			PlaceItemState = false;
-		}
-		else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
-		{
-			if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
-			{
-				m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-				inventory.inventory.UseItem(inventory.InvCount);
-				inventory.showInvent = false;
-			}
-			PlaceItemState = false;
-		}
-		else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
-		{
-			if(m_itemMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0)
-			{
-				m_itemMap->SetTile(player->getPosition().x -1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-				inventory.inventory.UseItem(inventory.InvCount);
-				inventory.showInvent = false;
-			}
-			PlaceItemState = false;
-		}
-		else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
-		{
-			if(m_itemMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0)
-			{
-				m_itemMap->SetTile(player->getPosition().x +1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-				inventory.inventory.UseItem(inventory.InvCount);
-				inventory.showInvent = false;
-			}
-			PlaceItemState = false;
-		}
+		win = true;
+		throw -1;
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
@@ -396,3 +414,9 @@ Mesh *GameModel::getTextMesh()
 {
 	return Text;
 }
+
+bool GameModel::getwin()
+{
+	return win;
+}
+

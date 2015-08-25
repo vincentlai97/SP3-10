@@ -15,6 +15,7 @@ private:
 	void RenderMusic();
 	void RenderInventory();
 	void RenderAI();
+	void RenderWin();
 
 public:
 	GameView(Model *model);

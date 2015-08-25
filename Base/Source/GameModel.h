@@ -84,6 +84,8 @@ private:
 
 	int up, down, left, right;
 
+	bool win;
+
 	Mesh *Text;
 public:
 	GameModel();
@@ -124,6 +126,8 @@ public:
 	Mesh *shadow;
 
 	AI Aina;
+
+	bool getwin();
 };
 
 #endif
