@@ -1,6 +1,6 @@
 #include "GameController.h"
 
-GameController::GameController(Model* model, View* view) : Controller(model, view), keypressed(false), modelkey(true)
+GameController::GameController(Model* model, View* view) : Controller(model, view), keypressed(false), modelkey(true), enterkey(false)
 {
 }
 
@@ -68,6 +68,16 @@ void GameController::Update()
 		model->setCommands(GameModel::COMMANDS::IDLE_LEFT);
 	if (IsKeyPressed(VK_RIGHT))
 		model->setCommands(GameModel::COMMANDS::IDLE_RIGHT);
+
+	if (IsKeyPressed(VK_RETURN) && !enterkey)
+	{
+		enterkey = true;
+		model->setCommands(GameModel::COMMANDS::SPEECH_NEXTLINE);
+	}
+	if (!IsKeyPressed(VK_RETURN) && enterkey)
+	{
+		enterkey = false;
+	}
 
 	Controller::Update();
 }

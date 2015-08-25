@@ -40,6 +40,7 @@
     <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\MouseCharacter.cpp" />
     <ClCompile Include="Source\PlayerCharacter.cpp" />
+    <ClCompile Include="Source\ReadFromText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\TileMap.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="Source\MouseCharacter.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\PlayerCharacter.h" />
+    <ClInclude Include="Source\ReadFromText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\TileMap.h" />

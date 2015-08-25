@@ -16,6 +16,7 @@ public:
 
 	bool keypressed;
 	bool modelkey;
+	bool enterkey;
 };
 
 #endif
