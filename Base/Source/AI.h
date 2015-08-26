@@ -3,6 +3,8 @@
 
 #include "Character.h"
 
+#include <vector>
+
 class AI : public Character
 {
 public:
@@ -16,6 +18,7 @@ public:
 private:
 	Vector3 m_target;
 	int AI_State;
+	std::vector<Vector3> path;
 
 public:
 	AI(Vector3 position = Vector3(), Mesh* sprite = NULL);
@@ -25,7 +28,7 @@ public:
 
 	Vector3 getPos();
 	Mesh* getMesh();
-
+	
 };
 
 #endif

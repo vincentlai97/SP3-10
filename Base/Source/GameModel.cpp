@@ -2,6 +2,7 @@
 
 #include "MeshBuilder.h"
 #include "LoadTGA.h"
+#include "Pathfinding.h"
 
 GameModel::GameModel()
 {
@@ -47,7 +48,7 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3 (20, 11, 0));
+	player = new PlayerCharacter(Vector3 (19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text",16,16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
@@ -327,9 +328,9 @@ PlayerCharacter* GameModel::getPlayer()
 	return player;
 }
 
-Mesh* GameModel::getPlayerMesh()
+Mesh* GameModel::getPlayerMesh(int modelSwitch)
 {
-	return meshPlayer[ModelSwitch - 1];
+	return meshPlayer[modelSwitch - 1];
 }
 
 void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)

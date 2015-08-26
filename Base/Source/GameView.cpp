@@ -6,7 +6,9 @@ ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED 
 
 #include "LoS.h"
 
-GameView::GameView(Model *model) : View(model) 
+#include "Pathfinding.h"
+
+GameView::GameView(Model *model) : View(model)
 , BGMusic(true)
 {
 }
@@ -29,7 +31,7 @@ void GameView::Render()
 		RenderTileMap();
 		RenderPlayer();
 		RenderMusic();
-		if(model->inventory.getInvent())
+		if (model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
 	} modelStack.PopMatrix();
@@ -46,7 +48,7 @@ void GameView::RenderTileMap()
 	model->getOffset(mapOffset_x, mapOffset_y);
 
 	modelStack.Translate(0, 0, 1);
-		static int seed = rand();
+	static int seed = rand();
 	srand(seed);
 	for (int ccount = 0; ccount < tileMap->getNumOfTilesWidth() + 1; ++ccount)
 	{
@@ -69,13 +71,13 @@ void GameView::RenderTileMap()
 					}
 				}
 				
-				modelStack.Translate(0,0,1);
+				modelStack.Translate(0, 0, 1);
 				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM + model->inventory.inventory.TOTAL_ITEM && itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
 				{
-					if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM ) 
-					RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()] , false);
-					else 
-						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) -  model->inventory.inventory.TOTAL_ITEM].getID()] , false);
+					if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM)
+						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()], false);
+					else
+						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) - model->inventory.inventory.TOTAL_ITEM].getID()], false);
 				}
 			} modelStack.PopMatrix();
 		}
@@ -98,7 +100,7 @@ void GameView::RenderPlayer()
 		modelStack.Translate(player->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
 
-		RenderMesh(model->getPlayerMesh(), false, 6 * player->getSpriteState(), 6);
+		RenderMesh(model->getPlayerMesh(1), false, 6 * player->getSpriteState(), 6);
 	} modelStack.PopMatrix();
 }
 #undef player
@@ -117,31 +119,31 @@ void GameView::RenderInventory()
 	GameModel* model = dynamic_cast<GameModel *>(m_model);
 
 	modelStack.Translate(model->getWorldWidth() * 0.5 + 2, model->getWorldHeight() * 0.5, 10);
-	modelStack.PushMatrix(); 
+	modelStack.PushMatrix();
 	{
 		//background
-		modelStack.PushMatrix(); 
-		modelStack.Translate(-4,1.8,0);
-		modelStack.Scale(22,13,1);
+		modelStack.PushMatrix();
+		modelStack.Translate(-4, 1.8, 0);
+		modelStack.Scale(22, 13, 1);
 		RenderMesh(model->inventory.getInventMesh(), false);
 		modelStack.PopMatrix();
 
-		for(int i = 0 ; i < 10; i++)
+		for (int i = 0; i < 10; i++)
 		{
-			if(model->inventory.inventory.getItem(i)->getID() != -1 && model->inventory.inventory.getItem(i)->getCount() != 0)
+			if (model->inventory.inventory.getItem(i)->getID() != -1 && model->inventory.inventory.getItem(i)->getCount() != 0)
 			{
 				//item mesh
 				modelStack.PushMatrix();
-				modelStack.Translate(model->inventory.InventPos[i].x,model->inventory.InventPos[i].y, 1);
-				modelStack.Scale(2,2,2);
+				modelStack.Translate(model->inventory.InventPos[i].x, model->inventory.InventPos[i].y, 1);
+				modelStack.Scale(2, 2, 2);
 				RenderMesh(model->inventory.inventory.getItem(i)->getMesh(), false);
 				modelStack.PopMatrix();
 
 				//item count
 				modelStack.PushMatrix();
 				std::ostringstream ss;
-				ss << model->inventory.inventory.getItem(i)->getCount() ; 
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 570 - model->getWorldWidth() * 0.5 , model->inventory.InventPos[i].y * 37 + 370 - model->getWorldHeight() * 0.5 ,10);
+				ss << model->inventory.inventory.getItem(i)->getCount();
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, model->inventory.InventPos[i].x * 32 + 570 - model->getWorldWidth() * 0.5, model->inventory.InventPos[i].y * 37 + 370 - model->getWorldHeight() * 0.5, 10);
 				modelStack.PopMatrix();
 			}
 			else
@@ -149,37 +151,37 @@ void GameView::RenderInventory()
 		}
 		// selector*
 		modelStack.PushMatrix();
-		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x,model->inventory.InventPos[model->inventory.InvCount].y, 2);
-		modelStack.Scale(2,2,2);
+		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x, model->inventory.InventPos[model->inventory.InvCount].y, 2);
+		modelStack.Scale(2, 2, 2);
 		RenderMesh(model->inventory.getborderMesh(), false);
 		modelStack.PopMatrix();
 
 		//Item selected
-		if(model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
+		if (model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(-11.5,5, 2);
-			modelStack.Scale(4,4,4);
+			modelStack.Translate(-11.5, 5, 2);
+			modelStack.Scale(4, 4, 4);
 			RenderMesh(model->inventory.inventory.getItem(model->inventory.InvCount)->getMesh(), false);
 			modelStack.PopMatrix();
 		}
-	} 
+	}
 	modelStack.PopMatrix();
 
-	if(model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
+	if (model->inventory.inventory.getItem(model->inventory.InvCount)->getID() != -1)
 	{
 		//print name of item selected
 		modelStack.PushMatrix();
 		std::ostringstream ss1;
-		ss1 << model->inventory.inventory.getItem(model->inventory.InvCount)->getName() ; 
-		RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 22, 130,450,10);
+		ss1 << model->inventory.inventory.getItem(model->inventory.InvCount)->getName();
+		RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 22, 130, 450, 10);
 		modelStack.PopMatrix();
 
 		//print count of item selected
 		modelStack.PushMatrix();
 		std::ostringstream ss2;
-		ss2 << model->inventory.inventory.getItem(model->inventory.InvCount)->getCount() ; 
-		RenderTextOnScreen(model->getTextMesh(), ss2.str(), Color(1, 1, 0), 25, 200,420,10);
+		ss2 << model->inventory.inventory.getItem(model->inventory.InvCount)->getCount();
+		RenderTextOnScreen(model->getTextMesh(), ss2.str(), Color(1, 1, 0), 25, 200, 420, 10);
 		modelStack.PopMatrix();
 	}
 }
@@ -194,11 +196,21 @@ void GameView::RenderAI()
 	modelStack.Translate(0, 0, 1);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
+
+		/*std::vector<Vector3> foo = Pathfinding::Pathfind(model->Aina->getPosition(), Vector3(floor(model->getPlayer()->getPosition().x), floor(model->getPlayer()->getPosition().y), 0), model->getTileMap());
+		for (std::vector<Vector3>::iterator it = foo.begin(); it != foo.end(); ++it)
+		{
+			modelStack.PushMatrix(); {
+				modelStack.Translate((*it));
+				modelStack.Translate(0.5, 0.5, 0);
+
+				RenderMesh(model->getPlayerMesh(), false);
+			} modelStack.PopMatrix();
+		}*/
+
 		modelStack.Translate(model->Aina->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
 
-		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
-
-		RenderMesh(model->getPlayerMesh(), false);
+		RenderMesh(model->getPlayerMesh(13), false);
 	} modelStack.PopMatrix();
 }

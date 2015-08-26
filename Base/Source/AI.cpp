@@ -1,6 +1,7 @@
 #include "AI.h"
 
 #include "LoS.h"
+#include "Pathfinding.h"
 
 AI::AI(Vector3 position, Mesh* sprite) : Character(position, sprite)
 {
@@ -19,6 +20,7 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 		m_target = playerPos;
 		AI_State = CHASE;
 		chaseTurns = 5;
+		path = Pathfinding::Pathfind(m_position, playerPos, tileMap);
 	}
 	else
 	{
@@ -32,7 +34,7 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 		break;
 	case CHASE:
 	{
-				  Vector3 dir = (m_target - m_position);
+				  /*Vector3 dir = (m_target - m_position);
 				  Vector3 vel;
 				  vel.x = (dir.x == 0) ? 0 : ((dir.x > 0) ? 1 : -1);
 				  vel.y = (dir.y == 0) ? 0 : ((dir.y > 0) ? 1 : -1);
@@ -60,7 +62,9 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 						  }
 					  }
 					  else m_position.y += vel.y;
-				  }
+				  }*/
+				  m_position = path.back();
+				  path.pop_back();
 	}
 		break;
 	}

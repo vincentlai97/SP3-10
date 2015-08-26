@@ -10,6 +10,8 @@
 
 #include "AI.h"
 
+#include <vector>
+
 #define worldWidth 32
 #define worldHeight 24
 
@@ -69,6 +71,11 @@ protected:
 		NUM_ITEM,
 	};
 	Mesh* meshItem[NUM_ITEM];
+	
+	enum STATE {
+		IDLE_STATE,
+		NUM_STATES,
+	};
 
 	PlayerCharacter *player;
 private:
@@ -100,7 +107,7 @@ public:
 	void MeshItem();
 
 	PlayerCharacter* getPlayer();
-	Mesh* getPlayerMesh();
+	Mesh* getPlayerMesh(int modelSwitch);
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
@@ -109,10 +116,6 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
-
-	Mesh* foo;
-	Vector3 pos1;
-	Vector3 pos2;
 
 	std::vector<int> floorTiles;
 
