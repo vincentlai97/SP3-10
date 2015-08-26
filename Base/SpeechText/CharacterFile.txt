@@ -1,0 +1,15 @@
+SpeechText//Character//MainBText.txt
+SpeechText//Character//MainGText.txt
+SpeechText//Character//ButlerText.txt
+SpeechText//Character//CatText.txt
+SpeechText//Character//CharoText.txt
+SpeechText//Character//ClownText.txt
+SpeechText//Character//DarkText.txt
+SpeechText//Character//EyesText.txt
+SpeechText//Character//GlowText.txt
+SpeechText//Character//HornText.txt
+SpeechText//Character//MaskText.txt
+SpeechText//Character//NoEyesText.txt
+SpeechText//Character//SkeletonText.txt
+SpeechText//Character//TurbanText.txt
+SpeechText//Character//WitchText.txt

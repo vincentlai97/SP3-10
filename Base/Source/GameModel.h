@@ -137,6 +137,7 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
+	float InvenTime;
 
 	Mesh* foo;
 	Vector3 pos1;
