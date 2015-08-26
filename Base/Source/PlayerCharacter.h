@@ -71,6 +71,7 @@ public:
 	bool PlayerDirLeft();
 	bool PlayerDirRight();
 	bool getWin();
+	void setWin(bool);
 };
 
 #endif

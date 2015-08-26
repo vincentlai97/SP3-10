@@ -246,3 +246,8 @@ bool PlayerCharacter::getWin()
 {
 	return gamewin;
 }
+
+void PlayerCharacter::setWin(bool a)
+{
+	gamewin = a;
+}

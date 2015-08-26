@@ -109,6 +109,7 @@ private:
 	int up, down, left, right;
 
 	bool win;
+	bool Key;
 
 	Mesh *Text;
 public:

@@ -31,7 +31,7 @@ void GameModel::Init()
 	m_tileMap->LoadMap("Image//map.csv");
 
 	m_itemMap = new TileMap();
-	m_itemMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_itemMap->Init(25, 64, 48, worldWidth, worldHeight);
 	m_itemMap->LoadMap("Image//ItemMap.csv");
 
 	commands = new bool[NUM_COMMANDS];
@@ -63,7 +63,7 @@ void GameModel::Init()
 	PlaceItemState = false;
 
 	win = false;
-
+	Key = false;
 
 	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
 	{
@@ -111,7 +111,7 @@ void GameModel::Update(double dt)
 			}
 			if (commands[ACTION])
 			{
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 4 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 18)
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.PLAYERB_BOX && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.WITCH_BOX)
 				{
 					ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
 					inventory.inventory.UseItem(inventory.InvCount);
@@ -124,7 +124,7 @@ void GameModel::Update(double dt)
 				if (ModelSwitch > 15)
 					ModelSwitch = 1;
 
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= 0 && inventory.inventory.getItem(inventory.InvCount)->getID() <= 3)
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE)
 					PlaceItemState = true;
 
 			}
@@ -206,14 +206,13 @@ void GameModel::Update(double dt)
 			{
 				if( player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
 				{
+					if(player->TouchItem(m_itemMap) == inventory.inventory.KEY)
+						Key = true;
+
 					inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
 					speech.talking = true;
 					speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
 					player->RemoveItem(m_itemMap);
-				}
-				else
-				{
-					cout << inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap) - inventory.inventory.TOTAL_ITEM )].getName() << endl;
 				}
 			}
 		}
@@ -221,7 +220,7 @@ void GameModel::Update(double dt)
 		if (PlaceItemState == true)
 		{
 
-			if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 			{
 				if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
 				{
@@ -233,7 +232,7 @@ void GameModel::Update(double dt)
 				}
 				PlaceItemState = false;
 			}
-			else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 			{
 				if(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
 				{
@@ -245,7 +244,7 @@ void GameModel::Update(double dt)
 				}
 				PlaceItemState = false;
 			}
-			else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 			{
 				if(m_itemMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x -1, floor(player->getPosition().y)) < 0)
 				{
@@ -257,7 +256,7 @@ void GameModel::Update(double dt)
 				}
 				PlaceItemState = false;
 			}
-			else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= 3 && inventory.inventory.getItem(inventory.InvCount)->getID() > -1))
+			else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 			{
 				if(m_itemMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x +1, floor(player->getPosition().y)) < 0)
 				{
@@ -271,10 +270,15 @@ void GameModel::Update(double dt)
 			}
 		}
 	}
-	else
+	else if(player->getWin() && Key)
 	{
 		win = true;
-		throw -1;
+		if (commands[ACTION])
+			throw -1;
+	}
+	else
+	{
+		player->setWin(false);
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)

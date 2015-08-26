@@ -79,7 +79,7 @@ void main(void)
 	}
 
 	if (model != NULL) delete model;
-	if (view != NULL) delete view;
+	if (view != NULL) {delete view; delete view2;}
 	if (controller != NULL) delete controller;
 
 }
