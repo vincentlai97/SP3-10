@@ -26,7 +26,8 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	Vector3 position = m_position;
 	position.x += m_velocity.x ;
 	
-	if(tileMap->getTile(position.x, floor(position.y)) == 176 || tileMap->getTile(position.x, ceil(position.y)) == 176 )
+	if(tileMap->getTile(position.x, floor(position.y)) == 176 || tileMap->getTile(position.x, ceil(position.y)) == 176 
+		|| tileMap->getTile(position.x, floor(position.y)) == 183 || tileMap->getTile(position.x, ceil(position.y)) == 183 )
 	{
 		gamewin = true;
 	}
@@ -38,7 +39,12 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	position = m_position;
 	position.y += m_velocity.y;
 	
-	if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
+	if(tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) == 50 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) == 50 
+		|| tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) == 88 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) == 88)
+	{
+		gamewin = true;
+	}
+	else if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
 	{
 		m_velocity.y = 0;
 	}

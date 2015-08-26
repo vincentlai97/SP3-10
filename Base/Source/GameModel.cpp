@@ -63,7 +63,8 @@ void GameModel::Init()
 	PlaceItemState = false;
 
 	win = false;
-	Key = false;
+	numKey = 0;
+	//getKeys();
 
 	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
 	{
@@ -207,7 +208,7 @@ void GameModel::Update(double dt)
 				if( player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
 				{
 					if(player->TouchItem(m_itemMap) == inventory.inventory.KEY)
-						Key = true;
+						numKey++;
 
 					inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
 					speech.talking = true;
@@ -270,11 +271,9 @@ void GameModel::Update(double dt)
 			}
 		}
 	}
-	else if(player->getWin() && Key)
+	else if(player->getWin() && totalKey == numKey)
 	{
 		win = true;
-		if (commands[ACTION])
-			throw -1;
 	}
 	else
 	{
@@ -505,4 +504,19 @@ Mesh* GameModel::getSpeechMesh()
 bool GameModel::getwin()
 {
 	return win;
+}
+
+int GameModel::getKeys()
+{
+	totalKey = 0;
+	for (int ccount = 0; ccount < m_itemMap->getMapWidth(); ++ccount)
+	{
+		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
+		{
+			if (m_itemMap->getTile(ccount , rcount) == inventory.inventory.KEY )
+				totalKey++;
+		}
+	}
+
+	return totalKey;
 }

@@ -99,8 +99,6 @@ protected:
 private:
 	Mesh *tile;
 	
-	TileMap* m_tileMap;
-	TileMap* m_itemMap;
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -109,9 +107,14 @@ private:
 	int up, down, left, right;
 
 	bool win;
+	int numKey;
 	bool Key;
+	int totalKey;
 
 	Mesh *Text;
+protected:
+	TileMap* m_tileMap;
+	TileMap* m_itemMap;
 public:
 	GameModel();
 	~GameModel();
@@ -153,6 +156,8 @@ public:
 	void MeshSpeech();
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
+
+	int getKeys();
 
 	bool getwin();
 };
