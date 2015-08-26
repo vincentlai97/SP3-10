@@ -101,7 +101,7 @@ void GameView::RenderPlayer()
 		modelStack.Translate(player->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
 
-		RenderMesh(model->getPlayerMesh(1), false, 6 * player->getSpriteState(), 6);
+		RenderMesh(model->getPlayerMesh(), false, 6 * player->getSpriteState(), 6);
 	} modelStack.PopMatrix();
 }
 #undef player
@@ -213,10 +213,8 @@ void GameView::RenderAI()
 		modelStack.Translate(0.5, 0.5, 0);
 		if (model->Aina->getAiActive() == true)
 		{
-			RenderMesh(model->getPlayerMesh(), false);
+			RenderMesh(model->getAIMesh(13), false);
 		}
-
-		RenderMesh(model->getPlayerMesh(13), false);
 	} modelStack.PopMatrix();
 }
 

@@ -135,7 +135,7 @@ public:
 	int GetLineParagraph();
 
 	PlayerCharacter* getPlayer();
-	Mesh* getPlayerMesh(int modelSwitch);
+	Mesh* getPlayerMesh();
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
@@ -157,6 +157,8 @@ public:
 	void MeshSpeech();
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
+
+	Mesh* getAIMesh(int modelSwitch);
 
 	bool getwin();
 };

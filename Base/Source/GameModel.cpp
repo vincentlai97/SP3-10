@@ -145,19 +145,18 @@ void GameModel::Update(double dt)
 		}
 		else
 		{
-			if (commands[MODEL_UP])
+			/*if (commands[MODEL_UP])
 			{
 				ModelSwitch--;
 				if (ModelSwitch < 1)
 					ModelSwitch = 15;
 			}
-
 			if (commands[MODEL_DOWN])
 			{
 				ModelSwitch++;
 				if (ModelSwitch > 15)
 					ModelSwitch = 1;
-			}
+			}*/
 
 			if (commands[MOVE_UP] && !speech.talking)
 			{
@@ -387,7 +386,12 @@ PlayerCharacter* GameModel::getPlayer()
 	return player;
 }
 
-Mesh* GameModel::getPlayerMesh(int modelSwitch)
+Mesh* GameModel::getPlayerMesh()
+{
+	return meshPlayer[ModelSwitch - 1];
+}
+
+Mesh* GameModel::getAIMesh(int modelSwitch)
 {
 	return meshPlayer[modelSwitch - 1];
 }
@@ -462,11 +466,6 @@ void GameModel::MeshSpeech()
 
 	meshSpeech[TEXTBOX] = MeshBuilder::GenerateText("Textbox", 1, 1);
 	meshSpeech[TEXTBOX]->textureID[0] = LoadTGA("Image//Sprite//Textbox.tga");
-}
-
-Mesh* GameModel::getPlayerMesh(int modelSwitch)
-{
-	return meshPlayer[modelSwitch - 1];
 }
 
 Mesh* GameModel::getFaceMesh()
