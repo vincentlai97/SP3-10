@@ -29,6 +29,7 @@ void GameModel::Init()
 
 	m_tileMap = new TileMap();
 	m_tileMap->Init(25, 64, 48, worldWidth, worldHeight);
+	
 	m_tileMap->LoadMap("Image//map.csv");
 
 	m_itemMap = new TileMap();
