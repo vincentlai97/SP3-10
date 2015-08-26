@@ -26,6 +26,7 @@ public:
 
 	bool KeyPressed;
 	bool talking;
+	void Textfile(const char* filename);
 	void Dialogue(const char* filename);
 	void Obtain(const char* filename, bool loot, string ItemName);
 	void Update(double dt);
@@ -33,5 +34,6 @@ public:
 	int GetParagraphLine(void);
 
 	vector<string> line;
+	vector<string> CharacterText;
 };
 

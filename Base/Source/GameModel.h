@@ -144,6 +144,7 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
+	float InvenTime;
 
 	std::vector<int> floorTiles;
 
