@@ -47,33 +47,14 @@ void main(void)
 			switch (state)
 			{
 			case -1:
-					model = new CMainMenuModel();
-					view2 = new CMainMenuView(model);
-					controller = new CMainMenuController(model, view2);
-
-					// Initialize GLFW
-					if (!glfwInit()) exit(EXIT_FAILURE);
-					controller->Init(view->getWindow());
-					glewExperimental = true; // Needed for core profile
-					// Initialize GLEW
-					if (glewInit() != GLEW_OK) exit(EXIT_FAILURE);
-					view2->Init();
-					model->Init();
-					break;
+				model = new CMainMenuModel();
+				view2 = new CMainMenuView(model);
+				controller = new CMainMenuController(model, view2);
+				break;
 			case 0:
-					model = new GameModel();
-					view2 = new GameView(model);
-					controller = new GameController(model, view2);
-
-					// Initialize GLFW
-					if (!glfwInit()) exit(EXIT_FAILURE);
-					controller->Init(view->getWindow());
-					glewExperimental = true; // Needed for core profile
-					// Initialize GLEW
-					if (glewInit() != GLEW_OK) exit(EXIT_FAILURE);
-					view2->Init();
-					model->Init();
-
+				model = new GameModel();
+				view2 = new GameView(model);
+				controller = new GameController(model, view2);
 				break;
 			case 1:
 				model = new GameModel();
@@ -83,6 +64,17 @@ void main(void)
 				n = false;
 				break;
 			}
+
+
+			// Initialize GLFW
+			if (!glfwInit()) exit(EXIT_FAILURE);
+			controller->Init(view->getWindow());
+			glewExperimental = true; // Needed for core profile
+			// Initialize GLEW
+			if (glewInit() != GLEW_OK) exit(EXIT_FAILURE);
+			view2->Init();
+			model->Init();
+
 		}
 	}
 
