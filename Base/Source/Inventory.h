@@ -29,6 +29,7 @@ public:
 		SKELETON_BOX,
 		TURBAN_BOX,
 		WITCH_BOX,
+		KEY,
 		TOTAL_ITEM,
 	};
 

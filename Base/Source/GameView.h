@@ -3,7 +3,7 @@
 
 #include "View.h"
 #include "GameModel.h"
-#include <irrKlang.h>
+
 
 class GameView : public View
 {
@@ -15,6 +15,8 @@ private:
 	void RenderMusic();
 	void RenderInventory();
 	void RenderAI();
+	void RenderSpeech();
+	void RenderWin();
 
 public:
 	GameView(Model *model);
@@ -23,7 +25,9 @@ public:
 	GameModel *model;
 
 	virtual void Render();
-
+	std::ostringstream strcopy;
+	std::ostringstream strcopy2;
+	std::ostringstream strcopy3;
 };
 
 #endif

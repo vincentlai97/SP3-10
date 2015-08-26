@@ -34,6 +34,9 @@ void Inventory::Init()
 	meshlist[THROWABLE] = MeshBuilder::GenerateText("border",1,1);
 	meshlist[THROWABLE]->textureID[0] = LoadTGA("Image//Random.tga");
 
+	meshlist[KEY] = MeshBuilder::GenerateText("key",1,1);
+	meshlist[KEY]->textureID[0] = LoadTGA("Image//key.tga");
+
 	MeshBox();
 
 	DefaultItem[MIRROR].Set("Mirror",MIRROR,1,false);
@@ -56,6 +59,7 @@ void Inventory::Init()
 	DefaultItem[SKELETON_BOX].Set("Skeleton", SKELETON_BOX, 1, false);
 	DefaultItem[TURBAN_BOX].Set("Turban", TURBAN_BOX, 1, false);
 	DefaultItem[WITCH_BOX].Set("Witch", WITCH_BOX, 1, false);
+	DefaultItem[KEY].Set("Key", KEY, 1, false);
 }
 
 void Inventory::MeshBox()

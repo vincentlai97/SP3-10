@@ -6,7 +6,7 @@ Character::Character(Vector3 position, Mesh* sprite)
 , m_velocity(0, 0, 0)
 , m_size(0, 0, 0)
 , m_sprite(sprite)
-, m_spriteState(0)
+, m_spriteState(1)
 , m_spriteTime(0)
 {
 }

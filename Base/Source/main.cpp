@@ -33,35 +33,53 @@ void main(void)
 	if (glewInit() != GLEW_OK) exit(EXIT_FAILURE);
 	view->Init();
 	model->Init();
-	try{
-		controller->RunLoop();
-	}
-	catch (int state)
+
+	View* view2; // view is the only one not changing 
+
+	int n = true;
+	while(n)
 	{
-		glfwDestroyWindow(view->getWindow());
-		switch (state)
+		try{
+			controller->RunLoop();
+		}
+		catch (int state)
 		{
-		case 0:
-			model = new GameModel();
-			view = new GameView(model);
-			controller = new GameController(model, view);
-			controller->Init();
-			view->Init();
+			switch (state)
+			{
+			case -1:
+				model = new CMainMenuModel();
+				view2 = new CMainMenuView(model);
+				controller = new CMainMenuController(model, view2);
+				break;
+			case 0:
+				model = new GameModel();
+				view2 = new GameView(model);
+				controller = new GameController(model, view2);
+				break;
+			case 1:
+				model = new GameModel();
+				break;
+			case 2:
+				controller->ExitKey = true;
+				n = false;
+				break;
+			}
+
+
+			// Initialize GLFW
+			if (!glfwInit()) exit(EXIT_FAILURE);
+			controller->Init(view->getWindow());
+			glewExperimental = true; // Needed for core profile
+			// Initialize GLEW
+			if (glewInit() != GLEW_OK) exit(EXIT_FAILURE);
+			view2->Init();
 			model->Init();
 
-			controller->RunLoop();
-			break;
-		case 1:
-			model = new GameModel();
-			break;
-		case 2:
-			controller->ExitKey = true;
-			break;
 		}
 	}
 
 	if (model != NULL) delete model;
-	if (view != NULL) delete view;
+	if (view != NULL) {delete view; delete view2;}
 	if (controller != NULL) delete controller;
 
 }

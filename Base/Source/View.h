@@ -9,6 +9,10 @@
 
 #include "Light.h"
 #include "MatrixStack.h"
+#include <irrKlang.h>
+
+#pragma comment(lib, "irrKlang.lib")
+using namespace irrklang;
 
 class View
 {
@@ -73,7 +77,7 @@ public:
 	bool createWindow(const int &window_width, const int &window_height, const char *window_title, GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
 	
 	GLFWwindow* getWindow() { return m_window; }
-	GLFWwindow* setWindow();
+	void setWindow(GLFWwindow* a) { m_window  = a;}
 
 	virtual void Init();
 	virtual void Render();

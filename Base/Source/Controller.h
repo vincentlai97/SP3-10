@@ -19,7 +19,7 @@ protected:
 public:
 	Controller(Model* model, View* view) : model(model), view(view) {}
 
-	virtual void Init();
+	virtual void Init(GLFWwindow* a = NULL);
 	virtual void RunLoop();
 	static bool ExitKey;
 };

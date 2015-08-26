@@ -38,6 +38,7 @@ private:
 	JUMP_STATE m_jumpState;
 	float m_jumpHeight;
 	bool move;
+	bool gamewin;
 
 	void UpdateVelocity(double dt);
 	void UpdatePosition(double dt, const TileMap *tileMap);
@@ -69,6 +70,8 @@ public:
 	bool PlayerDirDown();
 	bool PlayerDirLeft();
 	bool PlayerDirRight();
+	bool getWin();
+	void setWin(bool);
 };
 
 #endif

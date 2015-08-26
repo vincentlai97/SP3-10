@@ -1,12 +1,9 @@
 #include "GameView.h"
-
 #pragma comment(lib, "irrKlang.lib")
 using namespace irrklang;
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 #include "LoS.h"
-
-#include "Pathfinding.h"
 
 GameView::GameView(Model *model) : View(model)
 , BGMusic(true)
@@ -34,6 +31,10 @@ void GameView::Render()
 		if (model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
+		if(model->getwin())
+			RenderWin();
+		if (model->GetLineParagraph() > 0 && model->GetLineParagraph() < 4)
+			RenderSpeech();
 	} modelStack.PopMatrix();
 }
 
@@ -55,7 +56,7 @@ void GameView::RenderTileMap()
 		for (int rcount = 0; rcount < tileMap->getNumOfTilesHeight() + 1; ++rcount)
 		{
 			modelStack.PushMatrix(); {
-				modelStack.Translate(int(-(mapOffset_x - (int)mapOffset_x)), int(-(mapOffset_y - (int)mapOffset_y)), 0);
+				modelStack.Translate(-(mapOffset_x - (int)mapOffset_x), -(mapOffset_y - (int)mapOffset_y), 0);
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
@@ -210,7 +211,67 @@ void GameView::RenderAI()
 
 		modelStack.Translate(model->Aina->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
+		if (model->Aina->getAiActive() == true)
+		{
+			RenderMesh(model->getPlayerMesh(), false);
+		}
 
 		RenderMesh(model->getPlayerMesh(13), false);
 	} modelStack.PopMatrix();
+}
+
+void GameView::RenderSpeech()
+{
+	GameModel* model = dynamic_cast<GameModel *>(m_model);
+
+	modelStack.Translate(0, 0, 11);
+	modelStack.PushMatrix(); {
+		modelStack.Translate(model->getWorldWidth() / 2, model->getWorldHeight() / 8, 0);
+		modelStack.Scale(model->getWorldWidth(), model->getWorldHeight() / 4, 1);
+		RenderMesh(model->getSpeechMesh(), false, 6 * 0, 6);
+	} modelStack.PopMatrix();
+
+	modelStack.Translate(0, 0, 1);
+	modelStack.PushMatrix(); {
+		modelStack.Translate(model->getWorldWidth() / 8, model->getWorldHeight() / 8, 0);
+		modelStack.Scale(model->getWorldWidth() / 5, model->getWorldHeight() / 4.5, 1);
+		RenderMesh(model->getFaceMesh(), false, 6 * 0, 6);
+	} modelStack.PopMatrix();
+
+	float transX = model->getWorldWidth() * 8;
+
+	if (model->GetLineParagraph() == 1)
+	{
+		strcopy.str("");
+		strcopy << model->GetTextSpeech();
+		RenderTextOnScreen(model->getTextMesh(), strcopy.str(), Color(1, 1, 1), 30, transX, 140, 10);
+	}
+	else if (model->GetLineParagraph() == 2)
+	{
+		RenderTextOnScreen(model->getTextMesh(), strcopy.str(), Color(1, 1, 1), 30, transX, 140, 10);
+
+		strcopy2.str("");
+		strcopy2 << model->GetTextSpeech();
+		RenderTextOnScreen(model->getTextMesh(), strcopy2.str(), Color(1, 1, 1), 30, transX, 80, 10);
+	}
+	else if (model->GetLineParagraph() == 3)
+	{
+		RenderTextOnScreen(model->getTextMesh(), strcopy.str(), Color(1, 1, 1), 30, transX, 140, 10);
+		RenderTextOnScreen(model->getTextMesh(), strcopy2.str(), Color(1, 1, 1), 30, transX, 80, 10);
+
+		std::ostringstream strcopy3;
+		strcopy3 << model->GetTextSpeech();
+		RenderTextOnScreen(model->getTextMesh(), strcopy3.str(), Color(1, 1, 1), 30, transX, 20, 10);
+	}
+}
+
+void GameView::RenderWin()
+{
+	GameModel* model = dynamic_cast<GameModel *>(m_model);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 10);
+	modelStack.Scale(model->getWorldWidth(),model->getWorldHeight(),10);
+	RenderMesh(model->inventory.getInventMesh(),false);
+	modelStack.PopMatrix();
 }

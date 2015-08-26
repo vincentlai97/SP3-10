@@ -37,7 +37,7 @@ static void resize_callback(GLFWwindow* window, int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-void Controller::Init()
+void Controller::Init(GLFWwindow* a)
 {
 	//Set error callback
 	glfwSetErrorCallback(error_callback);
@@ -52,8 +52,12 @@ void Controller::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-	view->createWindow(1024, 800, "Scene");
+	if(a == NULL)
+		view->createWindow(1024, 800, "Scene");
+	else
+		view->setWindow(a);
 }
+
 
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -78,8 +82,10 @@ void Controller::RunLoop()
 		glfwPollEvents();
 		m_timer.waitUntil(frameTime); // Frame rate limiter. Limits each frame to a specified time in ms.   
 	}
-	if (view->getWindow())
-	glfwDestroyWindow(view->getWindow());
+	if(IsKeyPressed(VK_ESCAPE))
+		throw -1;
+	if(glfwWindowShouldClose(glfwGetCurrentContext()) || ExitKey)
+		throw 2;
 }
 
 void Controller::Update()

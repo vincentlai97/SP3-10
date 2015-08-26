@@ -9,6 +9,7 @@
 #include "InventoryMenu.h"
 
 #include "AI.h"
+#include "ReadFromText.h"
 
 #include <vector>
 
@@ -31,6 +32,7 @@ public:
 		IDLE_DOWN,
 		IDLE_LEFT,
 		IDLE_RIGHT,
+		SPEECH_NEXTLINE,
 		NUM_COMMANDS,
 	};
 protected:
@@ -51,6 +53,7 @@ protected:
 		SKELETON,
 		TURBAN,
 		WITCH,
+
 		MAID,
 		SHINIGAMI,
 		NUM_PLAYER,
@@ -77,6 +80,28 @@ protected:
 		NUM_STATES,
 	};
 
+	enum SPEECH_TYPE{
+		PLAYERB_FACE,
+		PLAYERG_FACE,
+		BUTLER_FACE,
+		CAT_FACE,
+		CHARO_FACE,
+		CLOWN_FACE,
+		DARK_FACE,
+		EYES_FACE,
+		GLOW_FACE,
+		HORN_FACE,
+		MASK_FACE,
+		NOEYES_FACE,
+		SKELETON_FACE,
+		TURBAN_FACE,
+		WITCH_FACE,
+		CHARACTER_FACE,
+		TEXTBOX,
+		NUM_SPEECH,
+	};
+	Mesh* meshSpeech[NUM_SPEECH];
+
 	PlayerCharacter *player;
 private:
 	Mesh *tile;
@@ -89,6 +114,9 @@ private:
 	bool PlaceItemState;
 
 	int up, down, left, right;
+
+	bool win;
+	bool Key;
 
 	Mesh *Text;
 public:
@@ -103,8 +131,8 @@ public:
 	int getWorldHeight() { return worldHeight; }
 
 	void MeshPlayer();
-	void MeshBox();
-	void MeshItem();
+	string GetTextSpeech();
+	int GetLineParagraph();
 
 	PlayerCharacter* getPlayer();
 	Mesh* getPlayerMesh(int modelSwitch);
@@ -120,8 +148,16 @@ public:
 	std::vector<int> floorTiles;
 
 	Mesh *shadow;
-	
+
 	AI *Aina;
+	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
+
+	ReadFromText speech;
+	void MeshSpeech();
+	Mesh* getFaceMesh();
+	Mesh* getSpeechMesh();
+
+	bool getwin();
 };
 
 #endif
