@@ -16,7 +16,7 @@ public:
 private:
 	Vector3 m_target;
 	int AI_State;
-
+	bool AI_Active;
 public:
 	AI(Vector3 position = Vector3(), Mesh* sprite = NULL);
 	~AI();
@@ -25,6 +25,12 @@ public:
 
 	Vector3 getPos();
 	Mesh* getMesh();
+
+	bool getAiActive();
+	void setAiActive(bool AI_Active);
+
+	int TouchItem(const TileMap *tileMap);
+	void RemoveItem(const TileMap *tileMap);
 
 };
 

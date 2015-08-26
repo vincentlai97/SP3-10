@@ -1,7 +1,9 @@
 #include "MainMenuView.h"
 
 
-CMainMenuView::CMainMenuView(Model* model) : View(model)
+ISoundEngine* MenuBGM = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
+CMainMenuView::CMainMenuView(Model* model) : View(model), b_MenuBGM(true)
 {
 }
 

@@ -2,7 +2,7 @@
 
 #include "LoS.h"
 
-AI::AI(Vector3 position, Mesh* sprite) : Character(position, sprite)
+AI::AI(Vector3 position, Mesh* sprite) : Character(position, sprite), AI_Active(true)
 {
 }
 
@@ -65,4 +65,23 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 		break;
 	}
 
+}
+
+bool AI::getAiActive()
+{
+	return AI_Active;
+}
+
+void AI::setAiActive(bool AI_Active)
+{
+	this->AI_Active = AI_Active;
+}
+
+int AI::TouchItem(const TileMap *tileMap)
+{
+	return tileMap->getTile(m_position.x, floor(m_position.y));
+}
+void AI::RemoveItem(const TileMap *tileMap)
+{
+	tileMap->SetTile(m_position.x, floor(m_position.y), -1);
 }

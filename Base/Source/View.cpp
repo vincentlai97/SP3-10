@@ -8,6 +8,8 @@
 
 #include <sstream>
 
+
+
 bool View::createWindow(const int& window_width, const int& window_height, const char* window_title, GLFWmonitor* monitor, GLFWwindow* share)
 {
 	//Set the GLFW window creation hints - these are optional

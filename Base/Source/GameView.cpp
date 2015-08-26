@@ -1,7 +1,8 @@
 #include "GameView.h"
-
 #pragma comment(lib, "irrKlang.lib")
 using namespace irrklang;
+
+
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 #include "LoS.h"
@@ -111,7 +112,7 @@ void GameView::RenderMusic()
 {
 	if (BGMusic)
 	{
-		BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
+		//BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
 		BGMusic = false;
 	}
 }
@@ -200,10 +201,12 @@ void GameView::RenderAI()
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
 		modelStack.Translate(model->Aina->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
+		if (model->Aina->getAiActive() == true)
+		{
+			RenderMesh(model->getPlayerMesh(), false);
+		}
 
-		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
 
-		RenderMesh(model->getPlayerMesh(), false);
 	} modelStack.PopMatrix();
 }
 
