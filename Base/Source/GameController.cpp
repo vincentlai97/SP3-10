@@ -1,6 +1,6 @@
 #include "GameController.h"
 
-GameController::GameController(Model* model, View* view) : Controller(model, view), keypressed(false), modelkey(true), enterkey(false)
+GameController::GameController(Model* model, View* view) : Controller(model, view), keypressed(false), enterkey(false) //,modelkey(true)
 {
 }
 
@@ -46,7 +46,7 @@ void GameController::Update()
 		keypressed = true;
 	}
 
-	if (IsKeyPressed('1') && modelkey)
+	/*if (IsKeyPressed('1') && modelkey)
 	{
 		modelkey = false;
 		model->setCommands(GameModel::COMMANDS::MODEL_UP);
@@ -58,7 +58,7 @@ void GameController::Update()
 	}
 
 	if (!IsKeyPressed('1') && !IsKeyPressed('2') && !modelkey)
-		modelkey = true;
+		modelkey = true;*/
 
 	if (IsKeyPressed(VK_UP))
 		model->setCommands(GameModel::COMMANDS::IDLE_UP);

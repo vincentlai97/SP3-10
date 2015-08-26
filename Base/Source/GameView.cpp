@@ -1,12 +1,11 @@
 #include "GameView.h"
-
 #pragma comment(lib, "irrKlang.lib")
 using namespace irrklang;
 ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 #include "LoS.h"
 
-GameView::GameView(Model *model) : View(model) 
+GameView::GameView(Model *model) : View(model)
 , BGMusic(true)
 {
 }
@@ -29,7 +28,7 @@ void GameView::Render()
 		RenderTileMap();
 		RenderPlayer();
 		RenderMusic();
-		if(model->inventory.getInvent())
+		if (model->inventory.getInvent())
 			RenderInventory();
 		RenderAI();
 		if(model->getwin())
@@ -73,13 +72,13 @@ void GameView::RenderTileMap()
 					}
 				}
 				
-				modelStack.Translate(0,0,1);
+				modelStack.Translate(0, 0, 1);
 				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM + model->inventory.inventory.TOTAL_ITEM && itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
 				{
-					if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM ) 
-					RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()] , false);
-					else 
-						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) -  model->inventory.inventory.TOTAL_ITEM].getID()] , false);
+					if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM)
+						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y)].getID()], false);
+					else
+						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) - model->inventory.inventory.TOTAL_ITEM].getID()], false);
 				}
 			} modelStack.PopMatrix();
 		}
@@ -153,8 +152,8 @@ void GameView::RenderInventory()
 		}
 		// selector*
 		modelStack.PushMatrix();
-		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x,model->inventory.InventPos[model->inventory.InvCount].y, 2);
-		modelStack.Scale(2.5,2.5,2.5);
+		modelStack.Translate(model->inventory.InventPos[model->inventory.InvCount].x, model->inventory.InventPos[model->inventory.InvCount].y, 2);
+		modelStack.Scale(2, 2, 2);
 		RenderMesh(model->inventory.getborderMesh(), false);
 		modelStack.PopMatrix();
 
@@ -198,12 +197,24 @@ void GameView::RenderAI()
 	modelStack.Translate(0, 0, 1);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
+
+		/*std::vector<Vector3> foo = Pathfinding::Pathfind(model->Aina->getPosition(), Vector3(floor(model->getPlayer()->getPosition().x), floor(model->getPlayer()->getPosition().y), 0), model->getTileMap());
+		for (std::vector<Vector3>::iterator it = foo.begin(); it != foo.end(); ++it)
+		{
+			modelStack.PushMatrix(); {
+				modelStack.Translate((*it));
+				modelStack.Translate(0.5, 0.5, 0);
+
+				RenderMesh(model->getPlayerMesh(), false);
+			} modelStack.PopMatrix();
+		}*/
+
 		modelStack.Translate(model->Aina->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
-
-		//cout << model->Aina.getPos().x << "   " << model->Aina.getPos().y << endl;
-
-		RenderMesh(model->getPlayerMesh(), false);
+		if (model->Aina->getAiActive() == true)
+		{
+			RenderMesh(model->getAIMesh(13), false);
+		}
 	} modelStack.PopMatrix();
 }
 

@@ -18,6 +18,30 @@ ReadFromText::~ReadFromText()
 	
 }
 
+void ReadFromText::Textfile(const char* filename)
+{
+	ifstream file;
+	string data;
+
+	file.open(filename);
+
+	if (file.is_open())
+	{
+		CharacterText.clear();
+		CharacterText.shrink_to_fit();
+
+		file.clear();
+		file.seekg(0, file.beg);
+
+		while (file.good()) {
+			getline(file, data, '\n');
+
+			CharacterText.push_back(data);
+		}
+	}
+	file.close();
+}
+
 void ReadFromText::Dialogue(const char* filename)
 {
 	ifstream file;

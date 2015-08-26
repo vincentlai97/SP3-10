@@ -116,6 +116,9 @@
     <ClCompile Include="Source\LoS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Pathfinding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\ReadFromText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -245,6 +248,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pathfinding.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\ReadFromText.h">

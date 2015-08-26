@@ -3,7 +3,7 @@
 
 #include "View.h"
 #include "GameModel.h"
-#include <irrKlang.h>
+
 
 class GameView : public View
 {

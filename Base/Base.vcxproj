@@ -40,6 +40,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\MouseCharacter.cpp" />
+    <ClCompile Include="Source\Pathfinding.cpp" />
     <ClCompile Include="Source\PlayerCharacter.cpp" />
     <ClCompile Include="Source\ReadFromText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="Source\Model.h" />
     <ClInclude Include="Source\MouseCharacter.h" />
     <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\Pathfinding.h" />
     <ClInclude Include="Source\PlayerCharacter.h" />
     <ClInclude Include="Source\ReadFromText.h" />
     <ClInclude Include="Source\shader.hpp" />

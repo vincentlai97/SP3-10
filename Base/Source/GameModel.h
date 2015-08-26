@@ -11,6 +11,8 @@
 #include "AI.h"
 #include "ReadFromText.h"
 
+#include <vector>
+
 #define worldWidth 32
 #define worldHeight 24
 
@@ -72,6 +74,11 @@ protected:
 		NUM_ITEM,
 	};
 	Mesh* meshItem[NUM_ITEM];
+	
+	enum STATE {
+		IDLE_STATE,
+		NUM_STATES,
+	};
 
 	enum SPEECH_TYPE{
 		PLAYERB_FACE,
@@ -140,10 +147,7 @@ public:
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
-
-	Mesh* foo;
-	Vector3 pos1;
-	Vector3 pos2;
+	float InvenTime;
 
 	std::vector<int> floorTiles;
 
@@ -157,8 +161,9 @@ public:
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
 
-	int getKeys();
+	Mesh* getAIMesh(int modelSwitch);
 
+	int getKeys();
 	bool getwin();
 };
 
