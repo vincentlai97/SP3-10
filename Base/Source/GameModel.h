@@ -181,7 +181,7 @@ public:
 	void laserswitch(void);
 	void setLaser(void);
 
-	Vector3 mirror;
+	std::vector<Vector3> mirror;
 };
 
 #endif

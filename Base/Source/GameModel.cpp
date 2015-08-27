@@ -82,8 +82,6 @@ void GameModel::Init()
 
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
-
-	mirror = Vector3(-1, -1, 0);
 }
 
 #define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
@@ -137,6 +135,7 @@ void GameModel::Update(double dt)
 			break;
 		}
 
+		//Laser switch
 		if(commands[ACTION])
 		{
 			if (!player->getDirection().IsZero())
@@ -184,8 +183,10 @@ void GameModel::Update(double dt)
 			{
 				Vector3 placePosition = player->getPosition() + player->getDirection();
 				if (m_itemMap->getTile(placePosition.x, placePosition.y) < 0)
+				{
 					m_itemMap->SetTile(placePosition.x, placePosition.y, inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() == Inventory::MIRROR) mirror = placePosition;
+					if (inventory.inventory.getItem(inventory.InvCount)->getID() == Inventory::MIRROR) mirror.push_back(placePosition);
+				}
 				speech.talking = true;
 				speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
 				inventory.inventory.UseItem(inventory.InvCount);
@@ -424,7 +425,7 @@ void GameModel::Update(double dt)
 	player->setWin(false);
 	}*/
 
-	if (!speech.talking && InstructText)
+	/*if (!speech.talking && InstructText)
 	{
 		for (int n = 0; n < speech.InstructionText.size(); n++)
 		{
@@ -449,7 +450,7 @@ void GameModel::Update(double dt)
 	if (commands[SPEECH_NEXTLINE] && speech.talking)
 	{
 		speech.KeyPressed = true;
-	}
+	}*/
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;

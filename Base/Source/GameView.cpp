@@ -33,7 +33,7 @@ void GameView::Render()
 		if (model->isShowInventory())
 			RenderInventory();
 		RenderAI();
-		if(model->getwin())
+		if (model->getwin())
 			RenderWin();
 		if (model->GetLineParagraph() > 0 && model->GetLineParagraph() < 4)
 			RenderSpeech();
@@ -68,19 +68,25 @@ void GameView::RenderTileMap()
 				else
 				{
 					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6); //Render Ground
-					if (!checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap)) //Check LoS with player
+					bool renderShadow = true;
+					if (checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap)) //Check LoS with player
+						renderShadow = false;
+					for (std::vector<Vector3>::iterator it = model->mirror.begin(); it != model->mirror.end(); ++it)
 					{
-						if (!checkLineOfSight(model->mirror + Vector3(0.5, 0.5, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap))
-						{
-							modelStack.PushMatrix(); {
-								modelStack.Translate(0, 0, 5);
+						if ((checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), (*it) + Vector3(.5f, .5f, 0), tileMap)
+							&& checkLineOfSight((*it) + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap)))
+							renderShadow = false;
+					}
+					if (renderShadow)
+					{
+						modelStack.PushMatrix(); {
+							modelStack.Translate(0, 0, 5);
 
-								RenderMesh(model->shadow, false); //Render Shadow
-							} modelStack.PopMatrix();
-						}
+							RenderMesh(model->shadow, false); //Render Shadow
+						} modelStack.PopMatrix();
 					}
 				}
-				
+
 				modelStack.Translate(0, 0, 1);
 				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM + model->inventory.inventory.TOTAL_ITEM && itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
 				{
@@ -92,22 +98,22 @@ void GameView::RenderTileMap()
 
 				/*if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 47)
 					{
-						modelStack.PushMatrix();
-						modelStack.Rotate(90,0,0,1);
-						RenderMesh(model->inventory.inventory.meshlist[20], false);
-						modelStack.PopMatrix();
+					modelStack.PushMatrix();
+					modelStack.Rotate(90,0,0,1);
+					RenderMesh(model->inventory.inventory.meshlist[20], false);
+					modelStack.PopMatrix();
 					}
 					else if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 48)
-					{	
-						modelStack.PushMatrix();
-						RenderMesh(model->inventory.inventory.meshlist[20], false);
-						modelStack.PopMatrix();
+					{
+					modelStack.PushMatrix();
+					RenderMesh(model->inventory.inventory.meshlist[20], false);
+					modelStack.PopMatrix();
 
-						modelStack.PushMatrix();
-						modelStack.Translate(0,0,1);
-						modelStack.Rotate(90,0,0,1);
-						RenderMesh(model->inventory.inventory.meshlist[20], false);
-						modelStack.PopMatrix();
+					modelStack.PushMatrix();
+					modelStack.Translate(0,0,1);
+					modelStack.Rotate(90,0,0,1);
+					RenderMesh(model->inventory.inventory.meshlist[20], false);
+					modelStack.PopMatrix();
 					}*/
 
 			} modelStack.PopMatrix();
@@ -234,12 +240,12 @@ void GameView::RenderAI()
 		/*std::vector<Vector3> foo = Pathfinding::Pathfind(model->Aina->getPosition(), Vector3(floor(model->getPlayer()->getPosition().x), floor(model->getPlayer()->getPosition().y), 0), model->getTileMap());
 		for (std::vector<Vector3>::iterator it = foo.begin(); it != foo.end(); ++it)
 		{
-			modelStack.PushMatrix(); {
-				modelStack.Translate((*it));
-				modelStack.Translate(0.5, 0.5, 0);
+		modelStack.PushMatrix(); {
+		modelStack.Translate((*it));
+		modelStack.Translate(0.5, 0.5, 0);
 
-				RenderMesh(model->getAIMesh(13), false);
-			} modelStack.PopMatrix();
+		RenderMesh(model->getAIMesh(13), false);
+		} modelStack.PopMatrix();
 		}*/
 
 		modelStack.Translate(model->Aina->getPosition());
@@ -302,7 +308,7 @@ void GameView::RenderWin()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 10);
-	modelStack.Scale(model->getWorldWidth(),model->getWorldHeight(),10);
-	RenderMesh(model->inventory.getInventMesh(),false);
+	modelStack.Scale(model->getWorldWidth(), model->getWorldHeight(), 10);
+	RenderMesh(model->inventory.getInventMesh(), false);
 	modelStack.PopMatrix();
 }
