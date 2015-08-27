@@ -178,6 +178,8 @@ public:
 	int getKeys();
 	bool getwin();
 
+	Vector3 mirror;
+
 };
 
 #endif

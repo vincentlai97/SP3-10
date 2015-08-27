@@ -30,12 +30,12 @@ void GameModel::Init()
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
 	m_tileMap = new TileMap();
-	m_tileMap->Init(25, 64, 48, worldWidth, worldHeight);
-	m_tileMap->LoadMap("Image//map.csv");
+	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_tileMap->LoadMap("Image//mylevel.csv");
 
 	m_itemMap = new TileMap();
-	m_itemMap->Init(25, 64, 48, worldWidth, worldHeight);
-	m_itemMap->LoadMap("Image//ItemMap.csv");
+	m_itemMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_itemMap->LoadMap("Image//mylevelitems.csv");
 
 	commands = new bool[NUM_COMMANDS];
 	for (int count = 0; count < NUM_COMMANDS; ++count)
@@ -59,7 +59,7 @@ void GameModel::Init()
 	inventory.Init();
 	InvenTime = 0;
 
-	Aina = new AI(Vector3(3, 4, 0));
+	Aina = new AI(Vector3(3, 4, 0), NULL, Vector3(3, 0, 0));
 
 	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
 	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
@@ -82,6 +82,8 @@ void GameModel::Init()
 
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
+
+	mirror = Vector3(-1, -1, 0);
 }
 
 #define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
@@ -109,7 +111,7 @@ void GameModel::Update(double dt)
 
 			inventory.inventory.AddToInvent(itemTouched(player));
 			speech.talking = true;
-			speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
+			speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[itemTouched(player)].getName());
 			m_itemMap->SetTile(player->getPosition().x, player->getPosition().y, -1);
 			m_gameState = SPEECH;
 			break;
@@ -172,6 +174,7 @@ void GameModel::Update(double dt)
 				Vector3 placePosition = player->getPosition() + player->getDirection();
 				if (m_itemMap->getTile(placePosition.x, placePosition.y) < 0)
 					m_itemMap->SetTile(placePosition.x, placePosition.y, inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() == Inventory::MIRROR) mirror = placePosition;
 				speech.talking = true;
 				speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
 				inventory.inventory.UseItem(inventory.InvCount);
@@ -185,7 +188,6 @@ void GameModel::Update(double dt)
 		else m_gameState = GAME_STATE::IDLE;
 		break;
 	}
-	std::cout << m_gameState;
 
 	/*if (!player->getWin())
 	{

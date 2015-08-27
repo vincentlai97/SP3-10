@@ -51,9 +51,6 @@ public:
 	Vector3 getAcceleration() const;
 	Vector3 getDirection() const;
 
-	int TouchItem(const TileMap *tileMap);
-	void RemoveItem(const TileMap *tileMap);
-
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
