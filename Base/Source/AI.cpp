@@ -50,7 +50,7 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 			m_position += waypoint.Normalized();
 			break;
 		case false:
-			m_position -= waypoint.Normalized();
+//			m_position -= waypoint.Normalized();
 			break;
 		}
 		break;
