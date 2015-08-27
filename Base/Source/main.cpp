@@ -17,12 +17,13 @@
 #include "MainMenuController.h"
 #include "GameController2D.h"
 #include "GameController.h"
+#include "JSLvl.h"
 
 void main(void)
 {
 
 	Model* model = new CMainMenuModel();
-	View* view = new CMainMenuView(model);
+	View* view = new CMainMenuView(model);  // view is the only one not changing 
 	Controller* controller = new CMainMenuController(model, view);
 
 	// Initialize GLFW
@@ -34,8 +35,7 @@ void main(void)
 	view->Init();
 	model->Init();
 
-	View* view2; // view is the only one not changing 
-
+	View* view2 = new CMainMenuView(model); // this is the view that changes
 	int n = true;
 	while(n)
 	{
@@ -46,25 +46,28 @@ void main(void)
 		{
 			switch (state)
 			{
+			case -2:
+				controller->ExitKey = true;
+				n = false;
+				break;
 			case -1:
 				model = new CMainMenuModel();
 				view2 = new CMainMenuView(model);
 				controller = new CMainMenuController(model, view2);
 				break;
 			case 0:
-				model = new GameModel();
-				view2 = new GameView(model);
-				controller = new GameController(model, view2);
+				model = new JSlvl();
 				break;
 			case 1:
 				model = new GameModel();
 				break;
-			case 2:
-				controller->ExitKey = true;
-				n = false;
-				break;
 			}
 
+			if(state > -1)
+			{
+				view2 = new GameView(model);
+				controller = new GameController(model, view2);
+			}
 
 			// Initialize GLFW
 			if (!glfwInit()) exit(EXIT_FAILURE);

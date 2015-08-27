@@ -45,7 +45,7 @@ void CMainMenuView::RenderButton()
 
 	modelStack.PushMatrix(); {
 		modelStack.Scale(windowWidth / 12, windowHeight / 12, 1);
-		
+
 		modelStack.PushMatrix();
 		modelStack.Translate(2, -0.5, 0);
 		modelStack.Scale(2.2, 1.5, 1);

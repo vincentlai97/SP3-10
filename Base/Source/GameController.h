@@ -15,7 +15,7 @@ public:
 	~GameController();
 
 	bool keypressed;
-	bool modelkey;
+	//bool modelkey;
 	bool enterkey;
 };
 

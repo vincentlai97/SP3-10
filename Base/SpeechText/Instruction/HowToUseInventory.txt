@@ -1,0 +1,6 @@
+Press W,A,S,D to move 
+thought the inventory.
+
+Press E to use Item.
+Press I again to close 
+inventory.

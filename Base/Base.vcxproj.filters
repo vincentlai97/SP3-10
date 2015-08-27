@@ -122,6 +122,9 @@
     <ClCompile Include="Source\ReadFromText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\JSlvl.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Geometry.h">
@@ -252,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="Source\ReadFromText.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\JSLvl.h">
+      <Filter>MVC</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

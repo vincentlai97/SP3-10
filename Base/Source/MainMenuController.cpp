@@ -38,6 +38,11 @@ void CMainMenuController::Update()
 	if (index < 0) index = 2;
 	else if (index >2) index = 0;
 
+	if (IsKeyPressed(VK_RETURN) && index == 2)
+	{
+		throw -2;
+	}
+
 	if (IsKeyPressed(VK_RETURN) )
 	{
 		throw index;

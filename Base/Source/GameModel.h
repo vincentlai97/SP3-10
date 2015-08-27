@@ -113,8 +113,6 @@ private:
 
 	Mesh *tile;
 	
-	TileMap* m_tileMap;
-	TileMap* m_itemMap;
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -123,9 +121,18 @@ private:
 	int up, down, left, right;
 
 	bool win;
+	int numKey;
 	bool Key;
+	int totalKey;
+
+	bool InstructText;
+	string InstructFile;
+	string temp_InstructFile;
 
 	Mesh *Text;
+protected:
+	TileMap* m_tileMap;
+	TileMap* m_itemMap;
 public:
 	GameModel();
 	~GameModel();
@@ -144,7 +151,7 @@ public:
 	int GetLineParagraph();
 
 	PlayerCharacter* getPlayer();
-	Mesh* getPlayerMesh(int modelSwitch);
+	Mesh* getPlayerMesh();
 
 	Mesh* getTileMesh();
 	TileMap* getTileMap();
@@ -166,6 +173,9 @@ public:
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
 
+	Mesh* getAIMesh(int modelSwitch);
+
+	int getKeys();
 	bool getwin();
 
 };

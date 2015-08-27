@@ -86,7 +86,7 @@ void Controller::RunLoop()
 	if(IsKeyPressed(VK_ESCAPE))
 		throw -1;
 	if(glfwWindowShouldClose(glfwGetCurrentContext()) || ExitKey)
-		throw 2;
+		throw -2;
 }
 
 void Controller::Update()
