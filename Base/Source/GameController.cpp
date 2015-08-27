@@ -8,26 +8,32 @@ GameController::~GameController()
 {
 }
 
+float buttonBuffer;
+
 void GameController::Update()
 {
-	if (IsKeyPressed('W'))
+	if (IsKeyPressed('W') && buttonBuffer < 0.f)
 	{
 		keypressed = false;
+		buttonBuffer = 0.2f;
 		model->setCommands(GameModel::COMMANDS::MOVE_UP);
 	}
-	if (IsKeyPressed('A'))
+	if (IsKeyPressed('A') && buttonBuffer < 0.f)
 	{
 		keypressed = false;
+		buttonBuffer = 0.2f;
 		model->setCommands(GameModel::COMMANDS::MOVE_LEFT);
 	}
-	if (IsKeyPressed('S'))
+	if (IsKeyPressed('S') && buttonBuffer < 0.f)
 	{
 		keypressed = false;
+		buttonBuffer = 0.2f;
 		model->setCommands(GameModel::COMMANDS::MOVE_DOWN);
 	}
-	if (IsKeyPressed('D'))
+	if (IsKeyPressed('D') && buttonBuffer < 0.f)
 	{
 		keypressed = false;
+		buttonBuffer = 0.2f;
 		model->setCommands(GameModel::COMMANDS::MOVE_RIGHT);
 	}
 	if (IsKeyPressed('I') && keypressed)
@@ -78,6 +84,8 @@ void GameController::Update()
 	{
 		enterkey = false;
 	}
+
+	buttonBuffer -= m_dElapsedTime;
 
 	Controller::Update();
 }

@@ -35,8 +35,6 @@ private:
 	};
 
 	Vector3 m_acceleration;
-	JUMP_STATE m_jumpState;
-	float m_jumpHeight;
 	bool move;
 	bool gamewin;
 
@@ -50,6 +48,9 @@ public:
 
 	void Update(double dt, const TileMap *tileMap);
 
+	Vector3 getAcceleration() const;
+	Vector3 getDirection() const;
+
 	int TouchItem(const TileMap *tileMap);
 	void RemoveItem(const TileMap *tileMap);
 
@@ -57,7 +58,6 @@ public:
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
-	
 
 	void idleUp();
 	void idleDown();

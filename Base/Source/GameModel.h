@@ -9,6 +9,7 @@
 #include "InventoryMenu.h"
 
 #include "AI.h"
+
 #include "ReadFromText.h"
 
 #include <vector>
@@ -36,6 +37,15 @@ public:
 		NUM_COMMANDS,
 	};
 protected:
+	enum GAME_STATE {
+		IDLE,
+		PLAYER_TURN,
+		AI_TURN,
+		INVENTORY,
+		PLACE_ITEM,
+		SPEECH,
+		NUM_STATES,
+	};
 	enum PLAYER_TYPE
 	{
 		PLAYERB,
@@ -74,11 +84,6 @@ protected:
 		NUM_ITEM,
 	};
 	Mesh* meshItem[NUM_ITEM];
-	
-	enum STATE {
-		IDLE_STATE,
-		NUM_STATES,
-	};
 
 	enum SPEECH_TYPE{
 		PLAYERB_FACE,
@@ -104,6 +109,8 @@ protected:
 
 	PlayerCharacter *player;
 private:
+	GAME_STATE m_gameState;
+
 	Mesh *tile;
 	
 	TileMap* m_tileMap;
@@ -126,6 +133,8 @@ public:
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void setCommands(int command);
+
+	bool isShowInventory() { return m_gameState == GAME_STATE::INVENTORY; }
 
 	int getWorldWidth() { return worldWidth; }
 	int getWorldHeight() { return worldHeight; }
@@ -151,7 +160,6 @@ public:
 	Mesh *shadow;
 
 	AI *Aina;
-	bool checkLineOfSight(Vector3 point, Vector3 target, const TileMap* tileMap);
 
 	ReadFromText speech;
 	void MeshSpeech();
@@ -159,6 +167,7 @@ public:
 	Mesh* getSpeechMesh();
 
 	bool getwin();
+
 };
 
 #endif
