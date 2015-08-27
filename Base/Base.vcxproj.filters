@@ -12,6 +12,9 @@
     <Filter Include="MVC">
       <UniqueIdentifier>{da86c79c-ed52-4636-966d-66c36b5b0d46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MVC\Tutorial_Levels">
+      <UniqueIdentifier>{79285462-ec91-4c0b-9e4c-e901f52c1ce7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -125,8 +128,19 @@
     <ClCompile Include="Source\JSlvl.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
+
     <ClCompile Include="Source\jslvl2.cpp">
       <Filter>MVC</Filter>
+
+    <ClCompile Include="Source\TutLvl2.cpp">
+      <Filter>MVC\Tutorial_Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NDLvl.cpp">
+      <Filter>MVC\Tutorial_Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutLvl3.cpp">
+      <Filter>MVC\Tutorial_Levels</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,15 +225,6 @@
     <ClInclude Include="Source\GameModelLevel2.h">
       <Filter>MVC</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenuModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainMenuController.h">
       <Filter>MVC</Filter>
     </ClInclude>
@@ -262,8 +267,22 @@
     <ClInclude Include="Source\JSLvl.h">
       <Filter>MVC</Filter>
     </ClInclude>
+
     <ClInclude Include="Source\jslvl2.h">
       <Filter>MVC</Filter>
+
+    <ClInclude Include="NDLvl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutLvl2.h">
+      <Filter>MVC\Tutorial_Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NDLvl.h">
+      <Filter>MVC\Tutorial_Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutLvl3.h">
+      <Filter>MVC\Tutorial_Levels</Filter>
+
     </ClInclude>
   </ItemGroup>
 </Project>

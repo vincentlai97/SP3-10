@@ -146,9 +146,10 @@ void GameView::RenderMusic()
 {
 	if (BGMusic)
 	{
-		BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
+		//BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
 		BGMusic = false;
 	}
+
 }
 
 void GameView::RenderInventory()

@@ -12,13 +12,15 @@
 #include "View.h"
 #include "MainMenuView.h"
 #include "GameView.h"
-#include "GameView2D.h"
+#include "GameView2D.h"1
 #include "Controller.h"
 #include "MainMenuController.h"
 #include "GameController2D.h"
 #include "GameController.h"
 #include "JSLvl.h"
-#include "jslvl2.h"
+#include "NDLvl.h"
+#include "TutLvl2.h"
+#include "TutLvl3.h"
 
 void main(void)
 {
@@ -57,14 +59,18 @@ void main(void)
 				controller = new CMainMenuController(model, view2);
 				break;
 			case 0:
-				model = new JSlvl();
+				model = new NDlvl();
 				break;
 			case 1:
-				model = new jslvl2();
+				model = new TutLvl2();
 				break;
 			case 2:
-				model = new GameModel();
+				model = new TutLvl3();
 				break;
+			case 3:
+				model = new JSlvl();
+				break;
+
 			}
 
 			if(state > -1)

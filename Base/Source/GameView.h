@@ -28,6 +28,8 @@ public:
 	std::ostringstream strcopy;
 	std::ostringstream strcopy2;
 	std::ostringstream strcopy3;
+
+
 };
 
 #endif
