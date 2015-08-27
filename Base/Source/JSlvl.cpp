@@ -15,11 +15,11 @@ void JSlvl::Init()
 
 	m_tileMap = new TileMap();
 	m_tileMap->Init(25, 40, 20, worldWidth, worldHeight);
-	m_tileMap->LoadMap("Image//jslvl2.csv");
+	m_tileMap->LoadMap("Image//junsenlvl.csv");
 
 	m_itemMap = new TileMap();
 	m_itemMap->Init(25, 40, 20, worldWidth, worldHeight);
-	m_itemMap->LoadMap("Image//jslvl2Item.csv");	
+	m_itemMap->LoadMap("Image//junsenlvlitem.csv");
 
 	GameModel::getKeys();
 

@@ -28,6 +28,7 @@
     <ClCompile Include="Source\InventoryMenu.cpp" />
     <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\JSlvl.cpp" />
+    <ClCompile Include="Source\jslvl2.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Source\InventoryMenu.h" />
     <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\JSLvl.h" />
+    <ClInclude Include="Source\jslvl2.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />

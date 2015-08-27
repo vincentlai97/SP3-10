@@ -105,7 +105,7 @@ void GameModel::Update(double dt)
 		if (itemTouched(player) >= 0 && itemTouched(player) < Inventory::TOTAL_ITEM)
 		{
 			if (itemTouched(player) == Inventory::KEY)
-				Key = true;
+				numKey++;
 
 			inventory.inventory.AddToInvent(itemTouched(player));
 			speech.talking = true;
@@ -144,6 +144,21 @@ void GameModel::Update(double dt)
 				if (m_tileMap->getTile(switchPosition.x, switchPosition.y) == 299)
 					laserswitch();
 			}
+		}
+
+		if (numKey == totalKey && player->getWin())
+			win = true;
+
+		if (!player->getDirection().IsZero())
+		{
+			Vector3 switchPosition = player->getPosition() + player->getDirection();
+			if (m_tileMap->getTile(switchPosition.x, switchPosition.y) == 50 ||
+				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 183 ||
+				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 176 ||
+				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 88)
+				player->setWin(true);
+			else
+				player->setWin(false);
 		}
 
 		break;
@@ -200,6 +215,12 @@ void GameModel::Update(double dt)
 		else m_gameState = GAME_STATE::IDLE;
 		break;
 	}
+
+	m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
+	m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));
+
+	m_mapOffset_y = player->getPosition().y - (float)m_tileMap->getNumOfTilesHeight() / 2.f;
+	m_mapOffset_y = Math::Clamp(m_mapOffset_y, 0.f, (float)(m_tileMap->getMapHeight() - m_tileMap->getNumOfTilesHeight()));
 
 	/*if (!player->getWin())
 	{

@@ -18,6 +18,7 @@
 #include "GameController2D.h"
 #include "GameController.h"
 #include "JSLvl.h"
+#include "jslvl2.h"
 
 void main(void)
 {
@@ -59,6 +60,9 @@ void main(void)
 				model = new JSlvl();
 				break;
 			case 1:
+				model = new jslvl2();
+				break;
+			case 2:
 				model = new GameModel();
 				break;
 			}
