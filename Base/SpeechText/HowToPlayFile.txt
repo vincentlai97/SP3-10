@@ -1,0 +1,7 @@
+SpeechText//Instruction//AfterDisguise.txt
+SpeechText//Instruction//ArrowKeys.txt
+SpeechText//Instruction//BeforeDisguise.txt
+SpeechText//Instruction//HowToUseInventory.txt
+SpeechText//Instruction//MoveCharacter.txt
+SpeechText//Instruction//OpenInventory.txt
+SpeechText//Instruction//Trap.txt

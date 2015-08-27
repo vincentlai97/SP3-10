@@ -42,7 +42,7 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3 (19, 11, 0));
+	player = new PlayerCharacter(Vector3(19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
@@ -76,7 +76,11 @@ void GameModel::Init()
 	}
 	MeshSpeech();
 
-	speech.Textfile("SpeechText//CharacterFile.txt");
+	speech.Textfile("SpeechText//CharacterFile.txt", true);
+	speech.Textfile("SpeechText//HowToPlayFile.txt", false);
+
+	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
+	InstructText = true;
 }
 
 bool b_buttonDown = false;
@@ -85,14 +89,13 @@ void GameModel::Update(double dt)
 {
 	if (!player->getWin())
 	{
-
 		m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
 		m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));
 
 		m_mapOffset_y = player->getPosition().y - (float)m_tileMap->getNumOfTilesHeight() / 2.f;
 		m_mapOffset_y = Math::Clamp(m_mapOffset_y, 0.f, (float)(m_tileMap->getMapHeight() - m_tileMap->getNumOfTilesHeight()));
 
-		if (commands[INVENT] && !player->getMove())
+		if (commands[INVENT] && !player->getMove() && !speech.talking)
 		{
 			inventory.Update();
 		}
@@ -101,104 +104,125 @@ void GameModel::Update(double dt)
 		{
 			InvenTime -= (float)dt;
 
-			if (InvenTime < 0)
+			temp_InstructFile = "SpeechText//Instruction//HowToUseInventory.txt";
+			for (int n = 0; n < speech.InstructionText.size(); n++)
 			{
-				if (commands[MOVE_UP] && inventory.InvCount > 3)
+				if (speech.InstructionText[n] == temp_InstructFile && !InstructText)
 				{
-					inventory.MoveUp();
+					InstructText = true;
+					InstructFile = "SpeechText//Instruction//HowToUseInventory.txt";
+					temp_InstructFile = "";
 				}
-				if (commands[MOVE_DOWN] && inventory.InvCount < 6)
-				{
-					inventory.MoveDown();
-				}
-				if (commands[MOVE_LEFT] && inventory.InvCount > 0)
-				{
-					inventory.MoveLeft();
-				}
-				if (commands[MOVE_RIGHT] && inventory.InvCount < 9)
-				{
-					inventory.MoveRight();
-				}
-				InvenTime = 0.4f;
 			}
-
-			if (!commands[MOVE_UP] && !commands[MOVE_DOWN] && !commands[MOVE_LEFT] && !commands[MOVE_RIGHT])
-				InvenTime = 0.f;
-
-			if (commands[ACTION])
+			
+			if (!speech.talking)
 			{
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.PLAYERB_BOX && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.WITCH_BOX)
+				if (InvenTime < 0)
 				{
-					ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
+					if (commands[MOVE_UP] && inventory.InvCount > 3)
+					{
+						inventory.MoveUp();
+					}
+					if (commands[MOVE_DOWN] && inventory.InvCount < 6)
+					{
+						inventory.MoveDown();
+					}
+					if (commands[MOVE_LEFT] && inventory.InvCount > 0)
+					{
+						inventory.MoveLeft();
+					}
+					if (commands[MOVE_RIGHT] && inventory.InvCount < 9)
+					{
+						inventory.MoveRight();
+					}
+					InvenTime = 0.4f;
 				}
 
-				if (ModelSwitch < 1)
-					ModelSwitch = 15;
+				if (!commands[MOVE_UP] && !commands[MOVE_DOWN] && !commands[MOVE_LEFT] && !commands[MOVE_RIGHT])
+					InvenTime = 0.f;
 
-				if (ModelSwitch > 15)
-					ModelSwitch = 1;
+				if (commands[ACTION])
+				{
+					if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.PLAYERB_BOX && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.WITCH_BOX)
+					{
+						speech.talking = true;
+						speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
 
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE)
-					PlaceItemState = true;
+						temp_InstructFile = "SpeechText//Instruction//AfterDisguise.txt";
+						for (int n = 0; n < speech.InstructionText.size(); n++)
+						{
+							if (speech.InstructionText[n] == temp_InstructFile && !InstructText)
+							{
+								InstructText = true;
+								InstructFile = "SpeechText//Instruction//AfterDisguise.txt";
+								temp_InstructFile = "";
+							}
+						}
 
+						ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+						inventory.inventory.UseItem(inventory.InvCount);
+						inventory.showInvent = false;
+					}
+
+					if (ModelSwitch < 1)
+						ModelSwitch = 15;
+					else if (ModelSwitch > 15)
+						ModelSwitch = 1;
+
+					if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE)
+						PlaceItemState = true;
+				}
 			}
 		}
 		else
 		{
 			/*if (commands[MODEL_UP])
 			{
-				ModelSwitch--;
-				if (ModelSwitch < 1)
-					ModelSwitch = 15;
+			ModelSwitch--;
+			if (ModelSwitch < 1)
+			ModelSwitch = 15;
 			}
 			if (commands[MODEL_DOWN])
 			{
-				ModelSwitch++;
-				if (ModelSwitch > 15)
-					ModelSwitch = 1;
+			ModelSwitch++;
+			if (ModelSwitch > 15)
+			ModelSwitch = 1;
 			}*/
+			if (!speech.talking)
+			{
+				if (commands[MOVE_UP])
+				{
+					if (!player->getMove())
+					if (player->moveUp())
+						Aina->Update(player->getPosition(), m_tileMap);
+				}
+				else if (commands[MOVE_DOWN])
+				{
+					if (!player->getMove())
+					if (player->moveDown())
+						Aina->Update(player->getPosition(), m_tileMap);
+				}
+				else if (commands[MOVE_LEFT])
+				{
+					if (!player->getMove())
+					if (player->moveLeft())
+						Aina->Update(player->getPosition(), m_tileMap);
+				}
+				else if (commands[MOVE_RIGHT])
+				{
+					if (!player->getMove())
+					if (player->moveRight())
+						Aina->Update(player->getPosition(), m_tileMap);
+				}
 
-			if (commands[MOVE_UP] && !speech.talking)
-			{
-				if (!player->getMove())
-				if (player->moveUp())
-					Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_DOWN] && !speech.talking)
-			{
-				if (!player->getMove())
-				if (player->moveDown())
-					Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_LEFT] && !speech.talking)
-			{
-				if (!player->getMove())
-				if (player->moveLeft())
-					Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_RIGHT] && !speech.talking)
-			{
-				if (!player->getMove())
-				if (player->moveRight())
-					Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[IDLE_UP] && !speech.talking)
-			{
-				player->idleUp();
-			}
-			if (commands[IDLE_DOWN] && !speech.talking)
-			{
-				player->idleDown();
-			}
-			if (commands[IDLE_LEFT] && !speech.talking)
-			{
-				player->idleLeft();
-			}
-			if (commands[IDLE_RIGHT] && !speech.talking)
-			{
-				player->idleRight();
+				if (commands[IDLE_UP])
+					player->idleUp();
+				else if (commands[IDLE_DOWN])
+					player->idleDown();
+				else if (commands[IDLE_LEFT])
+					player->idleLeft();
+				else if (commands[IDLE_RIGHT])
+					player->idleRight();
 			}
 
 			if (commands[SPEECH_NEXTLINE] && !speech.talking)
@@ -208,14 +232,6 @@ void GameModel::Update(double dt)
 				const char* temp = speech.CharacterText[ModelSwitch - 1].c_str();
 				speech.Dialogue(temp);
 			}
-			else if (commands[SPEECH_NEXTLINE] && speech.talking)
-			{
-				speech.KeyPressed = true;
-			}
-
-			if (speech.talking)
-				speech.Update(dt);
-
 
 			player->Update(dt, m_tileMap);
 
@@ -226,23 +242,49 @@ void GameModel::Update(double dt)
 					if(player->TouchItem(m_itemMap) == inventory.inventory.KEY)
 						numKey++;
 
+					temp_InstructFile = "SpeechText//Instruction//OpenInventory.txt";
+					for (int n = 0; n < speech.InstructionText.size(); n++)
+					{
+						if (speech.InstructionText[n] == temp_InstructFile && !InstructText)
+						{
+							InstructText = true;
+							InstructFile = "SpeechText//Instruction//OpenInventory.txt";
+							temp_InstructFile = "";
+						}
+					}
+
+					if (player->TouchItem(m_itemMap) == inventory.inventory.KEY)
+						Key = true;
+
+					if (player->TouchItem(m_itemMap) >= inventory.inventory.PLAYERB_BOX && player->TouchItem(m_itemMap) <= inventory.inventory.WITCH_BOX)
+					{
+						temp_InstructFile = "SpeechText//Instruction//BeforeDisguise.txt";
+						for (int n = 0; n < speech.InstructionText.size(); n++)
+						{
+							if (speech.InstructionText[n] == temp_InstructFile && !InstructText)
+							{
+								InstructText = true;
+								InstructFile = "SpeechText//Instruction//BeforeDisguise.txt";
+								temp_InstructFile = "";
+							}
+						}
+					}
+
 					inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
 					speech.talking = true;
 					speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
 					player->RemoveItem(m_itemMap);
 				}
-		}
-		if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
-		{
-			Aina->setAiActive(false);
-			Aina->RemoveItem(m_itemMap);
-
+			}
+			if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
+			{
+				Aina->setAiActive(false);
+				Aina->RemoveItem(m_itemMap);
 			}
 		}
 
 		if (PlaceItemState == true)
 		{
-
 			if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 			{
 				if (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
@@ -292,6 +334,8 @@ void GameModel::Update(double dt)
 				PlaceItemState = false;
 			}
 		}
+		if (speech.talking)
+			speech.Update(dt);
 	}
 	else if(player->getWin() && totalKey == numKey)
 	{
@@ -300,6 +344,33 @@ void GameModel::Update(double dt)
 	else
 	{
 		player->setWin(false);
+	}
+
+	if (!speech.talking && InstructText)
+	{
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				speech.talking = true;
+				const char* temp = speech.InstructionText[n].c_str();
+				speech.Dialogue(temp);
+				speech.InstructionText[n] = " ";
+			}
+		}
+		InstructFile = "";
+		if (temp_InstructFile != "")
+		{
+			InstructFile = temp_InstructFile;
+		}
+		else
+		{
+			InstructText = false;
+		}
+	}
+	if (commands[SPEECH_NEXTLINE] && speech.talking)
+	{
+		speech.KeyPressed = true;
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)

@@ -26,7 +26,7 @@ public:
 
 	bool KeyPressed;
 	bool talking;
-	void Textfile(const char* filename);
+	void Textfile(const char* filename, bool Character);
 	void Dialogue(const char* filename);
 	void Obtain(const char* filename, bool loot, string ItemName);
 	void Update(double dt);
@@ -35,5 +35,6 @@ public:
 
 	vector<string> line;
 	vector<string> CharacterText;
+	vector<string> InstructionText;
 };
 

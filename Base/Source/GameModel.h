@@ -118,6 +118,10 @@ private:
 	bool Key;
 	int totalKey;
 
+	bool InstructText;
+	string InstructFile;
+	string temp_InstructFile;
+
 	Mesh *Text;
 protected:
 	TileMap* m_tileMap;

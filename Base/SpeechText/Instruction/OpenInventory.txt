@@ -1,0 +1,4 @@
+You picked up an item...
+
+Press I to open the 
+inventory.

@@ -119,7 +119,9 @@ void GameView::RenderInventory()
 {
 	GameModel* model = dynamic_cast<GameModel *>(m_model);
 
-	modelStack.Translate(model->getWorldWidth() * 0.5 + 2, model->getWorldHeight() * 0.5, 10);
+	modelStack.Translate(0, 0, 10);
+	modelStack.PushMatrix();
+	modelStack.Translate(model->getWorldWidth() * 0.5 + 2, model->getWorldHeight() * 0.5, 0);
 	modelStack.PushMatrix();
 	{
 		//background
@@ -185,6 +187,7 @@ void GameView::RenderInventory()
 		RenderTextOnScreen(model->getTextMesh(), ss2.str(), Color(1, 1, 0), 25, 200, 420, 10);
 		modelStack.PopMatrix();
 	}
+	modelStack.PopMatrix();
 }
 
 void GameView::RenderAI()
@@ -222,7 +225,7 @@ void GameView::RenderSpeech()
 {
 	GameModel* model = dynamic_cast<GameModel *>(m_model);
 
-	modelStack.Translate(0, 0, 11);
+	modelStack.Translate(0, 0, 1);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(model->getWorldWidth() / 2, model->getWorldHeight() / 8, 0);
 		modelStack.Scale(model->getWorldWidth(), model->getWorldHeight() / 4, 1);
