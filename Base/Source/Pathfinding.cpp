@@ -29,7 +29,7 @@ std::vector<Vector3> Pathfinding::Pathfind(Vector3 start, Vector3 end, const Til
 	closed.clear();
 	PathfindingNode *node = new PathfindingNode(start);
 	open.push_back(node);
-	__current = node;
+	_current = node->position;
 	while (_current != _end && open.size() != 0) Search();
 	__start = node;
 	__current = closed.back();
@@ -40,16 +40,18 @@ std::vector<Vector3> Pathfinding::Pathfind(Vector3 start, Vector3 end, const Til
 void Pathfinding::Search()
 {
 	//Find node with smallest g_score
-	PathfindingNode *current = __current;
-	/*for (std::vector<PathfindingNode *>::iterator it = open.begin(); it != open.end(); ++it)
+	PathfindingNode *current = new PathfindingNode(_start);
+	for (std::vector<PathfindingNode *>::iterator it = open.begin(); it != open.end(); ++it)
 	{
 		if ((*it)->f_score() <= current->f_score())
 			current = *it;
-	}*/
+	}
 
 	//Remove node from open and add into closed
 	open.erase(std::remove(open.begin(), open.end(), current), open.end());
 	closed.push_back(current);
+
+	_current = current->position;
 
 	//Deal with adjacent nodes
 	for (int x = -1; x < 2; ++x)
@@ -88,14 +90,6 @@ void Pathfinding::Search()
 			}
 		}
 	}
-
-	for (std::vector<PathfindingNode *>::iterator it = open.begin(); it != open.end(); ++it)
-	{
-		if ((*it)->f_score() <= current->f_score())
-			current = *it;
-	}
-	__current = current;
-	_current = current->position;
 }
 
 void Pathfinding::CreatePath()

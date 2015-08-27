@@ -22,7 +22,6 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 {
 	if (checkLineOfSight(playerPos, m_position, tileMap))
 	{
-		m_target = playerPos;
 		AI_State = CHASE;
 		chaseTurns = 5;
 		path = Pathfinding::Pathfind(m_position, playerPos, tileMap);
@@ -43,15 +42,15 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 	switch (AI_State)
 	{
 	case IDLE:
+		if (m_position == m_intialPosition + waypoint) forward = false;
+		else if (m_position == m_intialPosition) forward = true;
 		switch (forward)
 		{
 		case true:
 			m_position += waypoint.Normalized();
-			if (m_position == m_intialPosition + waypoint) forward = false;
 			break;
 		case false:
 			m_position -= waypoint.Normalized();
-			if (m_position == m_intialPosition) forward = true;
 			break;
 		}
 		break;

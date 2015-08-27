@@ -5,6 +5,8 @@ ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED 
 
 #include "LoS.h"
 
+#include "Pathfinding.h"
+
 GameView::GameView(Model *model) : View(model)
 , BGMusic(true)
 {
@@ -236,7 +238,7 @@ void GameView::RenderAI()
 				modelStack.Translate((*it));
 				modelStack.Translate(0.5, 0.5, 0);
 
-				RenderMesh(model->getPlayerMesh(13), false);
+				RenderMesh(model->getAIMesh(13), false);
 			} modelStack.PopMatrix();
 		}*/
 
