@@ -68,11 +68,14 @@ void GameView::RenderTileMap()
 					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6); //Render Ground
 					if (!checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap)) //Check LoS with player
 					{
-						modelStack.PushMatrix(); {
-							modelStack.Translate(0, 0, 5);
+						if (!checkLineOfSight(model->mirror + Vector3(0.5, 0.5, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap))
+						{
+							modelStack.PushMatrix(); {
+								modelStack.Translate(0, 0, 5);
 
-							RenderMesh(model->shadow, false); //Render Shadow
-						} modelStack.PopMatrix();
+								RenderMesh(model->shadow, false); //Render Shadow
+							} modelStack.PopMatrix();
+						}
 					}
 				}
 				
@@ -105,7 +108,7 @@ void GameView::RenderPlayer()
 		modelStack.Translate(player->getPosition());
 		modelStack.Translate(0.5, 0.5, 0);
 
-		RenderMesh(model->getPlayerMesh(1), false, 6 * player->getSpriteState(), 6);
+		RenderMesh(model->getPlayerMesh(), false, 6 * player->getSpriteState(), 6);
 	} modelStack.PopMatrix();
 }
 #undef player
