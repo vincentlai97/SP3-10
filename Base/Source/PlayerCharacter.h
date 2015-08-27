@@ -35,29 +35,26 @@ private:
 	};
 
 	Vector3 m_acceleration;
-	JUMP_STATE m_jumpState;
-	float m_jumpHeight;
 	bool move;
 	bool gamewin;
 
 	void UpdateVelocity(double dt);
-	void UpdatePosition(double dt, const TileMap *tileMap,const TileMap *itemMap);
+	void UpdatePosition(double dt, const TileMap *tileMap);
 	void UpdateSprite();
 
 public:
 	PlayerCharacter(Vector3 position = Vector3(), Mesh* sprite = NULL);
 	~PlayerCharacter();
 
-	void Update(double dt, const TileMap *tileMap,const TileMap *itemMap);
+	void Update(double dt, const TileMap *tileMap);
 
-	int TouchItem(const TileMap *tileMap);
-	void RemoveItem(const TileMap *tileMap);
+	Vector3 getAcceleration() const;
+	Vector3 getDirection() const;
 
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
-	
 
 	void idleUp();
 	void idleDown();

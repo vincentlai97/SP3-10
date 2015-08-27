@@ -12,6 +12,10 @@ protected:
 	Model* model;
 	View* view;
 
+	double m_dElapsedTime; // delta time
+	double m_dAccumulatedTime_ThreadOne;
+	double m_dAccumulatedTime_ThreadTwo;
+
 	virtual void Update();
 
 	bool IsKeyPressed(unsigned short key) { return ((GetAsyncKeyState(key) & 0x8001) != 0); }

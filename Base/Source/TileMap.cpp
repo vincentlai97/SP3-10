@@ -66,7 +66,7 @@ int TileMap::getTile(unsigned col, unsigned row) const
 	return m_tileMap[col][row];
 }
 
-void TileMap::SetTile(unsigned col, unsigned row,int num) const
+void TileMap::SetTile(unsigned col, unsigned row,int num)
 {
 	m_tileMap[col][row] = num;
 }

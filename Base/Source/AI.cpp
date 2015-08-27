@@ -3,7 +3,11 @@
 #include "LoS.h"
 #include "Pathfinding.h"
 
-AI::AI(Vector3 position, Mesh* sprite) : Character(position, sprite), AI_Active(true)
+AI::AI(Vector3 initialPosition, Mesh* sprite, Vector3 waypoint) : Character(initialPosition, sprite)
+, m_intialPosition(initialPosition)
+, waypoint(waypoint)
+, AI_State(IDLE)
+, AI_Active(true)
 {
 }
 
@@ -11,7 +15,8 @@ AI::~AI()
 {
 }
 
-static int chaseTurns;
+static int chaseTurns = -1;
+static bool forward = true;
 
 void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 {
@@ -25,46 +30,46 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 	else
 	{
 		chaseTurns--;
-		if (chaseTurns <= 0) AI_State = IDLE;
+		if (chaseTurns == 0)
+		{
+			AI_State = RETURNING;
+			Vector3 closest = (m_intialPosition - m_position).LengthSquared() < (m_intialPosition + waypoint - m_position).LengthSquared() ? m_intialPosition : m_intialPosition + waypoint;
+			path = Pathfinding::Pathfind(m_position, closest, tileMap);
+		}
 	}
+
+	std::cout << AI_State;
 
 	switch (AI_State)
 	{
 	case IDLE:
+		switch (forward)
+		{
+		case true:
+			m_position += waypoint.Normalized();
+			if (m_position == m_intialPosition + waypoint) forward = false;
+			break;
+		case false:
+			m_position -= waypoint.Normalized();
+			if (m_position == m_intialPosition) forward = true;
+			break;
+		}
+		break;
+	case RETURNING:
+		if (!path.size()) AI_State = IDLE;
+		else
+		{
+			m_position = path.back();
+			path.pop_back();
+		}
 		break;
 	case CHASE:
 	{
-				  /*Vector3 dir = (m_target - m_position);
-				  Vector3 vel;
-				  vel.x = (dir.x == 0) ? 0 : ((dir.x > 0) ? 1 : -1);
-				  vel.y = (dir.y == 0) ? 0 : ((dir.y > 0) ? 1 : -1);
-
-				  if (abs(dir.x) >= abs(dir.y))
+				  if (path.size())
 				  {
-					  if (tileMap->getTile(m_position.x + vel.x, m_position.y) > 0)
-					  {
-						  if (dir.y)
-						  {
-							  if (tileMap->getTile(m_position.x, m_position.y + vel.y) > 0) break;
-							  else m_position.y += vel.y;
-						  }
-					  }
-					  else m_position.x += vel.x;
+					  m_position = path.back();
+					 path.pop_back();
 				  }
-				  else
-				  {
-					  if (tileMap->getTile(m_position.x, m_position.y + vel.y) > 0)
-					  {
-						  if (dir.x)
-						  {
-							  if (tileMap->getTile(m_position.x + vel.x, m_position.y) > 0) break;
-							  else m_position.x += vel.x;
-						  }
-					  }
-					  else m_position.y += vel.y;
-				  }*/
-				  m_position = path.back();
-				  path.pop_back();
 	}
 		break;
 	}
@@ -79,13 +84,4 @@ bool AI::getAiActive()
 void AI::setAiActive(bool AI_Active)
 {
 	this->AI_Active = AI_Active;
-}
-
-int AI::TouchItem(const TileMap *tileMap)
-{
-	return tileMap->getTile(m_position.x, floor(m_position.y));
-}
-void AI::RemoveItem(const TileMap *tileMap)
-{
-	tileMap->SetTile(m_position.x, floor(m_position.y), -1);
 }

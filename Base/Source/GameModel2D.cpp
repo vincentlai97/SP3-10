@@ -46,7 +46,7 @@ void GameModel2D::Update(double dt)
 	if (commands[MOVE_RIGHT]) player->moveRight();
 	//if (commands[JUMP]) player->jump();
 
-	player->Update(dt, m_tileMap,m_itemMap);
+	player->Update(dt, m_tileMap);
 
 	m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
 	m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));

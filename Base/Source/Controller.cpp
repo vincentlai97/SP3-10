@@ -56,14 +56,15 @@ void Controller::Init(GLFWwindow* a)
 		view->createWindow(1024, 800, "Scene");
 	else
 		view->setWindow(a);
+
+	m_dElapsedTime = 0.0; // delta time
+	m_dAccumulatedTime_ThreadOne = 0.0;
+	m_dAccumulatedTime_ThreadTwo = 0.0;
 }
 
 
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
-static double m_dElapsedTime = 0.0; // delta time
-static double m_dAccumulatedTime_ThreadOne = 0.0;
-static double m_dAccumulatedTime_ThreadTwo = 0.0;
 StopWatch m_timer;
 
 void Controller::RunLoop()

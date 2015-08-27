@@ -50,24 +50,24 @@ void InventoryMenu::Update()
 	}
 }
 
-void InventoryMenu::MoveLeft()
-{
-	InvCount--;
-}
-
-void InventoryMenu::MoveRight()
-{
-	InvCount++;
-}
-
 void InventoryMenu::MoveUp()
 {
-	InvCount -= 4;
+	if (InvCount < 3) InvCount -= 4;
 }
 
 void InventoryMenu::MoveDown()
 {
-	InvCount += 4;
+	if (InvCount < 6) InvCount += 4;
+}
+
+void InventoryMenu::MoveLeft()
+{
+	if (InvCount > 0) --InvCount;
+}
+
+void InventoryMenu::MoveRight()
+{
+	if (InvCount < 9) ++InvCount;
 }
 
 Mesh* InventoryMenu::getInventMesh()

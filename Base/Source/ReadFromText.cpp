@@ -18,7 +18,7 @@ ReadFromText::~ReadFromText()
 	
 }
 
-void ReadFromText::Textfile(const char* filename)
+void ReadFromText::Textfile(const char* filename, bool Character)
 {
 	ifstream file;
 	string data;
@@ -27,16 +27,26 @@ void ReadFromText::Textfile(const char* filename)
 
 	if (file.is_open())
 	{
-		CharacterText.clear();
-		CharacterText.shrink_to_fit();
-
+		if (Character)
+		{
+			CharacterText.clear();
+			CharacterText.shrink_to_fit();
+		}
+		else
+		{
+			InstructionText.clear();
+			InstructionText.shrink_to_fit();
+		}
 		file.clear();
 		file.seekg(0, file.beg);
 
 		while (file.good()) {
 			getline(file, data, '\n');
 
-			CharacterText.push_back(data);
+			if (Character)
+				CharacterText.push_back(data);
+			else
+				InstructionText.push_back(data);
 		}
 	}
 	file.close();

@@ -24,16 +24,18 @@ void GameModel::Init()
 	MeshPlayer();
 	ModelSwitch = 1;
 
+	m_gameState = GAME_STATE::IDLE;
+
 	tile = MeshBuilder::GenerateText("tiles", 32, 32);
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
 	m_tileMap = new TileMap();
-	m_tileMap->Init(25, 64, 48, worldWidth, worldHeight);
-	m_tileMap->LoadMap("Image//map.csv");
+	m_tileMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_tileMap->LoadMap("Image//mylevel.csv");
 
 	m_itemMap = new TileMap();
-	m_itemMap->Init(25, 64, 48, worldWidth, worldHeight);
-	m_itemMap->LoadMap("Image//ItemMap.csv");
+	m_itemMap->Init(25, 32, 24, worldWidth, worldHeight);
+	m_itemMap->LoadMap("Image//mylevelitems.csv");
 
 	commands = new bool[NUM_COMMANDS];
 	for (int count = 0; count < NUM_COMMANDS; ++count)
@@ -41,7 +43,7 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3 (19, 11, 0));
+	player = new PlayerCharacter(Vector3(19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
@@ -57,7 +59,7 @@ void GameModel::Init()
 	inventory.Init();
 	InvenTime = 0;
 
-	Aina = new AI(Vector3(3, 4, 0));
+	Aina = new AI(Vector3(3, 4, 0), NULL, Vector3(3, 0, 0));
 
 	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
 	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
@@ -75,30 +77,146 @@ void GameModel::Init()
 	}
 	MeshSpeech();
 
-	speech.Textfile("SpeechText//CharacterFile.txt");
+	speech.Textfile("SpeechText//CharacterFile.txt", true);
+	speech.Textfile("SpeechText//HowToPlayFile.txt", false);
+
+	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
+	InstructText = true;
+
+	mirror = Vector3(-1, -1, 0);
 }
 
-bool b_buttonDown = false;
+#define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
 
 void GameModel::Update(double dt)
 {
-	if (!player->getWin())
+	switch (m_gameState)
+	{
+	case GAME_STATE::IDLE:
+		//Movement
+		if (commands[MOVE_UP]) player->moveUp();
+		if (commands[MOVE_DOWN]) player->moveDown();
+		if (commands[MOVE_LEFT]) player->moveLeft();
+		if (commands[MOVE_RIGHT]) player->moveRight();
+		if (!player->getAcceleration().IsZero()) { m_gameState = GAME_STATE::PLAYER_TURN; break; }
+
+		//Open inventory
+		if (commands[INVENT]) { m_gameState = GAME_STATE::INVENTORY; break; }
+
+		//Item interaction with player
+		if (itemTouched(player) >= 0 && itemTouched(player) < Inventory::TOTAL_ITEM)
+		{
+			if (itemTouched(player) == Inventory::KEY)
+				Key = true;
+
+			inventory.inventory.AddToInvent(itemTouched(player));
+			speech.talking = true;
+			speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[itemTouched(player)].getName());
+			m_itemMap->SetTile(player->getPosition().x, player->getPosition().y, -1);
+			m_gameState = SPEECH;
+			break;
+		}
+		
+		//Item interaction with enemies
+		if (itemTouched(Aina) > Inventory::TOTAL_ITEM && itemTouched(Aina) < Inventory::TOTAL_ITEM * 2)
+		{
+			if (itemTouched(Aina) == Inventory::TRAP + Inventory::TOTAL_ITEM)
+			{
+				Aina->setAiActive(false);
+				m_itemMap->SetTile(Aina->getPosition().x, Aina->getPosition().y, -1);
+			}
+		}
+
+		//Initiate character speech
+		if (commands[SPEECH_NEXTLINE])
+		{
+			speech.talking = true;
+			const char* temp = speech.CharacterText[ModelSwitch - 1].c_str();
+			speech.Dialogue(temp);
+			m_gameState = GAME_STATE::SPEECH;
+			break;
+		}
+
+		if(commands[ACTION])
+		{
+			if (!player->getDirection().IsZero())
+			{
+				Vector3 switchPosition = player->getPosition() + player->getDirection();
+				if (m_tileMap->getTile(switchPosition.x, switchPosition.y) == 299)
+					laserswitch();
+			}
+		}
+
+		break;
+	case GAME_STATE::PLAYER_TURN:
+		player->Update(dt, m_tileMap);
+		if (player->getVelocity().IsZero())
+			m_gameState = GAME_STATE::AI_TURN;
+		break;
+	case GAME_STATE::AI_TURN:
+		Aina->Update(player->getPosition(), m_tileMap);
+		m_gameState = GAME_STATE::IDLE;
+		break;
+	case GAME_STATE::INVENTORY:
+		if (commands[INVENT]) { m_gameState = GAME_STATE::IDLE; break; }
+		if (commands[ACTION])
+		{
+			if (inventory.inventory.getItem(inventory.InvCount)->getID() >= Inventory::ITEM_TYPE::MIRROR
+				&& inventory.inventory.getItem(inventory.InvCount)->getID() <= Inventory::ITEM_TYPE::THROWABLE)
+				m_gameState = PLACE_ITEM;
+			else if (inventory.inventory.getItem(inventory.InvCount)->getID() >= Inventory::ITEM_TYPE::PLAYERB_BOX
+				&& inventory.inventory.getItem(inventory.InvCount)->getID() <= Inventory::ITEM_TYPE::WITCH_BOX)
+			{
+				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+				inventory.inventory.UseItem(inventory.InvCount);
+				m_gameState = IDLE;
+			}
+		}
+		if (commands[MOVE_UP]) inventory.MoveUp();
+		if (commands[MOVE_DOWN]) inventory.MoveDown();
+		if (commands[MOVE_LEFT]) inventory.MoveLeft();
+		if (commands[MOVE_RIGHT]) inventory.MoveRight();
+		break;
+	case GAME_STATE::PLACE_ITEM:
+		if ((inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
+		{
+			if (!player->getDirection().IsZero())
+			{
+				Vector3 placePosition = player->getPosition() + player->getDirection();
+				if (m_itemMap->getTile(placePosition.x, placePosition.y) < 0)
+					m_itemMap->SetTile(placePosition.x, placePosition.y, inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+				if (inventory.inventory.getItem(inventory.InvCount)->getID() == Inventory::MIRROR) mirror = placePosition;
+				speech.talking = true;
+				speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
+				inventory.inventory.UseItem(inventory.InvCount);
+				m_gameState = GAME_STATE::SPEECH;
+			}
+		}
+		break;
+	case GAME_STATE::SPEECH:
+		if (commands[SPEECH_NEXTLINE]) speech.KeyPressed = true;
+		if (speech.talking) speech.Update(dt);
+		else m_gameState = GAME_STATE::IDLE;
+		break;
+	}
+
+	/*if (!player->getWin())
 	{
 
-		m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
-		m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));
+	m_mapOffset_x = player->getPosition().x - (float)m_tileMap->getNumOfTilesWidth() / 2.f;
+	m_mapOffset_x = Math::Clamp(m_mapOffset_x, 0.f, (float)(m_tileMap->getMapWidth() - m_tileMap->getNumOfTilesWidth()));
 
-		m_mapOffset_y = player->getPosition().y - (float)m_tileMap->getNumOfTilesHeight() / 2.f;
-		m_mapOffset_y = Math::Clamp(m_mapOffset_y, 0.f, (float)(m_tileMap->getMapHeight() - m_tileMap->getNumOfTilesHeight()));
+	m_mapOffset_y = player->getPosition().y - (float)m_tileMap->getNumOfTilesHeight() / 2.f;
+	m_mapOffset_y = Math::Clamp(m_mapOffset_y, 0.f, (float)(m_tileMap->getMapHeight() - m_tileMap->getNumOfTilesHeight()));
 
 		if (commands[INVENT] && !player->getMove())
 		{
 			inventory.Update();
 		}
 
-		if (inventory.showInvent)
-		{
-			InvenTime -= (float)dt;
+	if (inventory.showInvent)
+	{
+	InvenTime -= (float)dt;
 
 			if (InvenTime < 0)
 			{
@@ -124,195 +242,219 @@ void GameModel::Update(double dt)
 			if (!commands[MOVE_UP] && !commands[MOVE_DOWN] && !commands[MOVE_LEFT] && !commands[MOVE_RIGHT])
 				InvenTime = 0.f;
 
-			if (commands[ACTION])
-			{
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.PLAYERB_BOX && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.WITCH_BOX)
-				{
-					ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
-				}
-
-				if (ModelSwitch < 1)
-					ModelSwitch = 15;
-
-				if (ModelSwitch > 15)
-					ModelSwitch = 1;
-
-				if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE)
-					PlaceItemState = true;
-
-			}
-		}
-		else
-		{
-			/*if (commands[MODEL_UP])
-			{
-			ModelSwitch--;
-			if (ModelSwitch < 1)
-			ModelSwitch = 15;
-			}
-			if (commands[MODEL_DOWN])
-			{
-			ModelSwitch++;
-			if (ModelSwitch > 15)
-			ModelSwitch = 1;
-			}*/
-
-			if (commands[MOVE_UP] && !speech.talking)
-			{
-				if (!player->getMove())
-					if (player->moveUp())
-						Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_DOWN] && !speech.talking)
-			{
-				if (!player->getMove())
-					if (player->moveDown())
-						Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_LEFT] && !speech.talking)
-			{
-				if (!player->getMove())
-					if (player->moveLeft())
-						Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[MOVE_RIGHT] && !speech.talking)
-			{
-				if (!player->getMove())
-					if (player->moveRight())
-						Aina->Update(player->getPosition(), m_tileMap);
-			}
-			if (commands[IDLE_UP] && !speech.talking)
-			{
-				player->idleUp();
-			}
-			if (commands[IDLE_DOWN] && !speech.talking)
-			{
-				player->idleDown();
-			}
-			if (commands[IDLE_LEFT] && !speech.talking)
-			{
-				player->idleLeft();
-			}
-			if (commands[IDLE_RIGHT] && !speech.talking)
-			{
-				player->idleRight();
-			}
-
-			if (commands[SPEECH_NEXTLINE] && !speech.talking)
-			{
-				speech.talking = true;
-
-				const char* temp = speech.CharacterText[ModelSwitch - 1].c_str();
-				speech.Dialogue(temp);
-			}
-			else if (commands[SPEECH_NEXTLINE] && speech.talking)
-			{
-				speech.KeyPressed = true;
-			}
-
-			if (commands[ACTION])
-			{
-				if ( (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) == 21 && player->PlayerDirUp() ) ||
-					(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) == 21 && player->PlayerDirDown() ) || 
-					(m_itemMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) == 21 && player->PlayerDirLeft() ) || 
-					(m_itemMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) == 21 && player->PlayerDirRight()) )
-					laserswitch();
-			}
-
-			if (speech.talking)
-				speech.Update(dt);
-
-
-			player->Update(dt, m_tileMap,m_itemMap);
-
-			if (player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
-			{
-				if (player->TouchItem(m_itemMap) < inventory.inventory.LASER)
-				{
-					if(player->TouchItem(m_itemMap) == inventory.inventory.KEY)
-						numKey++;
-
-					inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
-					speech.talking = true;
-					speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
-					player->RemoveItem(m_itemMap);
-				}
-			}
-			if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
-			{
-				Aina->setAiActive(false);
-				Aina->RemoveItem(m_itemMap);
-
-			}
-		}
-
-		if (PlaceItemState == true)
-		{
-
-			if (player->PlayerDirUp() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
-			{
-				if (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
-				{
-					m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-					speech.talking = true;
-					speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
-				}
-				PlaceItemState = false;
-			}
-			else if (player->PlayerDirDown() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
-			{
-				if (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
-				{
-					m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-					speech.talking = true;
-					speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
-				}
-				PlaceItemState = false;
-			}
-			else if (player->PlayerDirLeft() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
-			{
-				if (m_itemMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) < 0)
-				{
-					m_itemMap->SetTile(player->getPosition().x - 1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-					speech.talking = true;
-					speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
-				}
-				PlaceItemState = false;
-			}
-			else if (player->PlayerDirRight() && (inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
-			{
-				if (m_itemMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) < 0)
-				{
-					m_itemMap->SetTile(player->getPosition().x + 1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
-					speech.talking = true;
-					speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
-					inventory.inventory.UseItem(inventory.InvCount);
-					inventory.showInvent = false;
-				}
-				PlaceItemState = false;
-			}
-		}
-	}
-	else if(player->getWin() && totalKey == numKey)
+	if (commands[ACTION])
 	{
-		win = true;
+	if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.PLAYERB_BOX && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.WITCH_BOX)
+	{
+	ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+	inventory.inventory.UseItem(inventory.InvCount);
+	inventory.showInvent = false;
+	}
+
+	if (ModelSwitch < 1)
+	ModelSwitch = 15;
+
+	if (ModelSwitch > 15)
+	ModelSwitch = 1;
+
+	if (inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR && inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE)
+	PlaceItemState = true;
+
+	}
 	}
 	else
 	{
-		player->setWin(false);
+	if (commands[MODEL_UP])
+	{
+	ModelSwitch--;
+	if (ModelSwitch < 1)
+	ModelSwitch = 15;
+	}
+
+	if (commands[MODEL_DOWN])
+	{
+	ModelSwitch++;
+	if (ModelSwitch > 15)
+	ModelSwitch = 1;
+	}
+
+	if (commands[MOVE_UP] && !speech.talking)
+	{
+	if (!player->getMove())
+	if (player->moveUp())
+	Aina->Update(player->getPosition(), m_tileMap);
+	}
+	if (commands[MOVE_DOWN] && !speech.talking)
+	{
+	if (!player->getMove())
+	if (player->moveDown())
+	Aina->Update(player->getPosition(), m_tileMap);
+	}
+	if (commands[MOVE_LEFT] && !speech.talking)
+	{
+	if (!player->getMove())
+	if (player->moveLeft())
+	Aina->Update(player->getPosition(), m_tileMap);
+	}
+	if (commands[MOVE_RIGHT] && !speech.talking)
+	{
+	if (!player->getMove())
+	if (player->moveRight())
+	Aina->Update(player->getPosition(), m_tileMap);
+	}
+	if (commands[IDLE_UP] && !speech.talking)
+	{
+	player->idleUp();
+	}
+	if (commands[IDLE_DOWN] && !speech.talking)
+	{
+	player->idleDown();
+	}
+	if (commands[IDLE_LEFT] && !speech.talking)
+	{
+	player->idleLeft();
+	}
+	if (commands[IDLE_RIGHT] && !speech.talking)
+	{
+	player->idleRight();
+	}
+
+	if (commands[SPEECH_NEXTLINE] && !speech.talking)
+	{
+	speech.talking = true;
+
+	const char* temp = speech.CharacterText[ModelSwitch - 1].c_str();
+	speech.Dialogue(temp);
+	}
+	else if (commands[SPEECH_NEXTLINE] && speech.talking)
+	{
+	speech.KeyPressed = true;
+	}
+
+	if (speech.talking)
+	speech.Update(dt);
+
+
+	player->Update(dt, m_tileMap);
+
+	if (player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
+	{
+	if (player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
+	{
+	if (player->TouchItem(m_itemMap) == inventory.inventory.KEY)
+	Key = true;
+
+	inventory.inventory.AddToInvent(player->TouchItem(m_itemMap));
+	speech.talking = true;
+	speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
+	player->RemoveItem(m_itemMap);
+	}
+	}
+	if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
+	{
+	Aina->setAiActive(false);
+	Aina->RemoveItem(m_itemMap);
+
+	}
+	}
+
+	if (PlaceItemState == true)
+	{
+	if ((inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
+	{
+	if (player->PlayerDirUp())
+	{
+	if (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) < 0)
+	{
+	m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y + 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+	speech.talking = true;
+	speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
+	inventory.inventory.UseItem(inventory.InvCount);
+	inventory.showInvent = false;
+	}
+	PlaceItemState = false;
+	}
+	else if (player->PlayerDirDown())
+	{
+	if (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0 && m_tileMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) < 0)
+	{
+	m_itemMap->SetTile(player->getPosition().x, floor(player->getPosition().y - 1), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+	speech.talking = true;
+	speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
+	inventory.inventory.UseItem(inventory.InvCount);
+	inventory.showInvent = false;
+	}
+	PlaceItemState = false;
+	}
+	else if (player->PlayerDirLeft())
+	{
+	if (m_itemMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) < 0)
+	{
+	m_itemMap->SetTile(player->getPosition().x - 1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+	speech.talking = true;
+	speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
+	inventory.inventory.UseItem(inventory.InvCount);
+	inventory.showInvent = false;
+	}
+	PlaceItemState = false;
+	}
+	else if (player->PlayerDirRight())
+	{
+	if (m_itemMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) < 0 && m_tileMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) < 0)
+	{
+	m_itemMap->SetTile(player->getPosition().x + 1, floor(player->getPosition().y), inventory.inventory.getItem(inventory.InvCount)->getID() + Inventory::TOTAL_ITEM);
+	speech.talking = true;
+	speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
+	inventory.inventory.UseItem(inventory.InvCount);
+	inventory.showInvent = false;
+	}
+	PlaceItemState = false;
+	}
+	}
+	}
+	}
+	else if (player->getWin() && Key)
+	{
+	win = true;
+	if (commands[ACTION])
+	throw - 1;
+	}
+	else
+	{
+	player->setWin(false);
+	}*/
+
+	if (!speech.talking && InstructText)
+	{
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				speech.talking = true;
+				const char* temp = speech.InstructionText[n].c_str();
+				speech.Dialogue(temp);
+				speech.InstructionText[n] = " ";
+			}
+		}
+		InstructFile = "";
+		if (temp_InstructFile != "")
+		{
+			InstructFile = temp_InstructFile;
+		}
+		else
+		{
+			InstructText = false;
+		}
+	}
+	if (commands[SPEECH_NEXTLINE] && speech.talking)
+	{
+		speech.KeyPressed = true;
 	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
 }
+#undef item
 
 Mesh *GameModel::getTileMesh()
 {
@@ -508,24 +650,24 @@ int GameModel::getKeys()
 
 void GameModel::laserswitch()
 {
-	for (int ccount = 0; ccount < m_itemMap->getMapWidth(); ++ccount)
+	for (int ccount = 0; ccount < m_tileMap->getMapWidth(); ++ccount)
 	{
-		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
+		for (int rcount = 0; rcount < m_tileMap->getMapHeight(); ++rcount)
 		{
-			if (m_itemMap->getTile(ccount , rcount) == -2 )
-				m_itemMap->SetTile(ccount , rcount,inventory.inventory.LASER);
-			else if(m_itemMap->getTile(ccount , rcount) == inventory.inventory.LASER)
-				m_itemMap->SetTile(ccount , rcount,-2);
+			if (m_tileMap->getTile(ccount , rcount) == -2 )
+				m_tileMap->SetTile(ccount , rcount,301);
+			else if(m_tileMap->getTile(ccount , rcount) == 301)
+				m_tileMap->SetTile(ccount , rcount,-2);
 
-			if (m_itemMap->getTile(ccount , rcount) == -3 )
-				m_itemMap->SetTile(ccount , rcount,47);
-			else if(m_itemMap->getTile(ccount , rcount) == 47)
-				m_itemMap->SetTile(ccount , rcount,-3);
+			if (m_tileMap->getTile(ccount , rcount) == -3 )
+				m_tileMap->SetTile(ccount , rcount,302);
+			else if(m_tileMap->getTile(ccount , rcount) == 302)
+				m_tileMap->SetTile(ccount , rcount,-3);
 
-			if (m_itemMap->getTile(ccount , rcount) == -4 )
-				m_itemMap->SetTile(ccount , rcount,48);
-			else if(m_itemMap->getTile(ccount , rcount) == 48)
-				m_itemMap->SetTile(ccount , rcount,-4);
+			if (m_tileMap->getTile(ccount , rcount) == -4 )
+				m_tileMap->SetTile(ccount , rcount,303);
+			else if(m_tileMap->getTile(ccount , rcount) == 303)
+				m_tileMap->SetTile(ccount , rcount,-4);
 
 		}
 	}
@@ -533,32 +675,32 @@ void GameModel::laserswitch()
 
 void GameModel::setLaser()
 {
-	for (int ccount = 0; ccount < m_itemMap->getMapWidth(); ++ccount)
+	for (int ccount = 0; ccount < m_tileMap->getMapWidth(); ++ccount)
 	{
-		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
+		for (int rcount = 0; rcount < m_tileMap->getMapHeight(); ++rcount)
 		{
-			if (m_itemMap->getTile(ccount , rcount) == 22 )
+			if (m_tileMap->getTile(ccount , rcount) == 300 )
 			{
 				for(int i = ccount - 1; i > 0 ; --i)
 				{
-					if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) != 22)
+					if((m_tileMap->getTile(i , rcount) < 0 || m_tileMap->getTile(i , rcount) == 301) && m_tileMap->getTile(i,rcount) != 300)
 					{
-						if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) == 20 )
-							m_itemMap->SetTile(i,rcount,48);
+						if(m_tileMap->getTile(i,rcount) == 301 )
+							m_tileMap->SetTile(i,rcount,303);
 						else
-							m_itemMap->SetTile(i,rcount,47);
+							m_tileMap->SetTile(i,rcount,302);
 					}
 					else
 						break;
 				}
-				for(int i = ccount + 1; i < m_itemMap->getMapWidth(); ++i)
+				for(int i = ccount + 1; i < m_tileMap->getMapWidth(); ++i)
 				{
-					if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) != 22)
+					if((m_tileMap->getTile(i , rcount) < 0 || m_tileMap->getTile(i , rcount) == 301) && m_tileMap->getTile(i,rcount) != 300)
 					{
-						if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) == 20)
-							m_itemMap->SetTile(i,rcount,48);
+						if(m_tileMap->getTile(i,rcount) == 301)
+							m_tileMap->SetTile(i,rcount,303);
 						else
-							m_itemMap->SetTile(i,rcount,47);
+							m_tileMap->SetTile(i,rcount,302);
 					}
 					else
 						break;
@@ -566,24 +708,24 @@ void GameModel::setLaser()
 				}
 				for(int i = rcount - 1; i > 0 ; --i)
 				{
-					if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) != 22)
+					if((m_tileMap->getTile(ccount , i) < 0 || m_tileMap->getTile(ccount , i) == 302 ) && m_tileMap->getTile(ccount,i) != 300)
 					{
-						if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) == 47 )
-							m_itemMap->SetTile(ccount,i,48);
+						if(m_tileMap->getTile(ccount,i) == 302 )
+							m_tileMap->SetTile(ccount,i,303);
 						else
-							m_itemMap->SetTile(ccount,i,20);
+							m_tileMap->SetTile(ccount,i,301);
 					}
 					else
 						break;
 				}
-				for(int i = rcount + 1; i < m_itemMap->getMapHeight(); ++i)
+				for(int i = rcount + 1; i < m_tileMap->getMapHeight(); ++i)
 				{
-					if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) != 22)
+					if((m_tileMap->getTile(ccount , i) < 0 || m_tileMap->getTile(ccount , i) == 302 ) && m_tileMap->getTile(ccount,i) != 300)
 					{
-						if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) == 47 )
-							m_itemMap->SetTile(ccount,i,48);
+						if(m_tileMap->getTile(ccount,i) == 302 )
+							m_tileMap->SetTile(ccount,i,303);
 						else
-							m_itemMap->SetTile(ccount,i,20);
+							m_tileMap->SetTile(ccount,i,301);
 					}
 					else
 						break;
