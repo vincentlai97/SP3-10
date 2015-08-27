@@ -33,6 +33,7 @@ protected:
 	Mesh* meshList[TOTAL_GEOMETRY];
 
 	TileMap* m_tileMap;
+	TileMap* m_itemMap;
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 

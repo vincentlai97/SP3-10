@@ -80,6 +80,26 @@ void GameView::RenderTileMap()
 					else
 						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) - model->inventory.inventory.TOTAL_ITEM].getID()], false);
 				}
+				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 47)
+					{
+						modelStack.PushMatrix();
+						modelStack.Rotate(90,0,0,1);
+						RenderMesh(model->inventory.inventory.meshlist[20], false);
+						modelStack.PopMatrix();
+					}
+					else if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 48)
+					{	
+						modelStack.PushMatrix();
+						RenderMesh(model->inventory.inventory.meshlist[20], false);
+						modelStack.PopMatrix();
+
+						modelStack.PushMatrix();
+						modelStack.Translate(0,0,1);
+						modelStack.Rotate(90,0,0,1);
+						RenderMesh(model->inventory.inventory.meshlist[20], false);
+						modelStack.PopMatrix();
+					}
+
 			} modelStack.PopMatrix();
 		}
 	}

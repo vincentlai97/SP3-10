@@ -20,7 +20,7 @@ void PlayerCharacter::UpdateVelocity(double dt)
 	m_velocity = 0;
 }
 
-void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
+void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap,const TileMap *itemMap)
 {
 
 	Vector3 position = m_position;
@@ -31,7 +31,11 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	{
 		gamewin = true;
 	}
-	else if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0)
+	else if (tileMap->getTile(position.x, floor(position.y)) > 0 || tileMap->getTile(position.x, ceil(position.y)) > 0 || 
+		itemMap->getTile(position.x, floor(position.y)) == 21 || itemMap->getTile(position.x, ceil(position.y)) == 21 || 
+		itemMap->getTile(position.x, floor(position.y)) == 20 || itemMap->getTile(position.x, ceil(position.y)) == 20 ||
+		itemMap->getTile(position.x, floor(position.y)) == 22 || itemMap->getTile(position.x, ceil(position.y)) == 22 || 
+		itemMap->getTile(position.x, floor(position.y)) == 47 || itemMap->getTile(position.x, ceil(position.y)) == 47)
 	{
 		m_velocity.x = 0;
 	}
@@ -44,7 +48,11 @@ void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
 	{
 		gamewin = true;
 	}
-	else if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0)
+	else if (tileMap->getTile(floor(position.x + (1 - m_size.x)), position.y) > 0 || tileMap->getTile(ceil(position.x - (1 - m_size.x)), position.y) > 0 ||
+		itemMap->getTile(floor(position.x + (1 - m_size.x)), position.y)  == 21 || itemMap->getTile(ceil(position.x - (1 - m_size.x)), position.y)  == 21 || 
+		itemMap->getTile(floor(position.x + (1 - m_size.x)), position.y)  == 20 || itemMap->getTile(ceil(position.x - (1 - m_size.x)), position.y)  == 20 ||
+		itemMap->getTile(floor(position.x + (1 - m_size.x)), position.y)  == 22 || itemMap->getTile(ceil(position.x - (1 - m_size.x)), position.y)  == 22 ||
+		itemMap->getTile(floor(position.x + (1 - m_size.x)), position.y)  == 47 || itemMap->getTile(ceil(position.x - (1 - m_size.x)), position.y)  == 47)
 	{
 		m_velocity.y = 0;
 	}
@@ -119,10 +127,10 @@ void PlayerCharacter::UpdateSprite()
 {
 }
 
-void PlayerCharacter::Update(double dt, const TileMap *tileMap)
+void PlayerCharacter::Update(double dt, const TileMap *tileMap,const TileMap *itemMap)
 {
 	Character::Update(dt, tileMap);
-	UpdatePosition(dt, tileMap);
+	UpdatePosition(dt, tileMap,itemMap);
 }
 
 bool PlayerCharacter::moveUp()

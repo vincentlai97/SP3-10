@@ -37,6 +37,15 @@ void Inventory::Init()
 	meshlist[KEY] = MeshBuilder::GenerateText("key",1,1);
 	meshlist[KEY]->textureID[0] = LoadTGA("Image//key.tga");
 
+	meshlist[LASER] = MeshBuilder::GenerateText("laser",1,1);
+	meshlist[LASER]->textureID[0] = LoadTGA("Image//laser2.tga");
+
+	meshlist[BUTTON] = MeshBuilder::GenerateText("button",1,1);
+	meshlist[BUTTON]->textureID[0] = LoadTGA("Image//button.tga");
+
+	meshlist[LASERSOURCE] = MeshBuilder::GenerateText("button",1,1);
+	meshlist[LASERSOURCE]->textureID[0] = LoadTGA("Image//source.tga");
+
 	MeshBox();
 
 	DefaultItem[MIRROR].Set("Mirror",MIRROR,1,false);
@@ -60,6 +69,9 @@ void Inventory::Init()
 	DefaultItem[TURBAN_BOX].Set("Turban", TURBAN_BOX, 1, false);
 	DefaultItem[WITCH_BOX].Set("Witch", WITCH_BOX, 1, false);
 	DefaultItem[KEY].Set("Key", KEY, 1, false);
+	DefaultItem[LASER].Set("Laser",LASER,1,false);
+	DefaultItem[BUTTON].Set("Button",BUTTON,1,false);
+	DefaultItem[LASERSOURCE].Set("LaserSource",LASERSOURCE,1,false);
 }
 
 void Inventory::MeshBox()

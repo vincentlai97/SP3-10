@@ -165,6 +165,9 @@ public:
 
 	int getKeys();
 	bool getwin();
+
+	void laserswitch(void);
+	void setLaser(void);
 };
 
 #endif

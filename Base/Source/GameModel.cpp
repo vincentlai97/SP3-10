@@ -148,40 +148,40 @@ void GameModel::Update(double dt)
 		{
 			/*if (commands[MODEL_UP])
 			{
-				ModelSwitch--;
-				if (ModelSwitch < 1)
-					ModelSwitch = 15;
+			ModelSwitch--;
+			if (ModelSwitch < 1)
+			ModelSwitch = 15;
 			}
 			if (commands[MODEL_DOWN])
 			{
-				ModelSwitch++;
-				if (ModelSwitch > 15)
-					ModelSwitch = 1;
+			ModelSwitch++;
+			if (ModelSwitch > 15)
+			ModelSwitch = 1;
 			}*/
 
 			if (commands[MOVE_UP] && !speech.talking)
 			{
 				if (!player->getMove())
-				if (player->moveUp())
-					Aina->Update(player->getPosition(), m_tileMap);
+					if (player->moveUp())
+						Aina->Update(player->getPosition(), m_tileMap);
 			}
 			if (commands[MOVE_DOWN] && !speech.talking)
 			{
 				if (!player->getMove())
-				if (player->moveDown())
-					Aina->Update(player->getPosition(), m_tileMap);
+					if (player->moveDown())
+						Aina->Update(player->getPosition(), m_tileMap);
 			}
 			if (commands[MOVE_LEFT] && !speech.talking)
 			{
 				if (!player->getMove())
-				if (player->moveLeft())
-					Aina->Update(player->getPosition(), m_tileMap);
+					if (player->moveLeft())
+						Aina->Update(player->getPosition(), m_tileMap);
 			}
 			if (commands[MOVE_RIGHT] && !speech.talking)
 			{
 				if (!player->getMove())
-				if (player->moveRight())
-					Aina->Update(player->getPosition(), m_tileMap);
+					if (player->moveRight())
+						Aina->Update(player->getPosition(), m_tileMap);
 			}
 			if (commands[IDLE_UP] && !speech.talking)
 			{
@@ -212,15 +212,24 @@ void GameModel::Update(double dt)
 				speech.KeyPressed = true;
 			}
 
+			if (commands[ACTION])
+			{
+				if ( (m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y + 1)) == 21 && player->PlayerDirUp() ) ||
+					(m_itemMap->getTile(player->getPosition().x, floor(player->getPosition().y - 1)) == 21 && player->PlayerDirDown() ) || 
+					(m_itemMap->getTile(player->getPosition().x - 1, floor(player->getPosition().y)) == 21 && player->PlayerDirLeft() ) || 
+					(m_itemMap->getTile(player->getPosition().x + 1, floor(player->getPosition().y)) == 21 && player->PlayerDirRight()) )
+					laserswitch();
+			}
+
 			if (speech.talking)
 				speech.Update(dt);
 
 
-			player->Update(dt, m_tileMap);
+			player->Update(dt, m_tileMap,m_itemMap);
 
 			if (player->TouchItem(m_itemMap) > -1 && player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM + inventory.inventory.TOTAL_ITEM)
 			{
-				if (player->TouchItem(m_itemMap) < inventory.inventory.TOTAL_ITEM)
+				if (player->TouchItem(m_itemMap) < inventory.inventory.LASER)
 				{
 					if(player->TouchItem(m_itemMap) == inventory.inventory.KEY)
 						numKey++;
@@ -230,11 +239,11 @@ void GameModel::Update(double dt)
 					speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[(player->TouchItem(m_itemMap))].getName());
 					player->RemoveItem(m_itemMap);
 				}
-		}
-		if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
-		{
-			Aina->setAiActive(false);
-			Aina->RemoveItem(m_itemMap);
+			}
+			if (Aina->TouchItem(m_itemMap) == 1 + inventory.inventory.TOTAL_ITEM)
+			{
+				Aina->setAiActive(false);
+				Aina->RemoveItem(m_itemMap);
 
 			}
 		}
@@ -495,4 +504,91 @@ int GameModel::getKeys()
 	}
 
 	return totalKey;
+}
+
+void GameModel::laserswitch()
+{
+	for (int ccount = 0; ccount < m_itemMap->getMapWidth(); ++ccount)
+	{
+		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
+		{
+			if (m_itemMap->getTile(ccount , rcount) == -2 )
+				m_itemMap->SetTile(ccount , rcount,inventory.inventory.LASER);
+			else if(m_itemMap->getTile(ccount , rcount) == inventory.inventory.LASER)
+				m_itemMap->SetTile(ccount , rcount,-2);
+
+			if (m_itemMap->getTile(ccount , rcount) == -3 )
+				m_itemMap->SetTile(ccount , rcount,47);
+			else if(m_itemMap->getTile(ccount , rcount) == 47)
+				m_itemMap->SetTile(ccount , rcount,-3);
+
+			if (m_itemMap->getTile(ccount , rcount) == -4 )
+				m_itemMap->SetTile(ccount , rcount,48);
+			else if(m_itemMap->getTile(ccount , rcount) == 48)
+				m_itemMap->SetTile(ccount , rcount,-4);
+
+		}
+	}
+}
+
+void GameModel::setLaser()
+{
+	for (int ccount = 0; ccount < m_itemMap->getMapWidth(); ++ccount)
+	{
+		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
+		{
+			if (m_itemMap->getTile(ccount , rcount) == 22 )
+			{
+				for(int i = ccount - 1; i > 0 ; --i)
+				{
+					if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) != 22)
+					{
+						if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) == 20 )
+							m_itemMap->SetTile(i,rcount,48);
+						else
+							m_itemMap->SetTile(i,rcount,47);
+					}
+					else
+						break;
+				}
+				for(int i = ccount + 1; i < m_itemMap->getMapWidth(); ++i)
+				{
+					if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) != 22)
+					{
+						if(m_tileMap->getTile(i , rcount) < 0 && m_itemMap->getTile(i,rcount) == 20)
+							m_itemMap->SetTile(i,rcount,48);
+						else
+							m_itemMap->SetTile(i,rcount,47);
+					}
+					else
+						break;
+
+				}
+				for(int i = rcount - 1; i > 0 ; --i)
+				{
+					if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) != 22)
+					{
+						if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) == 47 )
+							m_itemMap->SetTile(ccount,i,48);
+						else
+							m_itemMap->SetTile(ccount,i,20);
+					}
+					else
+						break;
+				}
+				for(int i = rcount + 1; i < m_itemMap->getMapHeight(); ++i)
+				{
+					if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) != 22)
+					{
+						if(m_tileMap->getTile(ccount , i) < 0 && m_itemMap->getTile(ccount,i) == 47 )
+							m_itemMap->SetTile(ccount,i,48);
+						else
+							m_itemMap->SetTile(ccount,i,20);
+					}
+					else
+						break;
+				}
+			}
+		}
+	}
 }

@@ -41,14 +41,14 @@ private:
 	bool gamewin;
 
 	void UpdateVelocity(double dt);
-	void UpdatePosition(double dt, const TileMap *tileMap);
+	void UpdatePosition(double dt, const TileMap *tileMap,const TileMap *itemMap);
 	void UpdateSprite();
 
 public:
 	PlayerCharacter(Vector3 position = Vector3(), Mesh* sprite = NULL);
 	~PlayerCharacter();
 
-	void Update(double dt, const TileMap *tileMap);
+	void Update(double dt, const TileMap *tileMap,const TileMap *itemMap);
 
 	int TouchItem(const TileMap *tileMap);
 	void RemoveItem(const TileMap *tileMap);

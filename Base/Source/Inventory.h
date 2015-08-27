@@ -30,6 +30,9 @@ public:
 		TURBAN_BOX,
 		WITCH_BOX,
 		KEY,
+		LASER,
+		BUTTON,
+		LASERSOURCE,
 		TOTAL_ITEM,
 	};
 
