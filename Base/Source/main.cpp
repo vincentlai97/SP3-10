@@ -21,7 +21,7 @@
 #include "NDLvl.h"
 #include "TutLvl2.h"
 #include "TutLvl3.h"
-
+#include "jslvl2.h"
 void main(void)
 {
 
@@ -69,6 +69,9 @@ void main(void)
 				break;
 			case 3:
 				model = new JSlvl();
+				break;
+			case 4:
+				model = new jslvl2();
 				break;
 
 			}

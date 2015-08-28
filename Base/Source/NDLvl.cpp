@@ -25,6 +25,12 @@ void NDlvl::Init()
 	GameModel::getKeys();
 
 	player = new PlayerCharacter(Vector3(11, 12 , 0));
+
+	cout << "check";
+	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
+	InstructText = true;
+
+	RenderSpeech();
 }
 
 void NDlvl::Update(double dt)
@@ -33,4 +39,35 @@ void NDlvl::Update(double dt)
 	if (GameModel::getwin()) throw 1;
 	//if (commands[ACTION])
 	//throw 1;
+}
+
+void NDlvl::RenderSpeech()
+{
+	cout << "checck";
+	if (!speech.talking && InstructText)
+	{
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				speech.talking = true;
+				const char* temp = speech.InstructionText[n].c_str();
+				speech.Dialogue(temp);
+				speech.InstructionText[n] = " ";
+			}
+		}
+		InstructFile = "";
+		if (temp_InstructFile != "")
+		{
+			InstructFile = temp_InstructFile;
+		}
+		else
+		{
+			InstructText = false;
+		}
+	}
+	if (commands[SPEECH_NEXTLINE] && speech.talking)
+	{
+		speech.KeyPressed = true;
+	}
 }

@@ -8,6 +8,9 @@
 class NDlvl : public GameModel
 {
 private:
+	bool InstructText;
+	string InstructFile;
+	string temp_InstructFile;
 
 public:
 	NDlvl();
@@ -15,6 +18,11 @@ public:
 
 	void Init();
 	void Update(double dt);
+	void RenderSpeech();
+
+	GameModel * model;
+
+
 };
 
 #endif

@@ -12,6 +12,7 @@
 
 #include "ReadFromText.h"
 
+
 #include <vector>
 
 #define worldWidth 32
@@ -125,10 +126,10 @@ private:
 	bool Key;
 	int totalKey;
 
-	bool InstructText;
+	/*bool InstructText;
 	string InstructFile;
 	string temp_InstructFile;
-
+*/
 	Mesh *Text;
 protected:
 	TileMap* m_tileMap;

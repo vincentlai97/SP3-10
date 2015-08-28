@@ -81,8 +81,8 @@ void GameModel::Init()
 	speech.Textfile("SpeechText//CharacterFile.txt", true);
 	speech.Textfile("SpeechText//HowToPlayFile.txt", false);
 
-	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
-	InstructText = true;
+	/*InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
+	InstructText = true;*/
 }
 
 #define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
@@ -445,32 +445,32 @@ void GameModel::Update(double dt)
 		player->setWin(false);
 	}*/
 
-	/*if (!speech.talking && InstructText)
-	{
-		for (int n = 0; n < speech.InstructionText.size(); n++)
-		{
-			if (speech.InstructionText[n] == InstructFile)
-			{
-				speech.talking = true;
-				const char* temp = speech.InstructionText[n].c_str();
-				speech.Dialogue(temp);
-				speech.InstructionText[n] = " ";
-			}
-		}
-		InstructFile = "";
-		if (temp_InstructFile != "")
-		{
-			InstructFile = temp_InstructFile;
-		}
-		else
-		{
-			InstructText = false;
-		}
-	}
-	if (commands[SPEECH_NEXTLINE] && speech.talking)
-	{
-		speech.KeyPressed = true;
-	}*/
+//if (!speech.talking && InstructText )
+//	{
+//		for (int n = 0; n < speech.InstructionText.size(); n++)
+//		{
+//			if (speech.InstructionText[n] == InstructFile)
+//			{
+//				speech.talking = true;
+//				const char* temp = speech.InstructionText[n].c_str();
+//				speech.Dialogue(temp);
+//				speech.InstructionText[n] = " ";
+//			}
+//		}
+//		InstructFile = "";
+//		if (temp_InstructFile != "")
+//		{
+//			InstructFile = temp_InstructFile;
+//		}
+//		else
+//		{
+//			InstructText = false;
+//		}
+//	}
+//	if (commands[SPEECH_NEXTLINE] && speech.talking)
+//	{
+//		speech.KeyPressed = true;
+//	}
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
