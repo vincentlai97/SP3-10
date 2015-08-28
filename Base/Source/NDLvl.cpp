@@ -25,7 +25,6 @@ void NDlvl::Init()
 
 	player = new PlayerCharacter(Vector3(11, 12 , 0));
 
-	cout << "check";
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
 
