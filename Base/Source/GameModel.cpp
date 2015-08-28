@@ -157,9 +157,9 @@ void GameModel::Update(double dt)
 				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 183 ||
 				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 176 ||
 				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 88)
-				player->setWin(true);
+				win = true;
 			else
-				player->setWin(false);
+				win = false;
 		}
 
 		break;

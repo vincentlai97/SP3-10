@@ -24,3 +24,11 @@ void StoryModel1::Init()
 
 	Aina = new AI(Vector3(10, 2, 0), NULL, Vector3(0, 7, 0));
 }
+
+void StoryModel1::Update(double dt)
+{
+	GameModel::Update(dt);
+	if (GameModel::getwin()) throw 4;
+	//if (commands[ACTION])
+	//throw 1;
+}

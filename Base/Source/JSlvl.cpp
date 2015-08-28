@@ -31,7 +31,7 @@ void JSlvl::Init()
 void JSlvl::Update(double dt)
 {
 	GameModel::Update(dt);
-	if(GameModel::getwin()) throw 4;
+	if(GameModel::getwin()) throw 5;
 		//if (commands[ACTION])
 			//throw 1;
 }

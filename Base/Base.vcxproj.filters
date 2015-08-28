@@ -1,96 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\AI.cpp" />
-    <ClCompile Include="Source\Camera.cpp" />
-    <ClCompile Include="Source\Camera3.cpp" />
-    <ClCompile Include="Source\Character.cpp" />
-    <ClCompile Include="Source\Controller.cpp" />
-    <ClCompile Include="Source\GameController.cpp" />
-    <ClCompile Include="Source\GameController2D.cpp" />
-    <ClCompile Include="Source\GameModel.cpp" />
-    <ClCompile Include="Source\GameModel2D.cpp" />
-    <ClCompile Include="Source\GameModelLevel1.cpp" />
-    <ClCompile Include="Source\GameModelLevel2.cpp" />
-    <ClCompile Include="Source\GameView.cpp" />
-    <ClCompile Include="Source\GameView2D.cpp" />
-    <ClCompile Include="Source\Inventory.cpp" />
-    <ClCompile Include="Source\InventoryMenu.cpp" />
-    <ClCompile Include="Source\Item.cpp" />
-    <ClCompile Include="Source\JSlvl.cpp" />
-    <ClCompile Include="Source\jslvl2.cpp" />
-    <ClCompile Include="Source\LoadHmap.cpp" />
-    <ClCompile Include="Source\LoadOBJ.cpp" />
-    <ClCompile Include="Source\LoadTGA.cpp" />
-    <ClCompile Include="Source\LoS.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\MainMenuController.cpp" />
-    <ClCompile Include="Source\MainMenuModel.cpp" />
-    <ClCompile Include="Source\MainMenuView.cpp" />
-    <ClCompile Include="Source\Mesh.cpp" />
-    <ClCompile Include="Source\MeshBuilder.cpp" />
-    <ClCompile Include="Source\Model.cpp" />
-    <ClCompile Include="Source\MouseCharacter.cpp" />
-    <ClCompile Include="Source\NDLvl.cpp" />
-    <ClCompile Include="Source\Pathfinding.cpp" />
-    <ClCompile Include="Source\PlayerCharacter.cpp" />
-    <ClCompile Include="Source\ReadFromText.cpp" />
-    <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\SpriteAnimation.cpp" />
-    <ClCompile Include="Source\TileMap.cpp" />
-    <ClCompile Include="Source\TutLvl3.cpp" />
-    <ClCompile Include="Source\TutLvl2.cpp" />
-    <ClCompile Include="Source\Utility.cpp" />
-    <ClCompile Include="Source\View.cpp" />
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="MVC">
+      <UniqueIdentifier>{da86c79c-ed52-4636-966d-66c36b5b0d46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
-    <ClInclude Include="Source\AI.h" />
-    <ClInclude Include="Source\Camera.h" />
-    <ClInclude Include="Source\Camera3.h" />
-    <ClInclude Include="Source\Character.h" />
-    <ClInclude Include="Source\Controller.h" />
-    <ClInclude Include="Source\GameController.h" />
-    <ClInclude Include="Source\GameController2D.h" />
-    <ClInclude Include="Source\GameModel.h" />
-    <ClInclude Include="Source\GameModel2D.h" />
-    <ClInclude Include="Source\GameModelLevel1.h" />
-    <ClInclude Include="Source\GameModelLevel2.h" />
-    <ClInclude Include="Source\GameView.h" />
-    <ClInclude Include="Source\GameView2D.h" />
-    <ClInclude Include="Source\Geometry.h" />
-    <ClInclude Include="Source\Inventory.h" />
-    <ClInclude Include="Source\InventoryMenu.h" />
-    <ClInclude Include="Source\Item.h" />
-    <ClInclude Include="Source\JSLvl.h" />
-    <ClInclude Include="Source\jslvl2.h" />
-    <ClInclude Include="Source\Light.h" />
-    <ClInclude Include="Source\LoadHmap.h" />
-    <ClInclude Include="Source\LoadOBJ.h" />
-    <ClInclude Include="Source\LoadTGA.h" />
-    <ClInclude Include="Source\LoS.h" />
-    <ClInclude Include="Source\MainMenuController.h" />
-    <ClInclude Include="Source\MainMenuModel.h" />
-    <ClInclude Include="Source\MainMenuView.h" />
-    <ClInclude Include="Source\Material.h" />
-    <ClInclude Include="Source\Mesh.h" />
-    <ClInclude Include="Source\MeshBuilder.h" />
-    <ClInclude Include="Source\Model.h" />
-    <ClInclude Include="Source\MouseCharacter.h" />
-    <ClInclude Include="Source\NDLvl.h" />
-    <ClInclude Include="Source\Object.h" />
-    <ClInclude Include="Source\Pathfinding.h" />
-    <ClInclude Include="Source\PlayerCharacter.h" />
-    <ClInclude Include="Source\ReadFromText.h" />
-    <ClInclude Include="Source\shader.hpp" />
-    <ClInclude Include="Source\SpriteAnimation.h" />
-    <ClInclude Include="Source\TileMap.h" />
-    <ClInclude Include="Source\TutLvl2.h" />
-    <ClInclude Include="Source\TutLvl3.h" />
-    <ClInclude Include="Source\Utility.h" />
-    <ClInclude Include="Source\Vertex.h" />
-    <ClInclude Include="Source\View.h" />
-=======
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -200,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\JSlvl.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\jslvl2.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
     <ClCompile Include="Source\StoryModel1.cpp">
@@ -339,9 +265,11 @@
     <ClInclude Include="Source\JSLvl.h">
       <Filter>MVC</Filter>
     </ClInclude>
+    <ClInclude Include="Source\jslvl2.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
     <ClInclude Include="Source\StoryModel1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
->>>>>>> Stashed changes
   </ItemGroup>
 </Project>

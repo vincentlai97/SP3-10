@@ -12,6 +12,7 @@ public:
 	~StoryModel1();
 
 	virtual void Init();
+	virtual void Update(double dt);
 
 };
 

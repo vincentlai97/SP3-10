@@ -70,9 +70,12 @@ void main(void)
 				model = new TutLvl3();
 				break;
 			case 3:
-				model = new JSlvl();
+				model = new StoryModel1();
 				break;
 			case 4:
+				model = new JSlvl();
+				break;
+			case 5:
 				model = new jslvl2();
 				break;
 

@@ -42,16 +42,19 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap)
 	switch (AI_State)
 	{
 	case IDLE:
-		if (m_position == m_intialPosition + waypoint) forward = false;
-		else if (m_position == m_intialPosition) forward = true;
-		switch (forward)
+		if (!waypoint.IsZero())
 		{
-		case true:
-			m_position += waypoint.Normalized();
-			break;
-		case false:
-//			m_position -= waypoint.Normalized();
-			break;
+			if (m_position == m_intialPosition + waypoint) forward = false;
+			else if (m_position == m_intialPosition) forward = true;
+			switch (forward)
+			{
+			case true:
+				m_position += waypoint.Normalized();
+				break;
+			case false:
+				m_position -= waypoint.Normalized();
+				break;
+			}
 		}
 		break;
 	case RETURNING:
