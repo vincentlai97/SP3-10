@@ -45,6 +45,7 @@
     <ClCompile Include="Source\Pathfinding.cpp" />
     <ClCompile Include="Source\PlayerCharacter.cpp" />
     <ClCompile Include="Source\ReadFromText.cpp" />
+    <ClCompile Include="Source\RyLevel.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\StoryModel1.cpp" />
@@ -92,6 +93,7 @@
     <ClInclude Include="Source\Pathfinding.h" />
     <ClInclude Include="Source\PlayerCharacter.h" />
     <ClInclude Include="Source\ReadFromText.h" />
+    <ClInclude Include="Source\RyLevel.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\StoryModel1.h" />

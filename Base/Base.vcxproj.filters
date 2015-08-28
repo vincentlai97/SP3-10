@@ -128,6 +128,9 @@
     <ClCompile Include="Source\jslvl2.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RyLevel.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
     <ClCompile Include="Source\StoryModel1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -266,6 +269,9 @@
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\jslvl2.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RyLevel.h">
       <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\StoryModel1.h">
