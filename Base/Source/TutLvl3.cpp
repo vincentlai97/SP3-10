@@ -23,6 +23,7 @@ void TutLvl3::Init()
 	m_itemMap->LoadMap("Image//Tutorial3Item.csv");
 
 	GameModel::getKeys();
+	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(2, 16, 0));
 }

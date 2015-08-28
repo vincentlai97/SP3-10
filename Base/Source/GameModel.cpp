@@ -463,15 +463,15 @@ void GameModel::setLaser()
 				m_itemMap->SetTile(ccount, rcount, 50);
 				m_tileMap->SetTile(ccount, rcount, -1);
 			} 
-			if (m_tileMap->getTile(ccount, rcount) == 183){
+			else if (m_tileMap->getTile(ccount, rcount) == 183){
 				m_itemMap->SetTile(ccount, rcount, 183);
 				m_tileMap->SetTile(ccount, rcount, -1);
 			}
-			if (m_tileMap->getTile(ccount, rcount) == 176){
+			else if (m_tileMap->getTile(ccount, rcount) == 176){
 				m_itemMap->SetTile(ccount, rcount, 176);
 				m_tileMap->SetTile(ccount, rcount, -1);
 			}
-			if (m_tileMap->getTile(ccount, rcount) == 88){
+			else if (m_tileMap->getTile(ccount, rcount) == 88){
 				m_itemMap->SetTile(ccount, rcount, 88);
 				m_tileMap->SetTile(ccount, rcount, -1);
 			}

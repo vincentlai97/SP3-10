@@ -24,6 +24,8 @@ void TutLvl2::Init()
 
 	GameModel::getKeys();
 
+	GameModel::setLaser();
+
 	player = new PlayerCharacter(Vector3(28, 18, 0));
 }
 

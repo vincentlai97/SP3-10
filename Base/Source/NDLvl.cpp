@@ -22,6 +22,8 @@ void NDlvl::Init()
 	m_itemMap->LoadMap("Image//BlankItem.csv");
 
 	GameModel::getKeys();
+	
+	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(11, 12 , 0));
 
@@ -31,17 +33,8 @@ void NDlvl::Init()
 	RenderSpeech();
 }
 
-void NDlvl::Update(double dt)
-{
-	GameModel::Update(dt);
-	if (GameModel::getwin())
-		if (GameModel::getNext())
-			throw 1;
-}
-
 void NDlvl::RenderSpeech()
 {
-	cout << "checck";
 	if (!speech.talking && InstructText)
 	{
 		for (int n = 0; n < speech.InstructionText.size(); n++)
@@ -69,3 +62,18 @@ void NDlvl::RenderSpeech()
 		speech.KeyPressed = true;
 	}
 }
+
+void NDlvl::Update(double dt)
+{
+	GameModel::Update(dt);
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw 1;
+
+		if (speech.talking)
+		{
+			speech.Update(dt);
+			if ()
+		}
+}
+
