@@ -6,13 +6,14 @@
 #include "Model.h"
 #include "MainMenuModel.h"
 #include "GameModel.h"
+#include "StoryModel1.h"
 #include "GameModel2D.h"
 #include "GameModelLevel1.h"
 #include "GameModelLevel2.h"
 #include "View.h"
 #include "MainMenuView.h"
 #include "GameView.h"
-#include "GameView2D.h"1
+#include "GameView2D.h"
 #include "Controller.h"
 #include "MainMenuController.h"
 #include "GameController2D.h"
@@ -22,6 +23,7 @@
 #include "TutLvl2.h"
 #include "TutLvl3.h"
 #include "jslvl2.h"
+
 void main(void)
 {
 
