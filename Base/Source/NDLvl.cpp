@@ -73,7 +73,6 @@ void NDlvl::Update(double dt)
 		if (speech.talking)
 		{
 			speech.Update(dt);
-			if ()
 		}
 }
 
