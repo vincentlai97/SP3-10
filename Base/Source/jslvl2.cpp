@@ -10,7 +10,6 @@ jslvl2::~jslvl2()
 
 void jslvl2::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -31,7 +30,7 @@ void jslvl2::Init()
 void jslvl2::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 6;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw 6;
 }

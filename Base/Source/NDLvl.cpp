@@ -11,7 +11,6 @@ NDlvl::~NDlvl()
 
 void NDlvl::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -36,9 +35,9 @@ void NDlvl::Init()
 void NDlvl::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 1;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw 1;
 }
 
 void NDlvl::RenderSpeech()

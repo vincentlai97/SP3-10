@@ -12,7 +12,6 @@ TutLvl3::~TutLvl3()
 
 void TutLvl3::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -31,7 +30,7 @@ void TutLvl3::Init()
 void TutLvl3::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 3;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw 3;
 }

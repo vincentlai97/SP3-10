@@ -63,10 +63,19 @@ void GameView::RenderTileMap()
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
-				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) >= 0)
+				RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6); //Render Ground
+				modelStack.Translate(0, 0, 1);
+				if (tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) >= 0){
+
 					RenderMesh(model->getTileMesh(), false, 6 * tileMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y), 6); //Render Terrain
+				}
+				else if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > 49)
+				{
+					RenderMesh(model->getTileMesh(), false, 6 * itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y), 6);
+				}
 				else
 				{
+
 					RenderMesh(model->getTileMesh(), false, 6 * model->floorTiles[rand() % model->floorTiles.size()], 6); //Render Ground
 					bool renderShadow = true;
 					if (checkLineOfSight(model->getPlayer()->getPosition() + Vector3(.5f, .5f, 0), Vector3(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y, 0) + Vector3(.5f, .5f, 0), tileMap)) //Check LoS with player
@@ -85,6 +94,7 @@ void GameView::RenderTileMap()
 							RenderMesh(model->shadow, false); //Render Shadow
 						} modelStack.PopMatrix();
 					}
+
 				}
 
 				modelStack.Translate(0, 0, 1);
@@ -96,29 +106,19 @@ void GameView::RenderTileMap()
 						RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.DefaultItem[itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) - model->inventory.inventory.TOTAL_ITEM].getID()], false);
 				}
 
-				/*if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 47)
-					{
-					modelStack.PushMatrix();
-					modelStack.Rotate(90,0,0,1);
-					RenderMesh(model->inventory.inventory.meshlist[20], false);
-					modelStack.PopMatrix();
-					}
-					else if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) == 48)
-					{
-					modelStack.PushMatrix();
-					RenderMesh(model->inventory.inventory.meshlist[20], false);
-					modelStack.PopMatrix();
-
-					modelStack.PushMatrix();
-					modelStack.Translate(0,0,1);
-					modelStack.Rotate(90,0,0,1);
-					RenderMesh(model->inventory.inventory.meshlist[20], false);
-					modelStack.PopMatrix();
-					}*/
-
 			} modelStack.PopMatrix();
 		}
 	}
+
+	modelStack.PushMatrix();
+	std::ostringstream ss;
+	if (model->getNumKeys() == model->getTotalKeys())
+		ss << "All keys obtained! ";
+	else
+		ss << "Keys : " << model->getNumKeys() << " / " << model->getTotalKeys();
+	RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 50,750, 10);
+	modelStack.PopMatrix();
+
 }
 #undef tileMap
 
@@ -131,7 +131,7 @@ void GameView::RenderPlayer()
 	float mapOffset_x, mapOffset_y;
 	model->getOffset(mapOffset_x, mapOffset_y);
 
-	modelStack.Translate(0, 0, 1);
+	modelStack.Translate(0, 0, 2);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
 		modelStack.Translate(player->getPosition());
@@ -234,7 +234,7 @@ void GameView::RenderAI()
 	float mapOffset_x, mapOffset_y;
 	model->getOffset(mapOffset_x, mapOffset_y);
 
-	modelStack.Translate(0, 0, 1);
+	modelStack.Translate(0, 0, 2);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
 
@@ -308,8 +308,8 @@ void GameView::RenderWin()
 	GameModel* model = dynamic_cast<GameModel *>(m_model);
 
 	modelStack.PushMatrix();
-	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 10);
+	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 12);
 	modelStack.Scale(model->getWorldWidth(), model->getWorldHeight(), 10);
-	RenderMesh(model->inventory.getInventMesh(), false);
+	RenderMesh(model->getWinMesh(), false);
 	modelStack.PopMatrix();
 }

@@ -10,7 +10,6 @@ RyLevel::~RyLevel()
 
 void RyLevel::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -31,7 +30,7 @@ void RyLevel::Init()
 void RyLevel::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw -1;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw -1;
 }

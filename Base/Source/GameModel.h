@@ -114,6 +114,8 @@ private:
 
 	Mesh *tile;
 	
+	Mesh *winMesh;
+
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -122,9 +124,12 @@ private:
 	int up, down, left, right;
 
 	bool win;
+	bool touchdoor;
 	int numKey;
 	bool Key;
 	int totalKey;
+
+	bool goNext;
 
 	/*bool InstructText;
 	string InstructFile;
@@ -159,6 +164,8 @@ public:
 	TileMap* getItemMap();
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
+	Mesh* getWinMesh();
+
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
 	float InvenTime;
@@ -181,6 +188,11 @@ public:
 
 	void laserswitch(void);
 	void setLaser(void);
+
+	bool getNext();
+
+	int getNumKeys();
+	int getTotalKeys();
 
 	std::vector<Vector3> mirror;
 };

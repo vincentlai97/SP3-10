@@ -12,7 +12,6 @@ TutLvl2::~TutLvl2()
 
 void TutLvl2::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -31,7 +30,7 @@ void TutLvl2::Init()
 void TutLvl2::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 2;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+			throw 2;
 }

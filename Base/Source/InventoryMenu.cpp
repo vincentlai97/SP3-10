@@ -24,17 +24,6 @@ void InventoryMenu::Init()
 	showInvent = false;
 
 	inventory.Init();
-
-	Item wow("Amazing",inventory.TRAP,10,false);
-	Item wow2("WUUUR",inventory.MIRROR,15,false);
-	Item wow4("AMRIW",inventory.THROWABLE,5,false);
-	inventory.AddToInvent(wow);
-	inventory.AddToInvent(wow2);
-	inventory.AddToInvent(wow4);
-	inventory.AddToInvent(2);
-	inventory.AddToInvent(2);
-	inventory.AddToInvent(2);
-	inventory.AddToInvent(2);
 }
 
 void InventoryMenu::Update()
