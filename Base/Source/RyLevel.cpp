@@ -31,7 +31,7 @@ void RyLevel::Init()
 void RyLevel::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 2;
+	if (GameModel::getwin()) throw -1;
 	//if (commands[ACTION])
 	//throw 1;
 }

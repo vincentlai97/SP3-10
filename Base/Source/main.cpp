@@ -82,7 +82,6 @@ void main(void)
 			case 6:
 				model = new RyLevel();
 				break;
-
 			}
 
 			if(state > -1)
