@@ -83,8 +83,7 @@ void CMainMenuView::RenderLevel()
 
 			if (model->getCount() == i)
 			{
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 0, 0), 30, 600, 400 - i * 50, 10);
-				modelStack.Scale(1.2, 1.2, 1);
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 0, 0), 35, 590, 400 - i * 50, 10);
 			}
 			else
 				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 600, 400 - i * 50, 10);
