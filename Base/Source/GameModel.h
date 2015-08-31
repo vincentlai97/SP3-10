@@ -108,12 +108,16 @@ protected:
 	};
 	Mesh* meshSpeech[NUM_SPEECH];
 
+	GAME_STATE m_gameState;
+
 	PlayerCharacter *player;
 private:
-	GAME_STATE m_gameState;
 
 	Mesh *tile;
 	
+	Mesh *winMesh;
+	Mesh *lose;
+
 	float m_mapOffset_x;
 	float m_mapOffset_y;
 
@@ -122,10 +126,14 @@ private:
 	int up, down, left, right;
 
 	bool win;
+	bool touchdoor;
 	int numKey;
 	bool Key;
 	int totalKey;
 
+	bool goNext;
+
+	bool died;
 	/*bool InstructText;
 	string InstructFile;
 	string temp_InstructFile;
@@ -134,6 +142,7 @@ private:
 protected:
 	TileMap* m_tileMap;
 	TileMap* m_itemMap;
+	std::vector<AI *> AIList;
 public:
 	GameModel();
 	~GameModel();
@@ -142,6 +151,7 @@ public:
 	virtual void Update(double dt);
 	virtual void setCommands(int command);
 
+	bool isPlaceItemState() { return m_gameState == GAME_STATE::PLACE_ITEM; }
 	bool isShowInventory() { return m_gameState == GAME_STATE::INVENTORY; }
 
 	int getWorldWidth() { return worldWidth; }
@@ -159,6 +169,9 @@ public:
 	TileMap* getItemMap();
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
+	Mesh* getWinMesh();
+	Mesh* getLoseMesh();
+
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
 	float InvenTime;
@@ -167,20 +180,25 @@ public:
 
 	Mesh *shadow;
 
-	AI *Aina;
-
 	ReadFromText speech;
 	void MeshSpeech();
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
 
-	Mesh* getAIMesh(int modelSwitch);
+	std::vector<AI *> getAIList();
 
 	int getKeys();
 	bool getwin();
 
 	void laserswitch(void);
 	void setLaser(void);
+
+	bool getNext();
+
+	int getNumKeys();
+	int getTotalKeys();
+
+	bool getDead();
 
 	std::vector<Vector3> mirror;
 	Vector3 hologram;

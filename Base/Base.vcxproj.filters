@@ -128,8 +128,20 @@
     <ClCompile Include="Source\jslvl2.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RyLevel.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutLvl2.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutLvl3.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NDLvl.cpp">
+      <Filter>MVC</Filter>
+    </ClCompile>
     <ClCompile Include="Source\StoryModel1.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MVC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,15 +226,6 @@
     <ClInclude Include="Source\GameModelLevel2.h">
       <Filter>MVC</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenuModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainMenuController.h">
       <Filter>MVC</Filter>
     </ClInclude>
@@ -268,8 +271,20 @@
     <ClInclude Include="Source\jslvl2.h">
       <Filter>MVC</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RyLevel.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutLvl2.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutLvl3.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NDLvl.h">
+      <Filter>MVC</Filter>
+    </ClInclude>
     <ClInclude Include="Source\StoryModel1.h">
-      <Filter>Header Files</Filter>
+      <Filter>MVC</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

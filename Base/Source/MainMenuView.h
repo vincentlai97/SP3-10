@@ -13,7 +13,7 @@ public:
 	void Render();
 	void RenderBackground();
 	void RenderButton();
-
+	void RenderLevel();
 
 
 };

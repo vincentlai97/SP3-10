@@ -12,7 +12,6 @@ TutLvl3::~TutLvl3()
 
 void TutLvl3::Init()
 {
-	Model::Init();
 	GameModel::Init();
 
 	m_tileMap = new TileMap();
@@ -24,6 +23,7 @@ void TutLvl3::Init()
 	m_itemMap->LoadMap("Image//Tutorial3Item.csv");
 
 	GameModel::getKeys();
+	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(2, 16, 0));
 }
@@ -31,7 +31,13 @@ void TutLvl3::Init()
 void TutLvl3::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 3;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+		{
+			if (GameModel::getDead())
+				throw 2;
+			else
+				throw 3;
+		}
+
 }

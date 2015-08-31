@@ -1,5 +1,5 @@
 #include "MainMenuView.h"
-
+#include <sstream>
 
 ISoundEngine* MenuBGM = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
@@ -14,11 +14,16 @@ CMainMenuView::~CMainMenuView()
 
 void CMainMenuView::Render()
 {
+	CMainMenuModel* model = dynamic_cast<CMainMenuModel *>(m_model);
+
 	View::Render();
 
 	modelStack.PushMatrix(); {
-		RenderButton();
 		RenderBackground();
+		if (model->getChoose())
+			RenderLevel();
+		else
+			RenderButton();
 	} modelStack.PopMatrix();
 }
 
@@ -46,38 +51,43 @@ void CMainMenuView::RenderButton()
 	modelStack.PushMatrix(); {
 		modelStack.Scale(windowWidth / 12, windowHeight / 12, 1);
 
-		modelStack.PushMatrix();
-		modelStack.Translate(2, -0.5, 0);
-		modelStack.Scale(2.2, 1.5, 1);
-		if (model->getCount() == 0)
+		for (int i = 0; i < model->EXIT_BUTTON; i++)
 		{
-			Render2DMesh(model->getStartMesh2(), false);
-			modelStack.Scale(1.2, 1.2, 1);
+			modelStack.PushMatrix();
+			modelStack.Translate(2, -0.5 - 2 * i, 1);
+			modelStack.Scale(2.2, 1.5, 1);
+			if (model->getCount() == i)
+			{
+				Render2DMesh(model->getMesh(i + 4), false);
+				modelStack.Scale(1.2, 1.2, 1);
+			}
+			else
+				Render2DMesh(model->getMesh(i + 1), false);
+			modelStack.PopMatrix();
 		}
-		Render2DMesh(model->getStartMesh(), false);
-		modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(2, -2.5, 0);
-		modelStack.Scale(2.2, 1.5, 1);
-		if (model->getCount() == 1)
+	} modelStack.PopMatrix();
+}
+
+void CMainMenuView::RenderLevel()
+{
+	CMainMenuModel* model = dynamic_cast<CMainMenuModel *>(m_model);
+
+	modelStack.PushMatrix(); {
+
+		for (int i = 0; i < 7; i++)
 		{
-			Render2DMesh(model->getLoadMesh2(), false);
-			modelStack.Scale(1.2, 1.2, 1);
-		}
-		Render2DMesh(model->getLoadMesh(), false);
-		modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			std::ostringstream ss;
+			ss << "Level " << i + 1;
 
-		modelStack.PushMatrix();
-		modelStack.Translate(2, -4.5, 0);
-		modelStack.Scale(2.2, 1.5, 1);
-		if (model->getCount() == 2)
-		{
-			Render2DMesh(model->getExitMesh2(), false);
-			modelStack.Scale(1.2, 1.2, 1);
+			if (model->getCount() == i)
+			{
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 0, 0), 35, 590, 400 - i * 50, 10);
+			}
+			else
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 600, 400 - i * 50, 10);
+			modelStack.PopMatrix();
 		}
-		Render2DMesh(model->getExitMesh(), false);
-		modelStack.PopMatrix();
-
 	} modelStack.PopMatrix();
 }

@@ -23,6 +23,7 @@
 #include "TutLvl2.h"
 #include "TutLvl3.h"
 #include "jslvl2.h"
+#include "RyLevel.h"
 
 void main(void)
 {
@@ -78,7 +79,9 @@ void main(void)
 			case 5:
 				model = new jslvl2();
 				break;
-
+			case 6:
+				model = new RyLevel();
+				break;
 			}
 
 			if(state > -1)

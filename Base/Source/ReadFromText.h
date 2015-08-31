@@ -36,5 +36,11 @@ public:
 	vector<string> line;
 	vector<string> CharacterText;
 	vector<string> InstructionText;
+
+	void ReadCharacterSet();
+	void ReadCharacterGet();
+
+	void ReadInstructionSet();
+	void ReadInstructionGet();
 };
 

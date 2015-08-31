@@ -10,9 +10,8 @@ public:
 		MOVE_DOWN,
 		ENTER,
 		NUM_COMMANDS,
-
 	};
-protected:
+
 	enum MainMenu{
 		BACKGROUND,
 		START_BUTTON,
@@ -26,8 +25,9 @@ protected:
 		NUM_MENU,
 	};
 
+protected:
 	Mesh* meshList[NUM_MENU];
-
+	Mesh* Text;
 public:
 	virtual void Init();
 	virtual void Update(double dt);
@@ -35,19 +35,17 @@ public:
 	void setCommands(int command);
 
 	Mesh* getBackgroundMesh();
-	Mesh* getStartMesh();
-	Mesh* getLoadMesh();
-	Mesh* getExitMesh();
 
-	Mesh* getStartMesh2();
-	Mesh* getLoadMesh2();
-	Mesh* getExitMesh2();
+	Mesh* getMesh(int a);
 
 	int getCount(void);
+
+	bool getChoose(void);
+
+	Mesh* getTextMesh();
+
 private:
 	int counter;
-	bool countminus;
-	bool countplus;
-	static bool ExitKey;
+	bool chooselvl;
 };
 

@@ -23,21 +23,18 @@ void GameModel::Init()
 		meshPlayer[count]->textureID[0] = 0;
 	}
 	MeshPlayer();
-	ModelSwitch = 1;
+	ModelSwitch = 0;
 
 	m_gameState = GAME_STATE::IDLE;
 
 	tile = MeshBuilder::GenerateText("tiles", 32, 32);
 	tile->textureID[0] = LoadTGA("Image//tile.tga");
 
-	m_tileMap = new TileMap();
-	m_tileMap->Init(25, 64, 48, worldWidth, worldHeight);
-	
-	m_tileMap->LoadMap("Image//Tutorial1.csv");
+	winMesh = MeshBuilder::GenerateText("tiles", 1, 1);
+	winMesh->textureID[0] = LoadTGA("Image//win.tga");
 
-	m_itemMap = new TileMap();
-	m_itemMap->Init(25, 64, 48, worldWidth, worldHeight);
-	m_itemMap->LoadMap("Image//ItemMap.csv");
+	lose = MeshBuilder::GenerateText("tiles", 1, 1);
+	lose->textureID[0] = LoadTGA("Image//lose.tga");
 
 	commands = new bool[NUM_COMMANDS];
 	for (int count = 0; count < NUM_COMMANDS; ++count)
@@ -61,16 +58,18 @@ void GameModel::Init()
 	inventory.Init();
 	InvenTime = 0;
 
-	Aina = new AI(Vector3(3, 4, 0));
-
-	inventory.inventory.AddToInvent(inventory.inventory.PLAYERB_BOX);
-	inventory.inventory.AddToInvent(inventory.inventory.CAT_BOX);
-
 	PlaceItemState = false;
 
+	AIList.clear();
+
 	win = false;
+	touchdoor = false;
 	numKey = 0;
 	//getKeys();
+
+	goNext = false;
+
+	died = false;
 
 	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
 	{
@@ -124,12 +123,15 @@ void GameModel::Update(double dt)
 		}
 		
 		//Item interaction with enemies
-		if (itemTouched(Aina) > Inventory::TOTAL_ITEM && itemTouched(Aina) < Inventory::TOTAL_ITEM * 2)
+		for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
 		{
-			if (itemTouched(Aina) == Inventory::TRAP + Inventory::TOTAL_ITEM)
+			if (itemTouched((*it)) > Inventory::TOTAL_ITEM && itemTouched((*it)) < Inventory::TOTAL_ITEM * 2)
 			{
-				Aina->setAiActive(false);
-				m_itemMap->SetTile(Aina->getPosition().x, Aina->getPosition().y, -1);
+				if (itemTouched((*it)) == Inventory::TRAP + Inventory::TOTAL_ITEM)
+				{
+					(*it)->setAiActive(false);
+					m_itemMap->SetTile((*it)->getPosition().x, (*it)->getPosition().y, -1);
+				}
 			}
 		}
 
@@ -137,7 +139,7 @@ void GameModel::Update(double dt)
 		if (commands[SPEECH_NEXTLINE])
 		{
 			speech.talking = true;
-			const char* temp = speech.CharacterText[ModelSwitch - 1].c_str();
+			const char* temp = speech.CharacterText[ModelSwitch].c_str();
 			speech.Dialogue(temp);
 			m_gameState = GAME_STATE::SPEECH;
 			break;
@@ -154,19 +156,21 @@ void GameModel::Update(double dt)
 			}
 		}
 
-		if (numKey == totalKey && player->getWin())
+		if ((numKey == totalKey && touchdoor ) || died )
 			win = true;
+
+		if (commands[ACTION] && win)
+			goNext = true;
 
 		if (!player->getDirection().IsZero())
 		{
-			Vector3 switchPosition = player->getPosition() + player->getDirection();
-			if (m_tileMap->getTile(switchPosition.x, switchPosition.y) == 50 ||
-				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 183 ||
-				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 176 ||
-				m_tileMap->getTile(switchPosition.x, switchPosition.y) == 88)
-				win = true;
+			if (m_itemMap->getTile(player->getPosition().x, player->getPosition().y) == 50 ||
+				m_itemMap->getTile(player->getPosition().x, player->getPosition().y) == 183 ||
+				m_itemMap->getTile(player->getPosition().x, player->getPosition().y) == 176 ||
+				m_itemMap->getTile(player->getPosition().x, player->getPosition().y) == 88)
+				touchdoor = true;
 			else
-				win = false;
+				touchdoor = false;
 		}
 
 		break;
@@ -176,22 +180,29 @@ void GameModel::Update(double dt)
 			m_gameState = GAME_STATE::AI_TURN;
 		break;
 	case GAME_STATE::AI_TURN:
-		if (checkLineOfSight(Aina->getPosition(), player->getPosition(), m_tileMap))
+		for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
 		{
-			Aina->Update(player->getPosition(), m_tileMap);
-			AITarget = AITARGET::PLAYER;
+			if (checkLineOfSight((*it)->getPosition(), player->getPosition(), m_tileMap))
+			{
+				(*it)->Update(player->getPosition(), m_tileMap, ModelSwitch);
+				AITarget = AITARGET::PLAYER;
+			}
+			else if (checkLineOfSight((*it)->getPosition(), hologram, m_tileMap))
+			{
+				(*it)->Update(hologram, m_tileMap, ModelSwitch);
+				AITarget = AITARGET::HOLOGRAM;
+			}
+			else
+			{
+				if (AITarget == AITARGET::HOLOGRAM) (*it)->SetStateReturning();
+				(*it)->Update(player->getPosition(), m_tileMap, ModelSwitch);
+			}
+			if ((*it)->getSpot() == true)
+				ModelSwitch = 0;
+			if ((*it)->getPosition() == player->getPosition())
+				died = true;
 		}
-		else if (checkLineOfSight(Aina->getPosition(), hologram, m_tileMap))
-		{
-			Aina->Update(hologram, m_tileMap);
-			AITarget = AITARGET::HOLOGRAM;
-		}
-		else
-		{
-			if (AITarget == AITARGET::HOLOGRAM) Aina->SetStateReturning();
-			Aina->Update(player->getPosition(), m_tileMap);
-		}
-		m_gameState = GAME_STATE::IDLE;
+			m_gameState = GAME_STATE::IDLE;
 		break;
 	case GAME_STATE::INVENTORY:
 		if (commands[INVENT]) { m_gameState = GAME_STATE::IDLE; break; }
@@ -203,7 +214,7 @@ void GameModel::Update(double dt)
 			else if (inventory.inventory.getItem(inventory.InvCount)->getID() >= Inventory::ITEM_TYPE::PLAYERB_BOX
 				&& inventory.inventory.getItem(inventory.InvCount)->getID() <= Inventory::ITEM_TYPE::WITCH_BOX)
 			{
-				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 3;
+				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 4;
 				inventory.inventory.UseItem(inventory.InvCount);
 				m_gameState = IDLE;
 			}
@@ -216,7 +227,11 @@ void GameModel::Update(double dt)
 	case GAME_STATE::PLACE_ITEM:
 		if ((inventory.inventory.getItem(inventory.InvCount)->getID() <= inventory.inventory.THROWABLE && inventory.inventory.getItem(inventory.InvCount)->getID() >= inventory.inventory.MIRROR))
 		{
-			if (!player->getDirection().IsZero())
+			if (commands[COMMANDS::MOVE_UP]) player->idleUp();
+			if (commands[COMMANDS::MOVE_DOWN]) player->idleDown();
+			if (commands[COMMANDS::MOVE_LEFT]) player->idleLeft();
+			if (commands[COMMANDS::MOVE_RIGHT]) player->idleRight();
+			if (commands[COMMANDS::ACTION])
 			{
 				Vector3 placePosition = player->getPosition() + player->getDirection();
 				if (m_itemMap->getTile(placePosition.x, placePosition.y) < 0)
@@ -332,12 +347,12 @@ PlayerCharacter* GameModel::getPlayer()
 
 Mesh* GameModel::getPlayerMesh()
 {
-	return meshPlayer[ModelSwitch - 1];
+	return meshPlayer[ModelSwitch];
 }
 
-Mesh* GameModel::getAIMesh(int modelSwitch)
+std::vector<AI *> GameModel::getAIList()
 {
-	return meshPlayer[modelSwitch - 1];
+	return AIList;
 }
 
 void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)
@@ -414,7 +429,7 @@ void GameModel::MeshSpeech()
 
 Mesh* GameModel::getFaceMesh()
 {
-	return meshSpeech[ModelSwitch - 1];
+	return meshSpeech[ModelSwitch];
 }
 
 Mesh* GameModel::getSpeechMesh()
@@ -464,6 +479,10 @@ void GameModel::laserswitch()
 			else if(m_tileMap->getTile(ccount , rcount) == 303)
 				m_tileMap->SetTile(ccount , rcount,-4);
 
+			if(m_tileMap->getTile(ccount, rcount) == 313)
+				m_tileMap->SetTile(ccount, rcount, 312);
+			else if (m_tileMap->getTile(ccount, rcount) == 312)
+				m_tileMap->SetTile(ccount, rcount, 313);
 		}
 	}
 }
@@ -474,14 +493,34 @@ void GameModel::setLaser()
 	{
 		for (int rcount = 0; rcount < m_tileMap->getMapHeight(); ++rcount)
 		{
+			if (m_tileMap->getTile(ccount, rcount) == 50){
+				m_itemMap->SetTile(ccount, rcount, 50);
+				m_tileMap->SetTile(ccount, rcount, -1);
+			} 
+			else if (m_tileMap->getTile(ccount, rcount) == 183){
+				m_itemMap->SetTile(ccount, rcount, 183);
+				m_tileMap->SetTile(ccount, rcount, -1);
+			}
+			else if (m_tileMap->getTile(ccount, rcount) == 176){
+				m_itemMap->SetTile(ccount, rcount, 176);
+				m_tileMap->SetTile(ccount, rcount, -1);
+			}
+			else if (m_tileMap->getTile(ccount, rcount) == 88){
+				m_itemMap->SetTile(ccount, rcount, 88);
+				m_tileMap->SetTile(ccount, rcount, -1);
+			}
+
+
 			if (m_tileMap->getTile(ccount , rcount) == 300 )
 			{
 				for(int i = ccount - 1; i > 0 ; --i)
 				{
 					if((m_tileMap->getTile(i , rcount) < 0 || m_tileMap->getTile(i , rcount) == 301) && m_tileMap->getTile(i,rcount) != 300)
 					{
-						if(m_tileMap->getTile(i,rcount) == 301 )
-							m_tileMap->SetTile(i,rcount,303);
+						if (m_tileMap->getTile(i, rcount) == 301)
+							m_tileMap->SetTile(i, rcount, 303);
+						else if (m_tileMap->getTile(i, rcount) == -2)
+							m_tileMap->SetTile(i, rcount, 313);
 						else
 							m_tileMap->SetTile(i,rcount,302);
 					}
@@ -494,6 +533,8 @@ void GameModel::setLaser()
 					{
 						if(m_tileMap->getTile(i,rcount) == 301)
 							m_tileMap->SetTile(i,rcount,303);
+						else if (m_tileMap->getTile(i, rcount) == -2)
+							m_tileMap->SetTile(i, rcount, 313);
 						else
 							m_tileMap->SetTile(i,rcount,302);
 					}
@@ -507,6 +548,8 @@ void GameModel::setLaser()
 					{
 						if(m_tileMap->getTile(ccount,i) == 302 )
 							m_tileMap->SetTile(ccount,i,303);
+						else if (m_tileMap->getTile(ccount, i) == -3)
+							m_tileMap->SetTile(ccount, i, 312);
 						else
 							m_tileMap->SetTile(ccount,i,301);
 					}
@@ -519,6 +562,8 @@ void GameModel::setLaser()
 					{
 						if(m_tileMap->getTile(ccount,i) == 302 )
 							m_tileMap->SetTile(ccount,i,303);
+						else if (m_tileMap->getTile(ccount, i) == -3)
+							m_tileMap->SetTile(ccount, i, 312);
 						else
 							m_tileMap->SetTile(ccount,i,301);
 					}
@@ -528,4 +573,33 @@ void GameModel::setLaser()
 			}
 		}
 	}
+}
+
+bool GameModel::getNext()
+{
+	return goNext;
+}
+
+int  GameModel::getNumKeys()
+{
+	return numKey;
+}
+int GameModel::getTotalKeys()
+{
+	return totalKey;
+}
+
+Mesh* GameModel::getWinMesh()
+{
+	return winMesh;
+}
+
+bool GameModel::getDead()
+{
+	return died;
+}
+
+Mesh* GameModel::getLoseMesh()
+{
+	return lose;
 }

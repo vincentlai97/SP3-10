@@ -22,13 +22,26 @@ void StoryModel1::Init()
 
 	player = new PlayerCharacter(Vector3(4, 20, 0));
 
-	Aina = new AI(Vector3(10, 2, 0), NULL, Vector3(0, 7, 0));
+	AI *ai = new AI(Vector3(10, 2, 0), 1, NULL, Vector3(0, 7, 0));
+	AIList.push_back(ai);
+
+	inventory.inventory.AddToInvent(7);
+
+	GameModel::getKeys();
+	GameModel::setLaser();
+
 }
 
 void StoryModel1::Update(double dt)
 {
 	GameModel::Update(dt);
-	if (GameModel::getwin()) throw 4;
-	//if (commands[ACTION])
-	//throw 1;
+	if (GameModel::getwin())
+		if (GameModel::getNext())
+		{
+			if (GameModel::getDead())
+				throw 3;
+			else
+				throw 4;
+		}
+
 }
