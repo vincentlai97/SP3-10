@@ -54,26 +54,27 @@ AI::AI(Vector3 initialPosition, int modelswitch, Mesh* sprite, Vector3 waypoint)
 
 	meshAI[WITCH] = MeshBuilder::GenerateText("WitchModel", 4, 4);
 	meshAI[WITCH]->textureID[0] = LoadTGA("Image//Sprite//Model//WitchModel.tga");
+
+	chaseTurns = -1;
 }
 
 AI::~AI()
 {
 }
 
-static int chaseTurns = -1;
 static bool forward = true;
 
-void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
+void AI::UpdatePath(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 {
-	if (checkLineOfSight(playerPos, m_position, tileMap))
+	if (checkLineOfSight(playerPos, m_virtualPosition, tileMap))
 	{
 		if (ModelSwitch == modelswitch + 2)
 		{
-			if ((m_position - playerPos).Length() < 5)
+			if ((m_virtualPosition - playerPos).Length() < 5)
 			{
 				AI_State = CHASE;
 				chaseTurns = 5;
-				path = Pathfinding::Pathfind(m_position, playerPos, tileMap);
+				path = Pathfinding::Pathfind(m_virtualPosition, playerPos, tileMap);
 			}
 			else
 			{
@@ -83,8 +84,8 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 					if (chaseTurns == 0)
 					{
 						AI_State = RETURNING;
-						Vector3 closest = (m_intialPosition - m_position).LengthSquared() < (m_intialPosition + waypoint - m_position).LengthSquared() ? m_intialPosition : m_intialPosition + waypoint;
-						path = Pathfinding::Pathfind(m_position, closest, tileMap);
+						Vector3 closest = (m_intialPosition - m_virtualPosition).LengthSquared() < (m_intialPosition + waypoint - m_virtualPosition).LengthSquared() ? m_intialPosition : m_intialPosition + waypoint;
+						path = Pathfinding::Pathfind(m_virtualPosition, closest, tileMap);
 					}
 				}
 			}
@@ -93,7 +94,7 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 		{
 			AI_State = CHASE;
 			chaseTurns = 5;
-			path = Pathfinding::Pathfind(m_position, playerPos, tileMap);
+			path = Pathfinding::Pathfind(m_virtualPosition, playerPos, tileMap);
 		}
 	}
 	else
@@ -102,8 +103,8 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 		if (chaseTurns == 0)
 		{
 			AI_State = RETURNING;
-			Vector3 closest = (m_intialPosition - m_position).LengthSquared() < (m_intialPosition + waypoint - m_position).LengthSquared() ? m_intialPosition : m_intialPosition + waypoint;
-			path = Pathfinding::Pathfind(m_position, closest, tileMap);
+			Vector3 closest = (m_intialPosition - m_virtualPosition).LengthSquared() < (m_intialPosition + waypoint - m_virtualPosition).LengthSquared() ? m_intialPosition : m_intialPosition + waypoint;
+			path = Pathfinding::Pathfind(m_virtualPosition, closest, tileMap);
 		}
 	}
 
@@ -114,15 +115,15 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 	case IDLE:
 		if (!waypoint.IsZero())
 		{
-			if (m_position == m_intialPosition + waypoint) forward = false;
-			else if (m_position == m_intialPosition) forward = true;
+			if (m_virtualPosition == m_intialPosition + waypoint) forward = false;
+			else if (m_virtualPosition == m_intialPosition) forward = true;
 			switch (forward)
 			{
 			case true:
-				m_position += waypoint.Normalized();
+				m_virtualPosition += waypoint.Normalized();
 				break;
 			case false:
-				m_position -= waypoint.Normalized();
+				m_virtualPosition -= waypoint.Normalized();
 				break;
 			}
 		}
@@ -131,7 +132,7 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 		if (!path.size()) AI_State = IDLE;
 		else
 		{
-			m_position = path.back();
+			m_virtualPosition = path.back();
 			path.pop_back();
 		}
 		break;
@@ -139,13 +140,96 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 	{
 		if (path.size())
 		{
-			m_position = path.back();
+			m_virtualPosition = path.back();
 			path.pop_back();
 		}
 	}
 		break;
 	}
+}
 
+void AI::UpdatePosition(double dt)
+{
+	Vector3 position = m_position;
+	position.x += m_velocity.x * dt;
+	if (m_velocity.x < 0)
+		position.x = floor(position.x);
+	else if (m_velocity.x > 0)
+		position.x = ceil(position.x);
+	if (position != m_virtualPosition) //Check if player already reached his destination
+	{
+		if (position != m_virtualPosition) m_position.x = m_virtualPosition.x;
+		m_velocity.x = 0;
+	}
+
+	position = m_position;
+	position.y += m_velocity.y * dt;
+	if (m_velocity.y < 0)
+		position.y = floor(position.y);
+	else if (m_velocity.y > 0)
+		position.y = ceil(position.y);
+	if (position != m_virtualPosition) //Check if player already reached his destination
+	{
+		if (position != m_virtualPosition) m_position.y = m_virtualPosition.y;
+		m_velocity.y = 0;
+	}
+
+	m_position += m_velocity * dt;
+}
+
+void AI::UpdateSprite()
+{
+	if (m_velocity.x < 0)
+	{
+		m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+		m_spriteState %= WALKING_NUMFRAMES;
+		m_spriteState += WALKING_LEFT;
+	}
+	else if (m_velocity.x > 0)
+	{
+		m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+		m_spriteState %= WALKING_NUMFRAMES;
+		m_spriteState += WALKING_RIGHT;
+	}
+	else if (m_velocity.y < 0)
+	{
+		m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+		m_spriteState %= WALKING_NUMFRAMES;
+		m_spriteState += WALKING_DOWN;
+	}
+	else if (m_velocity.y > 0)
+	{
+		m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+		m_spriteState %= WALKING_NUMFRAMES;
+		m_spriteState += WALKING_UP;
+	}
+	else
+	{
+		if (m_spriteState >= WALKING_UP && m_spriteState <= WALKING_UP_END)
+			m_spriteState = IDLE_UP;
+		else if (m_spriteState >= WALKING_DOWN && m_spriteState <= WALKING_DOWN_END)
+			m_spriteState = IDLE_DOWN;
+		else if (m_spriteState >= WALKING_LEFT && m_spriteState <= WALKING_LEFT_END)
+			m_spriteState = IDLE_LEFT;
+		else if (m_spriteState >= WALKING_RIGHT && m_spriteState <= WALKING_RIGHT_END)
+			m_spriteState = IDLE_RIGHT;
+	}
+}
+
+void AI::UpdateVelocity(double dt)
+{
+	m_velocity.SetZero();
+	if (m_virtualPosition != m_position)
+		m_velocity += (m_virtualPosition - m_position).Normalized() * 5;
+}
+
+void AI::Update(double dt)
+{
+	Character::Update(dt);
+
+	UpdateVelocity(dt);
+	UpdatePosition(dt);
+	UpdateSprite();
 }
 
 bool AI::getAiActive()

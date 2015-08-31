@@ -106,8 +106,9 @@ void GameView::RenderTileMap()
 	if (model->isPlaceItemState())
 	{
 		modelStack.PushMatrix(); {
+			modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
 			modelStack.Translate(model->getPlayer()->getPosition() + model->getPlayer()->getDirection());
-			modelStack.Translate(0.5f, 0.5f, 2);
+			modelStack.Translate(0.5f, 0.5f, 10);
 			RenderMesh(model->inventory.inventory.meshlist[model->inventory.inventory.getItem(model->inventory.InvCount)->getID()], false);
 		} modelStack.PopMatrix();
 	}
@@ -253,7 +254,7 @@ void GameView::RenderAI()
 				modelStack.Translate(0.5, 0.5, 0);
 				if (AIList[count]->getAiActive() == true)
 				{
-					RenderMesh(AIList[count]->getMesh(), false);
+					RenderMesh(AIList[count]->getMesh(), false, 6 * AIList[count]->getSpriteState(), 6);
 				}
 			} modelStack.PopMatrix();
 		}

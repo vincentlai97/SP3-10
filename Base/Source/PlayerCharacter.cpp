@@ -63,6 +63,7 @@ void PlayerCharacter::UpdateSprite()
 	else if (m_velocity.x > 0)
 	{
 		m_spriteState = m_spriteTime / WALKINGSPRITE_TIME;
+		//std::cout << "Player: " << m_spriteState << std::endl;
 		m_spriteState %= WALKING_NUMFRAMES;
 		m_spriteState += WALKING_RIGHT;
 	}

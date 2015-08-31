@@ -5,7 +5,6 @@
 #include "Pathfinding.h"
 #include "LoS.h"
 
-
 GameModel::GameModel()
 {
 }
@@ -178,32 +177,47 @@ void GameModel::Update(double dt)
 	case GAME_STATE::PLAYER_TURN:
 		player->Update(dt, m_tileMap);
 		if (player->getVelocity().IsZero())
+		{
 			m_gameState = GAME_STATE::AI_TURN;
+			for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
+			{
+				if (checkLineOfSight((*it)->getPosition(), player->getPosition(), m_tileMap))
+				{
+					(*it)->UpdatePath(player->getPosition(), m_tileMap, ModelSwitch);
+					AITarget = AITARGET::PLAYER;
+				}
+				else if (checkLineOfSight((*it)->getPosition(), hologram, m_tileMap))
+				{
+					(*it)->UpdatePath(hologram, m_tileMap, ModelSwitch);
+					AITarget = AITARGET::HOLOGRAM;
+				}
+				else
+				{
+					if (AITarget == AITARGET::HOLOGRAM) (*it)->SetStateReturning();
+					(*it)->UpdatePath(player->getPosition(), m_tileMap, ModelSwitch);
+				}
+			}
+		}
 		break;
 	case GAME_STATE::AI_TURN:
-		for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
-		{
-			if (checkLineOfSight((*it)->getPosition(), player->getPosition(), m_tileMap))
-			{
-				(*it)->Update(player->getPosition(), m_tileMap, ModelSwitch);
-				AITarget = AITARGET::PLAYER;
-			}
-			else if (checkLineOfSight((*it)->getPosition(), hologram, m_tileMap))
-			{
-				(*it)->Update(hologram, m_tileMap, ModelSwitch);
-				AITarget = AITARGET::HOLOGRAM;
-			}
-			else
-			{
-				if (AITarget == AITARGET::HOLOGRAM) (*it)->SetStateReturning();
-				(*it)->Update(player->getPosition(), m_tileMap, ModelSwitch);
-			}
-			if ((*it)->getSpot() == true)
-				ModelSwitch = 0;
-			if ((*it)->getPosition() == player->getPosition())
-				died = true;
-		}
-			m_gameState = GAME_STATE::IDLE;
+	{
+								int AIStopped = 0;
+								for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
+								{
+									if ((*it)->getAiActive())
+									{
+									(*it)->Update(dt);
+									if ((*it)->getSpot() == true)
+										ModelSwitch = 0;
+									if ((*it)->getPosition() == player->getPosition())
+										died = true;
+									}
+									if (AIList[0]->getVelocity().IsZero())
+										AIStopped++;
+								}
+								if (AIStopped == AIList.size())
+									m_gameState = GAME_STATE::IDLE;
+	}
 		break;
 	case GAME_STATE::INVENTORY:
 		if (commands[INVENT]) { m_gameState = GAME_STATE::IDLE; break; }

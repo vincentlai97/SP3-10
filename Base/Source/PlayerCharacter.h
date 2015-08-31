@@ -5,7 +5,7 @@
 
 const Vector3 SMALLSIZE(0.7f, 0.8f, 0);
 #define WALKING_NUMFRAMES 4
-#define WALKINGSPRITE_TIME 0.1f
+#define WALKINGSPRITE_TIME 0.08f
 
 #define MAX_SPEED 3
 

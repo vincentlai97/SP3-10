@@ -20,7 +20,9 @@ public:
 	Character(Vector3 position = Vector3(), Mesh* sprite = NULL);
 	~Character();
 
+	virtual void Update(double dt) { m_spriteTime += dt; }
 	virtual void Update(double dt, const TileMap *tilemap) { m_spriteTime += dt; }
+	
 
 	const Vector3 getPosition() const;
 	const Vector3 getVelocity() const;
