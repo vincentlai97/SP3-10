@@ -41,7 +41,10 @@ void StoryModel1::Update(double dt)
 			if (GameModel::getDead())
 				throw 3;
 			else
+			{
+				GameModel::updateHighscore(3);
 				throw 4;
+			}
 		}
 
 }

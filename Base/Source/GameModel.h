@@ -136,6 +136,9 @@ private:
 	bool goNext;
 
 	bool died;
+
+	int steps;
+
 	/*bool InstructText;
 	string InstructFile;
 	string temp_InstructFile;
@@ -201,6 +204,10 @@ public:
 	int getTotalKeys();
 
 	bool getDead();
+
+	int getSteps();
+
+	bool updateHighscore(int a);
 
 	std::vector<Vector3> mirror;
 	Vector3 hologram;

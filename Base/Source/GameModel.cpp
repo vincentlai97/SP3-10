@@ -5,6 +5,10 @@
 #include "Pathfinding.h"
 #include "LoS.h"
 
+#include <sstream> 
+#include <fstream>
+#include <algorithm>
+
 GameModel::GameModel()
 {
 }
@@ -71,6 +75,8 @@ void GameModel::Init()
 
 	died = false;
 
+	steps = 0;
+
 	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
 	{
 		meshSpeech[count] = new Mesh("null");
@@ -103,7 +109,7 @@ void GameModel::Update(double dt)
 		if (commands[MOVE_DOWN]) player->moveDown();
 		if (commands[MOVE_LEFT]) player->moveLeft();
 		if (commands[MOVE_RIGHT]) player->moveRight();
-		if (!player->getAcceleration().IsZero()) { m_gameState = GAME_STATE::PLAYER_TURN; break; }
+		if (!player->getAcceleration().IsZero()) { m_gameState = GAME_STATE::PLAYER_TURN; steps++; break; }
 
 		//Open inventory
 		if (commands[INVENT]) { m_gameState = GAME_STATE::INVENTORY; break; }
@@ -617,4 +623,131 @@ bool GameModel::getDead()
 Mesh* GameModel::getLoseMesh()
 {
 	return lose;
+}
+
+int GameModel::getSteps()
+{
+	return steps;
+}
+
+bool GameModel::updateHighscore(int level)
+{
+	ifstream ifs;
+	string buffer;
+
+	bool wrote = false;
+
+	vector <int> highscores;
+	std::vector<string> text;
+
+	ifs.open("highscore.txt");
+
+	stringstream ss;
+	int thelvl = level + 1;
+	ss << "Level" << thelvl;
+
+	int position = 0;
+
+	if (ifs.is_open())
+	{
+		while (!ifs.eof())
+		{
+			static int temp = 0;
+			getline(ifs, buffer);
+			text.push_back(buffer);
+			++temp;
+			if (buffer == ss.str())
+			{
+				position = temp;
+				for (int count = 0; count < 5; ++count)
+				{
+					getline(ifs, buffer);
+					highscores.push_back(stoi(buffer));
+					text.push_back(buffer);
+				}
+			}
+		}
+		ifs.close();
+	}
+
+	highscores.push_back(steps);
+	std::sort(highscores.begin(), highscores.end());
+
+	for (int count = 0; count < 5; ++count)
+	{
+		ss.str("");
+		ss << highscores[count];
+		text[position + count] = ss.str();
+	}
+
+	//vector <int> 
+
+	//for (int i = 1; i < 5; i++)
+	//{
+	//	for (int k = 0; k < 5 - i; k++)
+	//	{
+	//		int scores = 0;
+	//		scores = stoi(highscores[position + k + 1]);
+
+	//		int scores2 = 0;
+	//		scores2 = stoi(highscores[position + k + 2]);
+
+	//		if (scores > scores2)
+	//		{
+	//			//Swap around
+	//			string temp = highscores[position + k + 1];
+	//			highscores[position + k + 1] = highscores[position + k + 2];
+	//			highscores[position + k + 2] = temp;
+	//		}
+	//	}
+	//}
+
+	//for (int i = position)
+
+	//int lowest = 999999;
+	//int lowestPos = position + 1;
+	////find position in the lvl to put
+	//for (int i = position + 1; i < position + 6; i++)
+	//{
+	//	int scores = 0;
+	//	scores = stoi(highscores[i]);
+
+	//	if (lowest > scores && scores != 999999)
+	//	{
+	//		lowest = scores;
+	//		lowestPos = i;
+	//	}
+	//}
+
+	//overwrite
+	/*if (lowestPos == position + 6)
+	{
+		string a = static_cast<ostringstream*>(&(ostringstream() << steps))->str();
+		highscores[lowestPos] = a;
+		wrote = true;
+	}
+	else
+	{
+		for (int i = lowestPos; i < (position + 6 - lowestPos); i++)
+		{
+			highscores[i + 1] = highscores[i];
+		}
+
+		string a = static_cast<ostringstream*>(&(ostringstream() << steps))->str();
+		highscores[lowestPos] = a;
+		wrote = true;
+	}*/
+
+	ofstream writer;
+	writer.open("highscore.txt");
+	int count = 0;
+
+	for (vector<string>::iterator it = text.begin(); it != text.end(); ++it)
+	{
+		writer << *it << endl;
+	}
+
+	writer.close();
+
+	return wrote;
 }

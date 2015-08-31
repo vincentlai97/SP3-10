@@ -74,7 +74,10 @@ void TutLvl2::Update(double dt)
 			if (GameModel::getDead())
 				throw 1;
 			else
+			{
+				GameModel::updateHighscore(1);
 				throw 2;
+			}
 		}
 
 }

@@ -36,7 +36,10 @@ void jslvl2::Update(double dt)
 			if (GameModel::getDead())
 				throw 5;
 			else
+			{
+				GameModel::updateHighscore(5);
 				throw 6;
+			}
 		}
 
 }

@@ -53,7 +53,7 @@ void GameView::RenderTileMap()
 		for (int rcount = 0; rcount < tileMap->getNumOfTilesHeight() + 1; ++rcount)
 		{
 			modelStack.PushMatrix(); {
-				modelStack.Translate(-(mapOffset_x - (int)mapOffset_x), -(mapOffset_y - (int)mapOffset_y), 0);
+				modelStack.Translate(-(mapOffset_x - (int)mapOffset_x), -(mapOffset_y - (int)mapOffset_y), 1);
 				modelStack.Translate(ccount, rcount, 0);
 				modelStack.Translate(0.5f, 0.5f, 0);
 
@@ -122,6 +122,11 @@ void GameView::RenderTileMap()
 	RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 50,750, 10);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	std::ostringstream ss1;
+	ss1 << "Moves : " << model->getSteps();
+	RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 30, 50, 720, 10);
+	modelStack.PopMatrix();
 }
 #undef tileMap
 
@@ -134,7 +139,7 @@ void GameView::RenderPlayer()
 	float mapOffset_x, mapOffset_y;
 	model->getOffset(mapOffset_x, mapOffset_y);
 
-	modelStack.Translate(0, 0, 2);
+	modelStack.Translate(0, 0, 3);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, 0);
 		modelStack.Translate(player->getPosition());
@@ -230,7 +235,7 @@ void GameView::RenderAI()
 	float mapOffset_x, mapOffset_y;
 	model->getOffset(mapOffset_x, mapOffset_y);
 
-	modelStack.Translate(0, 0, 2);
+	modelStack.Translate(0, 0, 3);
 	modelStack.PushMatrix(); {
 		modelStack.Translate(-mapOffset_x, -mapOffset_y, -1);
 

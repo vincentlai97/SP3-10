@@ -73,7 +73,10 @@ void TutLvl3::Update(double dt)
 			if (GameModel::getDead())
 				throw 2;
 			else
+			{
+				GameModel::updateHighscore(1);
 				throw 3;
+			}
 		}
 
 	if (speech.talking)

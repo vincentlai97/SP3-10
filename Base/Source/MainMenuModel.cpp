@@ -36,6 +36,7 @@ void CMainMenuModel::Init()
 	counter = 0;
 
 	chooselvl = false;
+	highscore = false;
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 	{
@@ -68,8 +69,8 @@ void CMainMenuModel::Update(double dt)
 		if (counter > 6) counter = 0;
 	}
 
-	if (commands[MOVE_UP]) counter -= 1;
-	if (commands[MOVE_DOWN]) counter += 1;
+	if (commands[MOVE_UP] && !highscore) counter -= 1;
+	if (commands[MOVE_DOWN] && !highscore) counter += 1;
 
 	if (commands[ENTER])
 	{
@@ -82,6 +83,14 @@ void CMainMenuModel::Update(double dt)
 				counter = 0;
 				chooselvl = true;
 			}
+			if (counter == 1)
+			{
+				if (!highscore)
+					highscore = true;
+				else
+					highscore = false;
+			}
+			
 		}
 		else
 		{
@@ -114,4 +123,9 @@ bool CMainMenuModel::getChoose()
 Mesh* CMainMenuModel::getTextMesh()
 {
 	return Text;
+}
+
+bool CMainMenuModel::getHighscore()
+{
+	return highscore;
 }

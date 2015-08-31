@@ -83,7 +83,10 @@ void NDlvl::Update(double dt)
 			if (GameModel::getDead())
 				throw 0;
 			else
+			{
+				GameModel::updateHighscore(0);
 				throw 1;
+			}
 		}
 
 		if (speech.talking)

@@ -15,6 +15,7 @@ public:
 	void RenderBackground();
 	void RenderButton();
 	void RenderLevel();
+	void RenderHighScore();
 
 };
 

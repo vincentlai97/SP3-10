@@ -44,8 +44,11 @@ public:
 
 	Mesh* getTextMesh();
 
+	bool getHighscore();
+
 private:
 	int counter;
 	bool chooselvl;
+	bool highscore;
 };
 

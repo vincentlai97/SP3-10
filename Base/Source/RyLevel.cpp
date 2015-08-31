@@ -41,7 +41,10 @@ void RyLevel::Update(double dt)
 			if (GameModel::getDead())
 				throw 6;
 			else
+			{
+				GameModel::updateHighscore(6);
 				throw -1;
+			}
 		}
 
 }
