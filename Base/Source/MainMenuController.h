@@ -2,6 +2,8 @@
 #include "Controller.h"
 #include "MainMenuModel.h"
 #include "MainMenuView.h"
+
+
 class CMainMenuController :
 	public Controller
 {

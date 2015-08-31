@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Model.h"
-
 class CMainMenuModel : public Model
 {
 public:
@@ -29,6 +28,7 @@ protected:
 	Mesh* meshList[NUM_MENU];
 	Mesh* Text;
 public:
+
 	virtual void Init();
 	virtual void Update(double dt);
 

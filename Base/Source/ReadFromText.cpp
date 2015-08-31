@@ -134,6 +134,7 @@ void ReadFromText::Update(double dt)
 {
 	speechspeed -= (float)dt;
 
+	//not speed up + character by character
 	if (speechspeed < 0 && vectorspeech < line.size() && !speedup)
 	{
 		if (letterofspeech < filespeech.size())

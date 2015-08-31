@@ -1,14 +1,10 @@
 #include "GameView.h"
-#pragma comment(lib, "irrKlang.lib")
-using namespace irrklang;
-ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 #include "LoS.h"
 
 #include "Pathfinding.h"
 
 GameView::GameView(Model *model) : View(model)
-, BGMusic(true)
 {
 }
 
@@ -29,7 +25,6 @@ void GameView::Render()
 	modelStack.PushMatrix(); {
 		RenderTileMap();
 		RenderPlayer();
-		RenderMusic();
 		if (model->isShowInventory())
 			RenderInventory();
 		RenderAI();
@@ -149,15 +144,6 @@ void GameView::RenderPlayer()
 }
 #undef player
 
-void GameView::RenderMusic()
-{
-	if (BGMusic)
-	{
-		//BGM1->play2D("../irrKlang/media/Bgm2.mp3", true);
-		BGMusic = false;
-	}
-
-}
 
 void GameView::RenderInventory()
 {

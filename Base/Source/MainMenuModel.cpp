@@ -105,6 +105,7 @@ int CMainMenuModel::getCount(void)
 	return counter;
 }
 
+
 bool CMainMenuModel::getChoose()
 {
 	return chooselvl;

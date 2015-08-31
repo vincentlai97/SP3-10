@@ -5,6 +5,7 @@
 #include "Pathfinding.h"
 #include "LoS.h"
 
+
 GameModel::GameModel()
 {
 }

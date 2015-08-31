@@ -12,6 +12,8 @@
 
 #include "ReadFromText.h"
 
+#include <irrKlang.h>
+
 
 #include <vector>
 

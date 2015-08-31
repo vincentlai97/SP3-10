@@ -1,5 +1,10 @@
 #include "NDLvl.h"
 
+#pragma comment(lib, "irrKlang.lib")
+using namespace irrklang;
+
+//ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
 NDlvl::NDlvl()
 {
 }
@@ -26,9 +31,12 @@ void NDlvl::Init()
 
 	player = new PlayerCharacter(Vector3(11, 12 , 0));
 
-	cout << "check";
+	//speech
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
+
+	GAME_STATE::SPEECH;
+	
 
 	RenderSpeech();
 
@@ -64,6 +72,7 @@ void NDlvl::RenderSpeech()
 		speech.KeyPressed = true;
 	}
 }
+
 
 void NDlvl::Update(double dt)
 {

@@ -1,10 +1,11 @@
 #pragma once
 #include "View.h"
 #include "MainMenuModel.h"
+
 class CMainMenuView : public View
 {
 private:
-	bool b_MenuBGM;
+
 public:
 
 	CMainMenuView(Model* model = NULL);
@@ -14,7 +15,6 @@ public:
 	void RenderBackground();
 	void RenderButton();
 	void RenderLevel();
-
 
 };
 

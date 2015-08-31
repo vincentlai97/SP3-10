@@ -19,7 +19,6 @@ public:
 	void Init();
 	void Update(double dt);
 	void RenderSpeech();
-
 	GameModel * model;
 
 

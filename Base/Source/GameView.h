@@ -8,11 +8,9 @@
 class GameView : public View
 {
 private:
-	bool BGMusic;
 	
 	void RenderTileMap();
 	void RenderPlayer();
-	void RenderMusic();
 	void RenderInventory();
 	void RenderAI();
 	void RenderSpeech();

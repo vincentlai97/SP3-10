@@ -24,6 +24,14 @@
 #include "TutLvl3.h"
 #include "jslvl2.h"
 #include "RyLevel.h"
+#include <irrKlang.h>
+
+#pragma comment(lib, "irrKlang.lib")
+using namespace irrklang;
+
+ISoundEngine* MenuBGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
 
 void main(void)
 {
@@ -42,6 +50,7 @@ void main(void)
 	model->Init();
 
 	View* view2 = new CMainMenuView(model); // this is the view that changes
+	MenuBGM1->play2D("../irrKlang/media/Menu.mp3", true);
 	int n = true;
 	while(n)
 	{
@@ -57,30 +66,51 @@ void main(void)
 				n = false;
 				break;
 			case -1:
+				BGM1->stopAllSounds();
 				model = new CMainMenuModel();
 				view2 = new CMainMenuView(model);
 				controller = new CMainMenuController(model, view2);
 				break;
 			case 0:
+				MenuBGM1->stopAllSounds();
 				model = new NDlvl();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 1:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new TutLvl2();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 2:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new TutLvl3();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 3:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new StoryModel1();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 4:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new JSlvl();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 5:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new jslvl2();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			case 6:
+				MenuBGM1->stopAllSounds();
+				BGM1->stopAllSounds();
 				model = new RyLevel();
+				BGM1->play2D("../irrKlang/media/Drums.mp3", true);
 				break;
 			}
 

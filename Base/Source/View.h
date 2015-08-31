@@ -9,10 +9,6 @@
 
 #include "Light.h"
 #include "MatrixStack.h"
-#include <irrKlang.h>
-
-#pragma comment(lib, "irrKlang.lib")
-using namespace irrklang;
 
 class View
 {

@@ -26,6 +26,42 @@ void TutLvl3::Init()
 	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(2, 16, 0));
+
+
+	InstructFile3 = "SpeechText//Instruction//AI.txt";
+	InstructText3 = true;
+
+	RenderSpeech();
+}
+
+void TutLvl3::RenderSpeech()
+{
+	if (!speech.talking && InstructText3)
+	{
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile3)
+			{
+				speech.talking = true;
+				const char* temp = speech.InstructionText[n].c_str();
+				speech.Dialogue(temp);
+				speech.InstructionText[n] = " ";
+			}
+		}
+		InstructFile3 = "";
+		if (temp_InstructFile3 != "")
+		{
+			InstructFile3 = temp_InstructFile3;
+		}
+		else
+		{
+			InstructText3 = false;
+		}
+	}
+	if (commands[SPEECH_NEXTLINE] && speech.talking)
+	{
+		speech.KeyPressed = true;
+	}
 }
 
 void TutLvl3::Update(double dt)
@@ -39,5 +75,10 @@ void TutLvl3::Update(double dt)
 			else
 				throw 3;
 		}
+
+	if (speech.talking)
+	{
+		speech.Update(dt);
+	}
 
 }

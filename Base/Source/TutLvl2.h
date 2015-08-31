@@ -8,6 +8,9 @@
 class TutLvl2 : public GameModel
 {
 private:
+	bool InstructText2;
+	string InstructFile2;
+	string temp_InstructFile2;
 
 public:
 	TutLvl2();
@@ -15,6 +18,7 @@ public:
 
 	void Init();
 	void Update(double dt);
+	void RenderSpeech();
 };
 
 #endif
