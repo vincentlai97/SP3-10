@@ -635,8 +635,6 @@ bool GameModel::updateHighscore(int level)
 	ifstream ifs;
 	string buffer;
 
-	bool wrote = false;
-
 	vector <int> highscores;
 	std::vector<string> text;
 
@@ -650,9 +648,9 @@ bool GameModel::updateHighscore(int level)
 
 	if (ifs.is_open())
 	{
+		int temp = 0;
 		while (!ifs.eof())
 		{
-			static int temp = 0;
 			getline(ifs, buffer);
 			text.push_back(buffer);
 			++temp;
@@ -679,6 +677,17 @@ bool GameModel::updateHighscore(int level)
 		ss << highscores[count];
 		text[position + count] = ss.str();
 	}
+
+	ofstream writer;
+	writer.open("highscore.txt");
+	int count = 0;
+
+	for (vector<string>::iterator it = text.begin(); it != text.end(); ++it)
+	{
+		writer << *it << endl;
+	}
+
+	writer.close();
 
 	//vector <int> 
 
@@ -738,16 +747,5 @@ bool GameModel::updateHighscore(int level)
 		wrote = true;
 	}*/
 
-	ofstream writer;
-	writer.open("highscore.txt");
-	int count = 0;
-
-	for (vector<string>::iterator it = text.begin(); it != text.end(); ++it)
-	{
-		writer << *it << endl;
-	}
-
-	writer.close();
-
-	return wrote;
+	return true;
 }

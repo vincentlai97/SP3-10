@@ -74,7 +74,7 @@ void TutLvl3::Update(double dt)
 				throw 2;
 			else
 			{
-				GameModel::updateHighscore(1);
+				GameModel::updateHighscore(2);
 				throw 3;
 			}
 		}
