@@ -61,7 +61,7 @@ void main(void)
 				view2 = new CMainMenuView(model);
 				controller = new CMainMenuController(model, view2);
 				break;
-			case 6:
+			case 0:
 				model = new NDlvl();
 				break;
 			case 1:
@@ -79,7 +79,7 @@ void main(void)
 			case 5:
 				model = new jslvl2();
 				break;
-			case 0:
+			case 6:
 				model = new RyLevel();
 				break;
 			}

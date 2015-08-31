@@ -72,7 +72,6 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 		{
 			if ((m_position - playerPos).Length() < 5)
 			{
-				std::cout << "chase cuz i see though your disguise!" << std::endl;
 				AI_State = CHASE;
 				chaseTurns = 5;
 				path = Pathfinding::Pathfind(m_position, playerPos, tileMap);
@@ -93,7 +92,6 @@ void AI::Update(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 		}
 		else
 		{
-			std::cout << "chase cuz i can" << std::endl;
 			AI_State = CHASE;
 			chaseTurns = 5;
 			path = Pathfinding::Pathfind(m_position, playerPos, tileMap);

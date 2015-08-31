@@ -25,6 +25,7 @@ void RyLevel::Init()
 	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(5, 3, 0));
+	inventory.inventory.AddToInvent(inventory.inventory.SKELETON_BOX);
 }
 
 void RyLevel::Update(double dt)

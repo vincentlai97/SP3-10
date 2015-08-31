@@ -22,7 +22,7 @@ void GameModel::Init()
 		meshPlayer[count]->textureID[0] = 0;
 	}
 	MeshPlayer();
-	ModelSwitch = 13;
+	ModelSwitch = 1;
 
 	m_gameState = GAME_STATE::IDLE;
 
