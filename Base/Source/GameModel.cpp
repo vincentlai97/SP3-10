@@ -22,7 +22,7 @@ void GameModel::Init()
 		meshPlayer[count]->textureID[0] = 0;
 	}
 	MeshPlayer();
-	ModelSwitch = 1;
+	ModelSwitch = 13;
 
 	m_gameState = GAME_STATE::IDLE;
 
@@ -64,7 +64,9 @@ void GameModel::Init()
 	inventory.Init();
 	InvenTime = 0;
 
-	Aina = new AI(Vector3(3, 4, 0));
+	Aina = new AI(Vector3(20, 28, 0), 13);
+
+	Aina->getMesh();
 
 	PlaceItemState = false;
 
@@ -177,8 +179,10 @@ void GameModel::Update(double dt)
 			m_gameState = GAME_STATE::AI_TURN;
 		break;
 	case GAME_STATE::AI_TURN:
-		Aina->Update(player->getPosition(), m_tileMap);
+		Aina->Update(player->getPosition(), m_tileMap, ModelSwitch);
 		m_gameState = GAME_STATE::IDLE;
+		if (Aina->getSpot() == true)
+			ModelSwitch = 1;
 		if (Aina->getPosition() == player->getPosition())
 			died = true;
 		break;
@@ -322,10 +326,10 @@ Mesh* GameModel::getPlayerMesh()
 {
 	return meshPlayer[ModelSwitch - 1];
 }
-
-Mesh* GameModel::getAIMesh(int modelSwitch)
+ 
+Mesh* GameModel::getAIMesh()
 {
-	return meshPlayer[modelSwitch - 1];
+	return Aina->getMesh();
 }
 
 void GameModel::getOffset(float& mapOffset_x, float& mapOffset_y)

@@ -22,7 +22,7 @@ void StoryModel1::Init()
 
 	player = new PlayerCharacter(Vector3(4, 20, 0));
 
-	Aina = new AI(Vector3(10, 2, 0), NULL, Vector3(0, 7, 0));
+	Aina = new AI(Vector3(10, 2, 0), 13, NULL, Vector3(0, 7, 0));
 
 	GameModel::getKeys();
 	GameModel::setLaser();

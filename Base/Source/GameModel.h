@@ -184,7 +184,7 @@ public:
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
 
-	Mesh* getAIMesh(int modelSwitch);
+	Mesh* getAIMesh();
 
 	int getKeys();
 	bool getwin();

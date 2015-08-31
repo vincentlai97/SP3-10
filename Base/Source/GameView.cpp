@@ -253,7 +253,7 @@ void GameView::RenderAI()
 		modelStack.Translate(0.5, 0.5, 0);
 		if (model->Aina->getAiActive() == true)
 		{
-			RenderMesh(model->getAIMesh(13), false);
+			RenderMesh(model->getAIMesh(), false);
 		}
 	} modelStack.PopMatrix();
 }
