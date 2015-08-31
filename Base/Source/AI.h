@@ -36,6 +36,8 @@ public:
 	bool getAiActive();
 	void setAiActive(bool AI_Active);
 
+	void SetStateReturning();
+
 };
 
 #endif

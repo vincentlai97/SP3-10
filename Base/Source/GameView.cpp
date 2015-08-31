@@ -87,7 +87,7 @@ void GameView::RenderTileMap()
 					}
 				}
 
-				modelStack.Translate(0, 0, 1);
+				modelStack.Translate(0, 0, 0.5);
 				if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM + model->inventory.inventory.TOTAL_ITEM && itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) > -1)
 				{
 					if (itemMap->getTile(ccount + (int)mapOffset_x, rcount + (int)mapOffset_y) < model->inventory.inventory.TOTAL_ITEM)

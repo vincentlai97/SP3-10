@@ -87,3 +87,8 @@ void AI::setAiActive(bool AI_Active)
 {
 	this->AI_Active = AI_Active;
 }
+
+void AI::SetStateReturning()
+{
+	chaseTurns = 1;
+}

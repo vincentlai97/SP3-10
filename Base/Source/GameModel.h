@@ -183,6 +183,7 @@ public:
 	void setLaser(void);
 
 	std::vector<Vector3> mirror;
+	Vector3 hologram;
 };
 
 #endif
