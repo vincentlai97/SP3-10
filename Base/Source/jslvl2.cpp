@@ -32,5 +32,11 @@ void jslvl2::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw 6;
+		{
+			if (GameModel::getDead())
+				throw 5;
+			else
+				throw 6;
+		}
+
 }

@@ -310,6 +310,9 @@ void GameView::RenderWin()
 	modelStack.PushMatrix();
 	modelStack.Translate(model->getWorldWidth() * 0.5, model->getWorldHeight() * 0.5, 12);
 	modelStack.Scale(model->getWorldWidth(), model->getWorldHeight(), 10);
-	RenderMesh(model->getWinMesh(), false);
+	if (!model->getDead())
+		RenderMesh(model->getWinMesh(), false);
+	else 
+		RenderMesh(model->getLoseMesh(), false);
 	modelStack.PopMatrix();
 }

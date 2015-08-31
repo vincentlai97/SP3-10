@@ -32,5 +32,11 @@ void RyLevel::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw -1;
+		{
+			if (GameModel::getDead())
+				throw 6;
+			else
+				throw -1;
+		}
+
 }

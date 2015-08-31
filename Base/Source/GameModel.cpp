@@ -39,6 +39,9 @@ void GameModel::Init()
 	winMesh = MeshBuilder::GenerateText("tiles", 1, 1);
 	winMesh->textureID[0] = LoadTGA("Image//win.tga");
 
+	lose = MeshBuilder::GenerateText("tiles", 1, 1);
+	lose->textureID[0] = LoadTGA("Image//lose.tga");
+
 	commands = new bool[NUM_COMMANDS];
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 		commands[count] = false;
@@ -71,6 +74,8 @@ void GameModel::Init()
 	//getKeys();
 
 	goNext = false;
+
+	died = false;
 
 	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
 	{
@@ -148,7 +153,7 @@ void GameModel::Update(double dt)
 			}
 		}
 
-		if (numKey == totalKey && touchdoor)
+		if ((numKey == totalKey && touchdoor ) || died )
 			win = true;
 
 		if (commands[ACTION] && win)
@@ -174,6 +179,8 @@ void GameModel::Update(double dt)
 	case GAME_STATE::AI_TURN:
 		Aina->Update(player->getPosition(), m_tileMap);
 		m_gameState = GAME_STATE::IDLE;
+		if (Aina->getPosition() == player->getPosition())
+			died = true;
 		break;
 	case GAME_STATE::INVENTORY:
 		if (commands[INVENT]) { m_gameState = GAME_STATE::IDLE; break; }
@@ -558,4 +565,14 @@ int GameModel::getTotalKeys()
 Mesh* GameModel::getWinMesh()
 {
 	return winMesh;
+}
+
+bool GameModel::getDead()
+{
+	return died;
+}
+
+Mesh* GameModel::getLoseMesh()
+{
+	return lose;
 }

@@ -21,7 +21,6 @@ void JSlvl::Init()
 	m_itemMap->LoadMap("Image//junsenlvlitem.csv");
 
 	GameModel::getKeys();
-
 	GameModel::setLaser();
 	
 	player = new PlayerCharacter(Vector3(16, 3, 0));
@@ -32,5 +31,11 @@ void JSlvl::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin()) //throw 5;
 		if (GameModel::getNext())
-			throw 5;
+		{
+			if (GameModel::getDead())
+				throw 4;
+			else
+				throw 5;
+		}
+
 }

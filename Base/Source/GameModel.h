@@ -115,6 +115,7 @@ private:
 	Mesh *tile;
 	
 	Mesh *winMesh;
+	Mesh *lose;
 
 	float m_mapOffset_x;
 	float m_mapOffset_y;
@@ -131,6 +132,7 @@ private:
 
 	bool goNext;
 
+	bool died;
 	/*bool InstructText;
 	string InstructFile;
 	string temp_InstructFile;
@@ -165,6 +167,7 @@ public:
 	void getOffset(float& mapOffset_x, float& mapOffset_y);
 
 	Mesh* getWinMesh();
+	Mesh* getLoseMesh();
 
 	Mesh* getTextMesh();
 	InventoryMenu inventory;
@@ -193,6 +196,8 @@ public:
 
 	int getNumKeys();
 	int getTotalKeys();
+
+	bool getDead();
 
 	std::vector<Vector3> mirror;
 };

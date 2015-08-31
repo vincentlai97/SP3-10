@@ -22,11 +22,11 @@ void NDlvl::Init()
 	m_itemMap->LoadMap("Image//BlankItem.csv");
 
 	GameModel::getKeys();
-	
 	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(11, 12 , 0));
 
+	cout << "check";
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
 
@@ -68,7 +68,12 @@ void NDlvl::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw 1;
+		{
+			if (GameModel::getDead())
+				throw 0;
+			else
+				throw 1;
+		}
 
 		if (speech.talking)
 		{

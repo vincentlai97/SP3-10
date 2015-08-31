@@ -23,6 +23,7 @@ void TutLvl2::Init()
 	m_itemMap->LoadMap("Image//Tutorial2Item.csv");
 
 	GameModel::getKeys();
+	GameModel::setLaser();
 
 	GameModel::setLaser();
 
@@ -34,5 +35,11 @@ void TutLvl2::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw 2;
+		{
+			if (GameModel::getDead())
+				throw 1;
+			else
+				throw 2;
+		}
+
 }

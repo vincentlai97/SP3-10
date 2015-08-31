@@ -33,5 +33,11 @@ void TutLvl3::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw 3;
+		{
+			if (GameModel::getDead())
+				throw 2;
+			else
+				throw 3;
+		}
+
 }

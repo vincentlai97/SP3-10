@@ -25,7 +25,6 @@ void StoryModel1::Init()
 	Aina = new AI(Vector3(10, 2, 0), NULL, Vector3(0, 7, 0));
 
 	GameModel::getKeys();
-
 	GameModel::setLaser();
 
 }
@@ -35,5 +34,11 @@ void StoryModel1::Update(double dt)
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
-			throw 4;
+		{
+			if (GameModel::getDead())
+				throw 3;
+			else
+				throw 4;
+		}
+
 }
