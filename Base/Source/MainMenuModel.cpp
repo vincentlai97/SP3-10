@@ -7,12 +7,6 @@ void CMainMenuModel::Init()
 {
 	Model::Init();
 
-	for (int count = 0; count < MainMenu::NUM_MENU; ++count)
-	{
-		meshList[count] = new Mesh("null");
-		meshList[count]->textureID[0] = 0;
-	}
-
 	meshList[BACKGROUND] = MeshBuilder::GenerateQuad("background", Color());
 	meshList[BACKGROUND]->textureID[0] = LoadTGA("Image\\MenuBG.tga");
 
@@ -34,12 +28,14 @@ void CMainMenuModel::Init()
 	meshList[EXIT_BUTTON2] = MeshBuilder::GenerateQuad("EXIT_BUTTON", Color());
 	meshList[EXIT_BUTTON2]->textureID[0] = LoadTGA("Image\\Exitbtn2.tga");
 
+	Text = MeshBuilder::GenerateText("text", 16, 16);
+	Text->textureID[0] = LoadTGA("Image//Font.tga");
 
 	commands = new bool[NUM_COMMANDS];
 
 	counter = 0;
-	countminus = false;
-	countplus = false;
+
+	chooselvl = false;
 
 	for (int count = 0; count < NUM_COMMANDS; ++count)
 	{
@@ -53,63 +49,48 @@ Mesh* CMainMenuModel::getBackgroundMesh()
 	return meshList[BACKGROUND];
 }
 
-Mesh* CMainMenuModel::getStartMesh()
+Mesh* CMainMenuModel::getMesh(int a)
 {
-	return meshList[START_BUTTON];
-}
-Mesh* CMainMenuModel::getLoadMesh()
-{
-	return meshList[LOAD_BUTTON];
-}
-Mesh* CMainMenuModel::getExitMesh()
-{
-	return meshList[EXIT_BUTTON];
-}
-
-Mesh* CMainMenuModel::getStartMesh2()
-{
-	return meshList[START_BUTTON2];
-}
-Mesh* CMainMenuModel::getLoadMesh2()
-{
-	return meshList[LOAD_BUTTON2];
-}
-Mesh* CMainMenuModel::getExitMesh2()
-{
-	return meshList[EXIT_BUTTON2];
+	return meshList[a];
 }
 
 void CMainMenuModel::Update(double dt)
 {
-	if (countminus == true)
+	if (!chooselvl)
 	{
-		counter -=1;
-		countminus = false;
+		if (counter < 0) counter = 2;
+		if (counter > 2) counter = 0;
+
 	}
-	if (countplus == true)
+	else
 	{
-		counter +=1;
-		countplus = false;
-	}
-	if (counter < 0)
-	{
-		counter = 2;
-	}
-	if (counter >2)
-	{
-		counter = 0;
+		if (counter < 0) counter = 6;
+		if (counter > 6) counter = 0;
 	}
 
-	if (commands[MOVE_UP])
+	if (commands[MOVE_UP]) counter -= 1;
+	if (commands[MOVE_DOWN]) counter += 1;
+
+	if (commands[ENTER])
 	{
-		countminus = true;
-		commands[MOVE_UP] = false;
+		if (!chooselvl)
+		{
+			if (counter == 2)
+				throw - 2;
+			if (counter == 0)
+			{
+				counter = 0;
+				chooselvl = true;
+			}
+		}
+		else
+		{
+			throw counter;
+		}
 	}
-	if (commands[MOVE_DOWN])
-	{
-		countplus = true;
-		commands[MOVE_DOWN] = false;
-	}
+
+	for (int i = 0; i < NUM_COMMANDS; i++)
+		commands[i] = false;
 
 }
 
@@ -122,4 +103,14 @@ void CMainMenuModel::setCommands(int command)
 int CMainMenuModel::getCount(void)
 {
 	return counter;
+}
+
+bool CMainMenuModel::getChoose()
+{
+	return chooselvl;
+}
+
+Mesh* CMainMenuModel::getTextMesh()
+{
+	return Text;
 }
