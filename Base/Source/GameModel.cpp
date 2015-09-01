@@ -124,7 +124,7 @@ void GameModel::Update(double dt)
 			speech.talking = true;
 			speech.Obtain("SpeechText//Obtain.txt", true, inventory.inventory.DefaultItem[itemTouched(player)].getName());
 			m_itemMap->SetTile(player->getPosition().x, player->getPosition().y, -1);
-			m_gameState = SPEECH;
+			m_gameState = GAME_STATE::SPEECH;
 			break;
 		}
 
@@ -236,8 +236,10 @@ void GameModel::Update(double dt)
 				&& inventory.inventory.getItem(inventory.InvCount)->getID() <= Inventory::ITEM_TYPE::WITCH_BOX)
 			{
 				ModelSwitch = inventory.inventory.getItem(inventory.InvCount)->getID() - 4;
+				speech.talking = true;
+				speech.Obtain("SpeechText//Obtain.txt", false, inventory.inventory.getItem(inventory.InvCount)->getName());
 				inventory.inventory.UseItem(inventory.InvCount);
-				m_gameState = IDLE;
+				m_gameState = GAME_STATE::SPEECH;;
 			}
 		}
 		if (commands[MOVE_UP]) inventory.MoveUp();

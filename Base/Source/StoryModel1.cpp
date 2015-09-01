@@ -25,14 +25,82 @@ void StoryModel1::Init()
 	AI *ai = new AI(Vector3(10, 2, 0), 1, NULL, Vector3(0, 7, 0));
 	AIList.push_back(ai);
 
-	inventory.inventory.AddToInvent(7);
-
 	GameModel::getKeys();
 	GameModel::setLaser();
 }
+#define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
 
 void StoryModel1::Update(double dt)
 {
+	if (!speech.talking && !InstructText)
+	{
+		int temp = 0;
+		//speech
+		InstructFile = "SpeechText//Instruction//Mirror.txt";
+		InstructText = true;
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				m_gameState = GAME_STATE::SPEECH;
+				temp++;
+			}
+		}
+		if (temp == 0)
+		{
+			InstructText = false;
+		}
+	}
+
+	if (!speech.talking && !InstructText)
+	{
+		for (int n = 0; n < 10; n++)
+		{
+			if (inventory.inventory.getItem(n)->getID() == 7)
+			{
+				int temp = 0;
+				//speech
+				InstructFile = "SpeechText//Instruction//BeforeDisguise.txt";
+				InstructText = true;
+				for (int n = 0; n < speech.InstructionText.size(); n++)
+				{
+					if (speech.InstructionText[n] == InstructFile && m_gameState)
+					{
+						m_gameState = GAME_STATE::SPEECH;
+						temp++;
+					}
+				}
+				if (temp == 0)
+				{
+					InstructText = false;
+				}
+			}
+		}
+	}
+
+	if (!speech.talking && !InstructText)
+	{
+		if (ModelSwitch != 0)
+		{
+			int temp = 0;
+			//speech
+			InstructFile = "SpeechText//Instruction//AfterDisguise.txt";
+			InstructText = true;
+			for (int n = 0; n < speech.InstructionText.size(); n++)
+			{
+				if (speech.InstructionText[n] == InstructFile)
+				{
+					m_gameState = GAME_STATE::SPEECH;
+					temp++;
+				}
+			}
+			if (temp == 0)
+			{
+				InstructText = false;
+			}
+		}
+	}
+
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
@@ -45,18 +113,4 @@ void StoryModel1::Update(double dt)
 				throw 4;
 			}
 		}
-
-	if (!speech.talking)
-	{
-		//speech
-		InstructFile = "SpeechText//Instruction//Mirror.txt";
-		InstructText = true;
-		for (int n = 0; n < speech.InstructionText.size(); n++)
-		{
-			if (speech.InstructionText[n] == InstructFile)
-			{
-				m_gameState = GAME_STATE::SPEECH;
-			}
-		}
-	}
 }
