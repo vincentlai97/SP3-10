@@ -70,6 +70,7 @@ void main(void)
 				model = new CMainMenuModel();
 				view2 = new CMainMenuView(model);
 				controller = new CMainMenuController(model, view2);
+				MenuBGM1->play2D("../irrKlang/media/Menu.mp3", true);
 				break;
 			case 0:
 				MenuBGM1->stopAllSounds();
