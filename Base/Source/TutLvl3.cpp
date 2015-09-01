@@ -41,13 +41,33 @@ void TutLvl3::Init()
 
 void TutLvl3::Update(double dt)
 {
-	if (!speech.talking && itemTouched(player) == Inventory::TRAP)
+	
+	if (!speech.talking && !InstructText)
 	{
-		//speech
-		InstructFile = "SpeechText//Instruction//OpenInventory.txt";
-		InstructText = true;
-
+		for (int n = 0; n < 10; n++)
+		{
+			if (inventory.inventory.getItem(n)->getID() == 1)
+			{
+				int temp = 0;
+				//speech
+				InstructFile = "SpeechText//Instruction//OpenInventory.txt";
+				InstructText = true;
+				for (int n = 0; n < speech.InstructionText.size(); n++)
+				{
+					if (speech.InstructionText[n] == InstructFile && m_gameState)
+					{
+						m_gameState = GAME_STATE::SPEECH;
+						temp++;
+					}
+				}
+				if (temp == 0)
+				{
+					InstructText = false;
+				}
+			}
+		}
 	}
+
 
 	GameModel::Update(dt);
 	if (GameModel::getwin())
