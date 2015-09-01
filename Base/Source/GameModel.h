@@ -28,6 +28,7 @@ public:
 		MOVE_DOWN,
 		MOVE_LEFT,
 		MOVE_RIGHT,
+		SHIFT,
 		INVENT,
 		ACTION,
 		MODEL_UP,

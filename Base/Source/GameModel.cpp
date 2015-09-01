@@ -107,6 +107,8 @@ void GameModel::Update(double dt)
 		if (commands[MOVE_DOWN]) player->moveDown();
 		if (commands[MOVE_LEFT]) player->moveLeft();
 		if (commands[MOVE_RIGHT]) player->moveRight();
+		if (commands[SHIFT])	player->SetSpeed(5);
+		if (!commands[SHIFT])	player->SetSpeed(3);
 		if (!player->getAcceleration().IsZero()) { m_gameState = GAME_STATE::PLAYER_TURN; steps++; break; }
 
 		//Open inventory

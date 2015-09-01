@@ -5,6 +5,7 @@ PlayerCharacter::PlayerCharacter(Vector3 position, Mesh* sprite)
 , Character(position, sprite)
 , move(false)
 , gamewin(false)
+, SPEED(3)
 {
 	m_size = SMALLSIZE;
 }
@@ -16,7 +17,7 @@ PlayerCharacter::~PlayerCharacter()
 void PlayerCharacter::UpdateVelocity(double dt)
 {
 	m_velocity.SetZero();
-	m_velocity += m_acceleration * MAX_SPEED;
+	m_velocity += m_acceleration * SPEED;
 }
 
 void PlayerCharacter::UpdatePosition(double dt, const TileMap *tileMap)
@@ -205,4 +206,13 @@ bool PlayerCharacter::getWin()
 void PlayerCharacter::setWin(bool a)
 {
 	gamewin = a;
+}
+
+int PlayerCharacter::GetSpeed(void)
+{
+	return SPEED;
+}
+void PlayerCharacter::SetSpeed(int speed)
+{
+	this->SPEED = speed;
 }

@@ -12,6 +12,13 @@ float buttonBuffer;
 
 void GameController::Update()
 {
+
+	if (IsKeyPressed(VK_SHIFT))
+	{
+		keypressed = false;
+		model->setCommands(GameModel::COMMANDS::SHIFT);
+	}
+
 	if (IsKeyPressed('W') && buttonBuffer < 0.f)
 	{
 		keypressed = false;

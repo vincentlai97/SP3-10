@@ -7,7 +7,7 @@ const Vector3 SMALLSIZE(0.7f, 0.8f, 0);
 #define WALKING_NUMFRAMES 4
 #define WALKINGSPRITE_TIME 0.08f
 
-#define MAX_SPEED 3
+//#define MAX_SPEED 3
 
 class PlayerCharacter : public Character
 {
@@ -42,6 +42,8 @@ private:
 	void UpdatePosition(double dt, const TileMap *tileMap);
 	void UpdateSprite();
 
+	float SPEED;
+
 public:
 	PlayerCharacter(Vector3 position = Vector3(), Mesh* sprite = NULL);
 	~PlayerCharacter();
@@ -69,6 +71,9 @@ public:
 	bool PlayerDirRight();
 	bool getWin();
 	void setWin(bool);
+
+	int GetSpeed(void);
+	void SetSpeed(int speed);
 };
 
 #endif
