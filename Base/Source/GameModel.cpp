@@ -49,7 +49,7 @@ void GameModel::Init()
 	player = new PlayerCharacter(Vector3(19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
-	Text->textureID[0] = LoadTGA("Image//Font.tga");
+	Text->textureID[0] = LoadTGA("Image//ArialBlack.tga");
 
 	floorTiles.push_back(112);
 	floorTiles.push_back(309);

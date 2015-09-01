@@ -29,7 +29,7 @@ void CMainMenuModel::Init()
 	meshList[EXIT_BUTTON2]->textureID[0] = LoadTGA("Image\\Exitbtn2.tga");
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
-	Text->textureID[0] = LoadTGA("Image//Font.tga");
+	Text->textureID[0] = LoadTGA("Image//ArialBlack.tga");
 
 	commands = new bool[NUM_COMMANDS];
 
