@@ -87,8 +87,6 @@ void GameModel::Init()
 	speech.Textfile("SpeechText//CharacterFile.txt", true);
 	speech.Textfile("SpeechText//HowToPlayFile.txt", false);
 
-	/*InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
-	InstructText = true;*/
 }
 
 enum AITARGET {

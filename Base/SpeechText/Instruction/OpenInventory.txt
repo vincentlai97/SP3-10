@@ -2,3 +2,12 @@ You picked up an item...
 
 Press I to open the 
 inventory.
+
+Press I again to close
+the inventory.
+
+Press E to use Item.
+
+Do you know that
+Traps can kill
+enemies?

@@ -1,5 +1,5 @@
 #include "TutLvl3.h"
-
+#define itemTouched(character) m_itemMap->getTile(character->getPosition().x, character->getPosition().y)
 
 TutLvl3::TutLvl3()
 {
@@ -25,16 +25,30 @@ void TutLvl3::Init()
 	GameModel::getKeys();
 	GameModel::setLaser();
 
-	player = new PlayerCharacter(Vector3(2, 16, 0));
+	player = new PlayerCharacter(Vector3(2, 17, 0));
 
 	InstructFile = "SpeechText//Instruction//AI.txt";
 	InstructText = true;
 
 	m_gameState = GAME_STATE::SPEECH;
+
+	AI* Aina = new AI(Vector3(18, 17, 0), 10, NULL, Vector3(5, 0, 0));
+	AIList.push_back(Aina);
+
+	AI* Cina = new AI(Vector3(29, 17, 0), 6, NULL, Vector3(0, -5, 0));
+	AIList.push_back(Cina);
 }
 
 void TutLvl3::Update(double dt)
 {
+	if (!speech.talking && itemTouched(player) == Inventory::TRAP)
+	{
+		//speech
+		InstructFile = "SpeechText//Instruction//OpenInventory.txt";
+		InstructText = true;
+
+	}
+
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())
@@ -47,4 +61,8 @@ void TutLvl3::Update(double dt)
 				throw 3;
 			}
 		}
+
+		
+
+	
 }
