@@ -273,7 +273,6 @@ void GameModel::Update(double dt)
 		{
 			for (int n = 0; n < speech.InstructionText.size(); n++)
 			{
-				cout << speech.InstructionText[n] << endl;
 				if (speech.InstructionText[n] == InstructFile)
 				{
 					speech.talking = true;
