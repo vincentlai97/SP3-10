@@ -25,6 +25,12 @@ void jslvl2::Init()
 	GameModel::setLaser();
 
 	player = new PlayerCharacter(Vector3(5, 3, 0));
+
+	AI* Aina = new AI(Vector3(4, 20, 0), 10, NULL, Vector3(5, 0, 0));
+	AIList.push_back(Aina);		
+	AI* Bina = new AI(Vector3(20, 20, 0), 10, NULL, Vector3(5, 0, 0));
+	AIList.push_back(Bina);
+
 }
 
 void jslvl2::Update(double dt)

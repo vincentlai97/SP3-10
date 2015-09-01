@@ -28,6 +28,9 @@ void JSlvl::Init()
 	InstructFile = "SpeechText//Instruction//Switch.txt";
 	InstructText = true;
 
+	AI* Aina = new AI(Vector3(20, 14, 0), 10, NULL, Vector3(-10, 0, 0));
+	AIList.push_back(Aina);
+
 	m_gameState = GAME_STATE::SPEECH;
 }
 
