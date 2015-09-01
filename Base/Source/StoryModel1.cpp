@@ -29,7 +29,6 @@ void StoryModel1::Init()
 
 	GameModel::getKeys();
 	GameModel::setLaser();
-
 }
 
 void StoryModel1::Update(double dt)
@@ -47,4 +46,17 @@ void StoryModel1::Update(double dt)
 			}
 		}
 
+	if (!speech.talking)
+	{
+		//speech
+		InstructFile = "SpeechText//Instruction//Mirror.txt";
+		InstructText = true;
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				m_gameState = GAME_STATE::SPEECH;
+			}
+		}
+	}
 }

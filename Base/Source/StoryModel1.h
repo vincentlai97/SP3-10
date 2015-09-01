@@ -5,8 +5,6 @@
 
 class StoryModel1 : public GameModel
 {
-private:
-
 public:
 	StoryModel1();
 	~StoryModel1();

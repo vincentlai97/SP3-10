@@ -132,9 +132,40 @@ void ReadFromText::Obtain(const char* filename, bool loot, string ItemName)
 
 void ReadFromText::Update(double dt)
 {
+	if (speedup)
+	{
+		if (letterofspeech < filespeech.size())
+		{
+			while (letterofspeech < filespeech.size())
+			{
+				copyspeech += filespeech[letterofspeech];
+				letterofspeech += 1;
+			}
+		}
+		else if (vectorspeech < line.size() - 1)
+		{
+			if (line[vectorspeech + 1] != "")
+			{
+				if (vectorspeech < line.size() - 1)
+				{
+					letterofspeech = 0;
+					vectorspeech = vectorspeech + 1;
+					filespeech = line[vectorspeech];
+					copyspeech = "";
+
+					LineParagraph++;
+				}
+			}
+			else
+			{
+				changetext = true;
+				speedup = false;
+			}
+		}
+	}
+
 	speechspeed -= (float)dt;
 
-	//not speed up + character by character
 	if (speechspeed < 0 && vectorspeech < line.size() && !speedup)
 	{
 		if (letterofspeech < filespeech.size())
@@ -197,40 +228,6 @@ void ReadFromText::Update(double dt)
 		copyspeech = "";
 
 		LineParagraph = 0;
-	}
-
-	if (speedup)
-	{
-		if (letterofspeech < filespeech.size())
-		{
-			copyspeech += filespeech[letterofspeech];
-			letterofspeech += 1;
-			while (letterofspeech < filespeech.size())
-			{
-				copyspeech += filespeech[letterofspeech];
-				letterofspeech += 1;
-			}
-		}
-		else if (vectorspeech < line.size() - 1)
-		{
-			if (line[vectorspeech + 1] != "")
-			{
-				if (vectorspeech < line.size() - 1)
-				{
-					letterofspeech = 0;
-					vectorspeech = vectorspeech + 1;
-					filespeech = line[vectorspeech];
-					copyspeech = "";
-
-					LineParagraph++;
-				}
-			}
-			else
-			{
-				changetext = true;
-				speedup = false;
-			}
-		}
 	}
 }
 

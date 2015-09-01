@@ -7,11 +7,6 @@
 
 class NDlvl : public GameModel
 {
-private:
-	bool InstructText;
-	string InstructFile;
-	string temp_InstructFile;
-
 public:
 	NDlvl();
 	~NDlvl();

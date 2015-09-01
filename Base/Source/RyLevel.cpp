@@ -27,9 +27,13 @@ void RyLevel::Init()
 	player = new PlayerCharacter(Vector3(5, 3, 0));
 	inventory.inventory.AddToInvent(inventory.inventory.SKELETON_BOX);
 	inventory.inventory.AddToInvent(inventory.inventory.TRAP);
+	inventory.inventory.AddToInvent(inventory.inventory.MIRROR);
 
-	AI* Aina = new AI(Vector3(30, 28, 0), 10);
+	AI* Aina = new AI(Vector3(28, 25, 0), 10, NULL, Vector3(7, 0, 0));
 	AIList.push_back(Aina);
+
+	AI* Bina = new AI(Vector3(4, 24, 0), 5, NULL, Vector3(5, 0, 0));
+	AIList.push_back(Bina);
 }
 
 void RyLevel::Update(double dt)

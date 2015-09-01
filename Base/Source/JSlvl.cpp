@@ -24,6 +24,11 @@ void JSlvl::Init()
 	GameModel::setLaser();
 	
 	player = new PlayerCharacter(Vector3(16, 3, 0));
+
+	InstructFile = "SpeechText//Instruction//Switch.txt";
+	InstructText = true;
+
+	m_gameState = GAME_STATE::SPEECH;
 }
 
 void JSlvl::Update(double dt)

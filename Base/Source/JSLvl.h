@@ -7,8 +7,6 @@
 
 class JSlvl : public GameModel
 {
-private:
-
 public:
 	JSlvl();
 	~JSlvl();

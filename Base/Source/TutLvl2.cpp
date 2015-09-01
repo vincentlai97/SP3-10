@@ -29,44 +29,40 @@ void TutLvl2::Init()
 
 	player = new PlayerCharacter(Vector3(28, 18, 0));
 
-	InstructFile2 = "SpeechText//Instruction//AI.txt";
-	InstructText2 = true;
+	InstructFile = "SpeechText//Instruction//SeeKey.txt";
+	InstructText = true;
 
-	RenderSpeech();
-}
-
-void TutLvl2::RenderSpeech()
-{
-	if (!speech.talking && InstructText2)
-	{
-		for (int n = 0; n < speech.InstructionText.size(); n++)
-		{
-			if (speech.InstructionText[n] == InstructFile2)
-			{
-				speech.talking = true;
-				const char* temp = speech.InstructionText[n].c_str();
-				speech.Dialogue(temp);
-				speech.InstructionText[n] = " ";
-			}
-		}
-		InstructFile2 = "";
-		if (temp_InstructFile2 != "")
-		{
-			InstructFile2 = temp_InstructFile2;
-		}
-		else
-		{
-			InstructText2 = false;
-		}
-	}
-	if (commands[SPEECH_NEXTLINE] && speech.talking)
-	{
-		speech.KeyPressed = true;
-	}
+	m_gameState = GAME_STATE::SPEECH;
 }
 
 void TutLvl2::Update(double dt)
 {
+	if ((getNumKeys() != getTotalKeys() && getTouchDoor()) && !InstructText)
+	{
+		InstructFile = "SpeechText//Instruction//BeforeKey.txt";
+		InstructText = true;
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				m_gameState = GAME_STATE::SPEECH;
+			}
+		}
+	}
+
+	if ((getNumKeys() == getTotalKeys() && !getTouchDoor()) && !InstructText)
+	{
+		InstructFile = "SpeechText//Instruction//AfterKey.txt";
+		InstructText = true;
+		for (int n = 0; n < speech.InstructionText.size(); n++)
+		{
+			if (speech.InstructionText[n] == InstructFile)
+			{
+				m_gameState = GAME_STATE::SPEECH;
+			}
+		}
+	}
+
 	GameModel::Update(dt);
 	if (GameModel::getwin())
 		if (GameModel::getNext())

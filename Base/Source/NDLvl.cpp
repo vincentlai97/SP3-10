@@ -35,44 +35,8 @@ void NDlvl::Init()
 	InstructFile = "SpeechText//Instruction//MoveCharacter.txt";
 	InstructText = true;
 
-	GAME_STATE::SPEECH;
-	
-
-	RenderSpeech();
-
 	m_gameState = GAME_STATE::SPEECH;
 }
-
-void NDlvl::RenderSpeech()
-{
-	if (!speech.talking && InstructText)
-	{
-		for (int n = 0; n < speech.InstructionText.size(); n++)
-		{
-			if (speech.InstructionText[n] == InstructFile)
-			{
-				speech.talking = true;
-				const char* temp = speech.InstructionText[n].c_str();
-				speech.Dialogue(temp);
-				speech.InstructionText[n] = " ";
-			}
-		}
-		InstructFile = "";
-		if (temp_InstructFile != "")
-		{
-			InstructFile = temp_InstructFile;
-		}
-		else
-		{
-			InstructText = false;
-		}
-	}
-	if (commands[SPEECH_NEXTLINE] && speech.talking)
-	{
-		speech.KeyPressed = true;
-	}
-}
-
 
 void NDlvl::Update(double dt)
 {
@@ -87,11 +51,6 @@ void NDlvl::Update(double dt)
 				GameModel::updateHighscore(0);
 				throw 1;
 			}
-		}
-
-		if (speech.talking)
-		{
-			speech.Update(dt);
 		}
 }
 

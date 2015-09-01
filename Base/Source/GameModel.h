@@ -187,6 +187,10 @@ public:
 
 	ReadFromText speech;
 	void MeshSpeech();
+	bool InstructText;
+	string InstructFile;
+	string temp_InstructFile;
+
 	Mesh* getFaceMesh();
 	Mesh* getSpeechMesh();
 
@@ -202,6 +206,7 @@ public:
 
 	int getNumKeys();
 	int getTotalKeys();
+	bool getTouchDoor();
 
 	bool getDead();
 

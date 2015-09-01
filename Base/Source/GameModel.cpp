@@ -46,7 +46,7 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3 (19, 11, 0));
+	player = new PlayerCharacter(Vector3(19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
 	Text->textureID[0] = LoadTGA("Image//Font.tga");
@@ -127,7 +127,7 @@ void GameModel::Update(double dt)
 			m_gameState = SPEECH;
 			break;
 		}
-		
+
 		//Item interaction with enemies
 		for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
 		{
@@ -152,7 +152,7 @@ void GameModel::Update(double dt)
 		}
 
 		//Laser switch
-		if(commands[ACTION])
+		if (commands[ACTION])
 		{
 			if (!player->getDirection().IsZero())
 			{
@@ -162,7 +162,7 @@ void GameModel::Update(double dt)
 			}
 		}
 
-		if ((numKey == totalKey && touchdoor ) || died )
+		if ((numKey == totalKey && touchdoor) || died)
 			win = true;
 
 		if (commands[ACTION] && win)
@@ -207,22 +207,22 @@ void GameModel::Update(double dt)
 		break;
 	case GAME_STATE::AI_TURN:
 	{
-								int AIStopped = 0;
-								for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
-								{
-									if ((*it)->getAiActive())
-									{
-									(*it)->Update(dt);
-									if ((*it)->getSpot() == true)
-										ModelSwitch = 0;
-									if ((*it)->getPosition() == player->getPosition())
-										died = true;
-									}
-									if (AIList[0]->getVelocity().IsZero())
-										AIStopped++;
-								}
-								if (AIStopped == AIList.size())
-									m_gameState = GAME_STATE::IDLE;
+		int AIStopped = 0;
+		for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
+		{
+			if ((*it)->getAiActive())
+			{
+				(*it)->Update(dt);
+				if ((*it)->getSpot() == true)
+					ModelSwitch = 0;
+				if ((*it)->getPosition() == player->getPosition())
+					died = true;
+			}
+			if (AIList[0]->getVelocity().IsZero())
+				AIStopped++;
+		}
+		if (AIStopped == AIList.size())
+			m_gameState = GAME_STATE::IDLE;
 	}
 		break;
 	case GAME_STATE::INVENTORY:
@@ -269,7 +269,34 @@ void GameModel::Update(double dt)
 		}
 		break;
 	case GAME_STATE::SPEECH:
-		if (commands[SPEECH_NEXTLINE]) speech.KeyPressed = true;
+		if (!speech.talking && InstructText)
+		{
+			for (int n = 0; n < speech.InstructionText.size(); n++)
+			{
+				cout << speech.InstructionText[n] << endl;
+				if (speech.InstructionText[n] == InstructFile)
+				{
+					speech.talking = true;
+					const char* temp = speech.InstructionText[n].c_str();
+					speech.Dialogue(temp);
+					speech.InstructionText[n] = " ";
+				}
+			}
+			InstructFile = "";
+			if (temp_InstructFile != "")
+			{
+				InstructFile = temp_InstructFile;
+			}
+			else
+			{
+				InstructText = false;
+			}
+		}
+		if (commands[SPEECH_NEXTLINE] && speech.talking)
+		{
+			speech.KeyPressed = true;
+		}
+
 		if (speech.talking) speech.Update(dt);
 		else m_gameState = GAME_STATE::IDLE;
 		break;
@@ -460,7 +487,7 @@ Mesh* GameModel::getSpeechMesh()
 
 bool GameModel::getwin()
 {
-	
+
 	return win;
 }
 
@@ -471,7 +498,7 @@ int GameModel::getKeys()
 	{
 		for (int rcount = 0; rcount < m_itemMap->getMapHeight(); ++rcount)
 		{
-			if (m_itemMap->getTile(ccount , rcount) == inventory.inventory.KEY )
+			if (m_itemMap->getTile(ccount, rcount) == inventory.inventory.KEY)
 				totalKey++;
 		}
 	}
@@ -485,22 +512,22 @@ void GameModel::laserswitch()
 	{
 		for (int rcount = 0; rcount < m_tileMap->getMapHeight(); ++rcount)
 		{
-			if (m_tileMap->getTile(ccount , rcount) == -2 )
-				m_tileMap->SetTile(ccount , rcount,301);
-			else if(m_tileMap->getTile(ccount , rcount) == 301)
-				m_tileMap->SetTile(ccount , rcount,-2);
+			if (m_tileMap->getTile(ccount, rcount) == -2)
+				m_tileMap->SetTile(ccount, rcount, 301);
+			else if (m_tileMap->getTile(ccount, rcount) == 301)
+				m_tileMap->SetTile(ccount, rcount, -2);
 
-			if (m_tileMap->getTile(ccount , rcount) == -3 )
-				m_tileMap->SetTile(ccount , rcount,302);
-			else if(m_tileMap->getTile(ccount , rcount) == 302)
-				m_tileMap->SetTile(ccount , rcount,-3);
+			if (m_tileMap->getTile(ccount, rcount) == -3)
+				m_tileMap->SetTile(ccount, rcount, 302);
+			else if (m_tileMap->getTile(ccount, rcount) == 302)
+				m_tileMap->SetTile(ccount, rcount, -3);
 
-			if (m_tileMap->getTile(ccount , rcount) == -4 )
-				m_tileMap->SetTile(ccount , rcount,303);
-			else if(m_tileMap->getTile(ccount , rcount) == 303)
-				m_tileMap->SetTile(ccount , rcount,-4);
+			if (m_tileMap->getTile(ccount, rcount) == -4)
+				m_tileMap->SetTile(ccount, rcount, 303);
+			else if (m_tileMap->getTile(ccount, rcount) == 303)
+				m_tileMap->SetTile(ccount, rcount, -4);
 
-			if(m_tileMap->getTile(ccount, rcount) == 313)
+			if (m_tileMap->getTile(ccount, rcount) == 313)
 				m_tileMap->SetTile(ccount, rcount, 312);
 			else if (m_tileMap->getTile(ccount, rcount) == 312)
 				m_tileMap->SetTile(ccount, rcount, 313);
@@ -517,7 +544,7 @@ void GameModel::setLaser()
 			if (m_tileMap->getTile(ccount, rcount) == 50){
 				m_itemMap->SetTile(ccount, rcount, 50);
 				m_tileMap->SetTile(ccount, rcount, -1);
-			} 
+			}
 			else if (m_tileMap->getTile(ccount, rcount) == 183){
 				m_itemMap->SetTile(ccount, rcount, 183);
 				m_tileMap->SetTile(ccount, rcount, -1);
@@ -532,61 +559,61 @@ void GameModel::setLaser()
 			}
 
 
-			if (m_tileMap->getTile(ccount , rcount) == 300 )
+			if (m_tileMap->getTile(ccount, rcount) == 300)
 			{
-				for(int i = ccount - 1; i > 0 ; --i)
+				for (int i = ccount - 1; i > 0; --i)
 				{
-					if((m_tileMap->getTile(i , rcount) < 0 || m_tileMap->getTile(i , rcount) == 301) && m_tileMap->getTile(i,rcount) != 300)
+					if ((m_tileMap->getTile(i, rcount) < 0 || m_tileMap->getTile(i, rcount) == 301) && m_tileMap->getTile(i, rcount) != 300)
 					{
 						if (m_tileMap->getTile(i, rcount) == 301)
 							m_tileMap->SetTile(i, rcount, 303);
 						else if (m_tileMap->getTile(i, rcount) == -2)
 							m_tileMap->SetTile(i, rcount, 313);
 						else
-							m_tileMap->SetTile(i,rcount,302);
+							m_tileMap->SetTile(i, rcount, 302);
 					}
 					else
 						break;
 				}
-				for(int i = ccount + 1; i < m_tileMap->getMapWidth(); ++i)
+				for (int i = ccount + 1; i < m_tileMap->getMapWidth(); ++i)
 				{
-					if((m_tileMap->getTile(i , rcount) < 0 || m_tileMap->getTile(i , rcount) == 301) && m_tileMap->getTile(i,rcount) != 300)
+					if ((m_tileMap->getTile(i, rcount) < 0 || m_tileMap->getTile(i, rcount) == 301) && m_tileMap->getTile(i, rcount) != 300)
 					{
-						if(m_tileMap->getTile(i,rcount) == 301)
-							m_tileMap->SetTile(i,rcount,303);
+						if (m_tileMap->getTile(i, rcount) == 301)
+							m_tileMap->SetTile(i, rcount, 303);
 						else if (m_tileMap->getTile(i, rcount) == -2)
 							m_tileMap->SetTile(i, rcount, 313);
 						else
-							m_tileMap->SetTile(i,rcount,302);
+							m_tileMap->SetTile(i, rcount, 302);
 					}
 					else
 						break;
 
 				}
-				for(int i = rcount - 1; i > 0 ; --i)
+				for (int i = rcount - 1; i > 0; --i)
 				{
-					if((m_tileMap->getTile(ccount , i) < 0 || m_tileMap->getTile(ccount , i) == 302 ) && m_tileMap->getTile(ccount,i) != 300)
+					if ((m_tileMap->getTile(ccount, i) < 0 || m_tileMap->getTile(ccount, i) == 302) && m_tileMap->getTile(ccount, i) != 300)
 					{
-						if(m_tileMap->getTile(ccount,i) == 302 )
-							m_tileMap->SetTile(ccount,i,303);
+						if (m_tileMap->getTile(ccount, i) == 302)
+							m_tileMap->SetTile(ccount, i, 303);
 						else if (m_tileMap->getTile(ccount, i) == -3)
 							m_tileMap->SetTile(ccount, i, 312);
 						else
-							m_tileMap->SetTile(ccount,i,301);
+							m_tileMap->SetTile(ccount, i, 301);
 					}
 					else
 						break;
 				}
-				for(int i = rcount + 1; i < m_tileMap->getMapHeight(); ++i)
+				for (int i = rcount + 1; i < m_tileMap->getMapHeight(); ++i)
 				{
-					if((m_tileMap->getTile(ccount , i) < 0 || m_tileMap->getTile(ccount , i) == 302 ) && m_tileMap->getTile(ccount,i) != 300)
+					if ((m_tileMap->getTile(ccount, i) < 0 || m_tileMap->getTile(ccount, i) == 302) && m_tileMap->getTile(ccount, i) != 300)
 					{
-						if(m_tileMap->getTile(ccount,i) == 302 )
-							m_tileMap->SetTile(ccount,i,303);
+						if (m_tileMap->getTile(ccount, i) == 302)
+							m_tileMap->SetTile(ccount, i, 303);
 						else if (m_tileMap->getTile(ccount, i) == -3)
 							m_tileMap->SetTile(ccount, i, 312);
 						else
-							m_tileMap->SetTile(ccount,i,301);
+							m_tileMap->SetTile(ccount, i, 301);
 					}
 					else
 						break;
@@ -599,6 +626,11 @@ void GameModel::setLaser()
 bool GameModel::getNext()
 {
 	return goNext;
+}
+
+bool GameModel::getTouchDoor()
+{
+	return touchdoor;
 }
 
 int  GameModel::getNumKeys()
