@@ -119,13 +119,13 @@ void GameView::RenderTileMap()
 		ss << "All keys obtained! ";
 	else
 		ss << "Keys : " << model->getNumKeys() << " / " << model->getTotalKeys();
-	RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 50,750, 10);
+	RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 50,730, 10);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	std::ostringstream ss1;
 	ss1 << "Moves : " << model->getSteps();
-	RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 30, 50, 720, 10);
+	RenderTextOnScreen(model->getTextMesh(), ss1.str(), Color(1, 1, 0), 30, 50, 700, 10);
 	modelStack.PopMatrix();
 }
 #undef tileMap

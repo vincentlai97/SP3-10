@@ -53,7 +53,7 @@ void Controller::Init(GLFWwindow* a)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	if(a == NULL)
-		view->createWindow(1024, 800, "Scene");
+		view->createWindow(1024, 768, "Scene", glfwGetPrimaryMonitor());
 	else
 		view->setWindow(a);
 

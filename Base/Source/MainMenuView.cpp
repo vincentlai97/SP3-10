@@ -69,7 +69,28 @@ void CMainMenuView::RenderButton()
 				Render2DMesh(model->getMesh(i + 1), false);
 			modelStack.PopMatrix();
 		}
+		for(int i = 0 ; i < 5; ++i)
+		{
 
+			modelStack.PushMatrix();
+			std::ostringstream ss;
+			switch(i)
+			{
+			case 0 : ss << "Done by:" ;
+				break;
+			case 1 : ss << "Jun Sen" ;
+				break;
+			case 2 : ss << "Ruoyun" ;
+				break;
+			case 3 : ss << "Andy" ;
+				break;
+			case 4 : ss << "Vincent" ;
+				break;
+
+			}
+			RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 20, i > 0 ? 750  + 145 : 850 , 100 - i * 20, 10);
+			modelStack.PopMatrix();
+		}
 	} modelStack.PopMatrix();
 }
 
