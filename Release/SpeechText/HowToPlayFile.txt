@@ -1,0 +1,15 @@
+SpeechText//Instruction//AfterDisguise.txt
+SpeechText//Instruction//AfterKey.txt
+SpeechText//Instruction//AI.txt
+SpeechText//Instruction//ArrowKeys.txt
+SpeechText//Instruction//BeforeDisguise.txt
+SpeechText//Instruction//BeforeKey.txt
+SpeechText//Instruction//Hologram.txt
+SpeechText//Instruction//HowToUseInventory.txt
+SpeechText//Instruction//Lazer.txt
+SpeechText//Instruction//Mirror.txt
+SpeechText//Instruction//MoveCharacter.txt
+SpeechText//Instruction//OpenInventory.txt
+SpeechText//Instruction//SeeKey.txt
+SpeechText//Instruction//Switch.txt
+SpeechText//Instruction//Trap.txt

@@ -1,0 +1,6 @@
+This red switch seems 
+to link with the red 
+laser...
+
+Press 'E' to switch
+on/off laser(s).

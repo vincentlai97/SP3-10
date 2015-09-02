@@ -1,0 +1,3 @@
+W,A,S,D to move.
+
+Hold "SHIFT" to run.
