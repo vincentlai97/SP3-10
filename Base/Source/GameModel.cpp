@@ -15,17 +15,27 @@ GameModel::GameModel()
 
 GameModel::~GameModel()
 {
+	for (int count = 0; count < NUM_PLAYER; ++count)
+		delete meshPlayer[count];
+	for (int count = 0; count < NUM_SPEECH; ++count)
+		delete meshSpeech[count];
+	delete tile;
+	delete winMesh;
+	delete lose;
+	delete Text;
+	delete shadow;
+	delete[] commands;
+	delete m_tileMap;
+	delete m_itemMap;
+	delete player;
+	for (std::vector<AI *>::iterator it = AIList.begin(); it != AIList.end(); ++it)
+		delete (*it);
 }
 
 void GameModel::Init()
 {
 	Model::Init();
 
-	for (int count = 0; count < PLAYER_TYPE::NUM_PLAYER; ++count)
-	{
-		meshPlayer[count] = new Mesh("null");
-		meshPlayer[count]->textureID[0] = 0;
-	}
 	MeshPlayer();
 	ModelSwitch = 0;
 
@@ -46,7 +56,6 @@ void GameModel::Init()
 
 	m_mapOffset_x = 0;
 	m_mapOffset_y = 0;
-	player = new PlayerCharacter(Vector3(19, 11, 0));
 
 	Text = MeshBuilder::GenerateText("text", 16, 16);
 	Text->textureID[0] = LoadTGA("Image//ArialBlack.tga");
@@ -75,13 +84,8 @@ void GameModel::Init()
 
 	died = false;
 
-	steps = 0;
+	steps = 0; 
 
-	for (int count = 0; count < SPEECH_TYPE::NUM_SPEECH; ++count)
-	{
-		meshSpeech[count] = new Mesh("null");
-		meshSpeech[count]->textureID[0] = 0;
-	}
 	MeshSpeech();
 
 	speech.Textfile("SpeechText//CharacterFile.txt", true);

@@ -66,13 +66,14 @@ private:
 	bool AI_Active;
 	std::vector<Vector3> path;
 	int chaseTurns;
+	bool forward;
 	Mesh* meshAI[NUM_AI];
 	int modelswitch;
 
 public:
 	AI(Vector3 initialPosition = Vector3(), int modelswitch = 1, Mesh* sprite = NULL, Vector3 waypoint = Vector3());
 	~AI();
-
+	
 	void Update(double dt);
 
 	Vector3 getPos();

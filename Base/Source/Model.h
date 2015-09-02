@@ -16,12 +16,13 @@ protected:
 	bool *commands;
 
 public:
+	Model();
+	virtual ~Model();
+
 	virtual void Init();
 	virtual void Update(double dt);
 
 	virtual void setCommands(int command) {}
-
-	void UpdateCameraPos(bool* cmds);
 
 	const std::vector<Object *>& getObjectList() const { return m_objectList; }
 	const Camera3& getCamera() const { return camera; }

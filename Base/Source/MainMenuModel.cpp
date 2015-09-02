@@ -3,6 +3,18 @@
 #include "MeshBuilder.h"
 #include "LoadTGA.h"
 
+CMainMenuModel::CMainMenuModel()
+{
+}
+
+CMainMenuModel::~CMainMenuModel()
+{
+	for (int count = 0; count < NUM_MENU; ++count)
+		delete meshList[count];
+	delete Text;
+	delete[] commands;
+}
+
 void CMainMenuModel::Init()
 {
 	Model::Init();
@@ -50,9 +62,9 @@ Mesh* CMainMenuModel::getBackgroundMesh()
 	return meshList[BACKGROUND];
 }
 
-Mesh* CMainMenuModel::getMesh(int a)
+Mesh* CMainMenuModel::getMesh(int num)
 {
-	return meshList[a];
+	return meshList[num];
 }
 
 void CMainMenuModel::Update(double dt)
@@ -109,7 +121,7 @@ void CMainMenuModel::setCommands(int command)
 		commands[command] = true;
 }
 
-int CMainMenuModel::getCount(void)
+int CMainMenuModel::getCount()
 {
 	return counter;
 }

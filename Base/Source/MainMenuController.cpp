@@ -1,13 +1,11 @@
 #include "MainMenuController.h"
 
-
 CMainMenuController::CMainMenuController(Model* model, View* view) : Controller(model, view)
 , down(false)
 , index(0)
-
 {
-
 }
+
 CMainMenuController::~CMainMenuController()
 {
 }

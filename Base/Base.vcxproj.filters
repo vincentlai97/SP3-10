@@ -44,19 +44,10 @@
     <ClCompile Include="Source\LoadHmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SpriteAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Controller.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameModel2D.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameView2D.cpp">
       <Filter>MVC</Filter>
     </ClCompile>
     <ClCompile Include="Source\Model.cpp">
@@ -70,18 +61,6 @@
     </ClCompile>
     <ClCompile Include="Source\PlayerCharacter.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameController2D.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MouseCharacter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameModelLevel2.cpp">
-      <Filter>MVC</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameModelLevel1.cpp">
-      <Filter>MVC</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainMenuController.cpp">
       <Filter>MVC</Filter>
@@ -184,20 +163,11 @@
     <ClInclude Include="Source\LoadHmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SpriteAnimation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\TileMap.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameModel2D.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameView2D.h">
-      <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\Controller.h">
       <Filter>MVC</Filter>
@@ -213,18 +183,6 @@
     </ClInclude>
     <ClInclude Include="Source\PlayerCharacter.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameController2D.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MouseCharacter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameModelLevel1.h">
-      <Filter>MVC</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameModelLevel2.h">
-      <Filter>MVC</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainMenuController.h">
       <Filter>MVC</Filter>

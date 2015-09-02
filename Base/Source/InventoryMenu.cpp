@@ -1,5 +1,15 @@
 #include "InventoryMenu.h"
 
+InventoryMenu::InventoryMenu()
+{
+}
+
+InventoryMenu::~InventoryMenu()
+{
+	delete Invent;
+	delete border;
+}
+
 void InventoryMenu::Init()
 {
 	Invent = MeshBuilder::GenerateText("Invent",1,1);

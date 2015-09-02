@@ -105,7 +105,6 @@ protected:
 		SKELETON_FACE,
 		TURBAN_FACE,
 		WITCH_FACE,
-		CHARACTER_FACE,
 		TEXTBOX,
 		NUM_SPEECH,
 	};
@@ -151,7 +150,7 @@ protected:
 	std::vector<AI *> AIList;
 public:
 	GameModel();
-	~GameModel();
+	virtual ~GameModel();
 
 	virtual void Init();
 	virtual void Update(double dt);

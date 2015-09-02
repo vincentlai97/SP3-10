@@ -6,7 +6,9 @@
 
 class InventoryMenu 
 {
-public: 
+public:
+	InventoryMenu();
+	~InventoryMenu();
 
 	Mesh *Invent;
 	Mesh *border;

@@ -1,11 +1,11 @@
 #include "MainMenuView.h"
-#include <sstream> 
+
+#include <sstream>
 #include <fstream>
 
 CMainMenuView::CMainMenuView(Model* model) : View(model)
 {
 }
-
 
 CMainMenuView::~CMainMenuView()
 {

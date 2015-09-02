@@ -11,6 +11,9 @@ TileMap::TileMap()
 
 TileMap::~TileMap()
 {
+	for (int count = 0; count < m_mapWidth; ++count)
+		delete[] m_tileMap[count];
+	delete[] m_tileMap;
 }
 
 void TileMap::Init(const float& tileSize, const unsigned& mapWidth, const unsigned& mapHeight, const unsigned& numOfTileWidth, const unsigned& numOfTileHeight)
@@ -20,6 +23,7 @@ void TileMap::Init(const float& tileSize, const unsigned& mapWidth, const unsign
 	m_mapHeight = mapHeight;
 	m_numOfTileWidth = numOfTileWidth;
 	m_numOfTileHeight = numOfTileHeight;
+
 
 	m_tileMap = new int*[m_mapWidth];
 	for (int count = 0; count < m_mapWidth; ++count)

@@ -13,6 +13,7 @@ public:
 
 	enum MainMenu{
 		BACKGROUND,
+
 		START_BUTTON,
 		LOAD_BUTTON,
 		EXIT_BUTTON,
@@ -24,10 +25,17 @@ public:
 		NUM_MENU,
 	};
 
-protected:
+private:
 	Mesh* meshList[NUM_MENU];
 	Mesh* Text;
+
+	int counter;
+	bool chooselvl;
+	bool highscore;
+
 public:
+	CMainMenuModel();
+	~CMainMenuModel();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -35,20 +43,11 @@ public:
 	void setCommands(int command);
 
 	Mesh* getBackgroundMesh();
-
-	Mesh* getMesh(int a);
-
-	int getCount(void);
-
-	bool getChoose(void);
-
 	Mesh* getTextMesh();
+	Mesh* getMesh(int num);
 
+	int getCount();
+	bool getChoose();
 	bool getHighscore();
-
-private:
-	int counter;
-	bool chooselvl;
-	bool highscore;
 };
 

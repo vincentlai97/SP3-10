@@ -3,7 +3,8 @@
 #include "LoS.h"
 #include "Pathfinding.h"
 
-AI::AI(Vector3 initialPosition, int modelswitch, Mesh* sprite, Vector3 waypoint) : Character(initialPosition, sprite)
+AI::AI(Vector3 initialPosition, int modelswitch, Mesh* sprite, Vector3 waypoint)
+: Character(initialPosition, sprite)
 , m_intialPosition(initialPosition)
 , waypoint(waypoint)
 , AI_State(IDLE)
@@ -56,13 +57,14 @@ AI::AI(Vector3 initialPosition, int modelswitch, Mesh* sprite, Vector3 waypoint)
 	meshAI[WITCH]->textureID[0] = LoadTGA("Image//Sprite//Model//WitchModel.tga");
 
 	chaseTurns = -1;
+	forward = true;
 }
 
 AI::~AI()
 {
+	for (int count = 0; count < NUM_AI; ++count)
+		delete meshAI[count];
 }
-
-static bool forward = true;
 
 void AI::UpdatePath(Vector3 playerPos, const TileMap *tileMap, int ModelSwitch)
 {

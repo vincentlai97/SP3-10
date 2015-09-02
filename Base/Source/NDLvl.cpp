@@ -1,10 +1,5 @@
 #include "NDLvl.h"
 
-#pragma comment(lib, "irrKlang.lib")
-using namespace irrklang;
-
-//ISoundEngine* BGM1 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
-
 NDlvl::NDlvl()
 {
 }

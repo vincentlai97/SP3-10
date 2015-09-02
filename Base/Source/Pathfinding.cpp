@@ -3,7 +3,6 @@
 #include <algorithm>
 
 Vector3 _start, _end, _current;
-TileMap *_tileMap;
 std::vector<PathfindingNode *> open;
 std::vector<PathfindingNode *> closed;
 PathfindingNode *__start, *__current;
@@ -24,23 +23,26 @@ std::vector<Vector3> Pathfinding::Pathfind(Vector3 start, Vector3 end, const Til
 	if (start == end) { path.clear(); return path; }
 	_start = start;
 	_end = end;
-	_tileMap = new TileMap(*tileMap);
 	open.clear();
 	closed.clear();
 	PathfindingNode *node = new PathfindingNode(start);
 	open.push_back(node);
 	_current = node->position;
-	while (_current != _end && open.size() != 0) Search();
 	__start = node;
+	while (_current != _end && open.size() != 0) Search(tileMap);
 	__current = closed.back();
 	CreatePath();
+	for (std::vector<PathfindingNode *>::iterator it = open.begin(); it != open.end(); ++it)
+		delete (*it);
+	for (std::vector<PathfindingNode *>::iterator it = closed.begin(); it != closed.end(); ++it)
+		delete (*it);
 	return path;
 }
 
-void Pathfinding::Search()
+void Pathfinding::Search(const TileMap* tileMap)
 {
 	//Find node with smallest g_score
-	PathfindingNode *current = new PathfindingNode(_start);
+	PathfindingNode *current = __start;
 	for (std::vector<PathfindingNode *>::iterator it = open.begin(); it != open.end(); ++it)
 	{
 		if ((*it)->f_score() <= current->f_score())
@@ -60,9 +62,9 @@ void Pathfinding::Search()
 		{
 			if (abs(x) != abs(y))
 			{
-				if (current->position.x + x < 0 || current->position.x + x >= _tileMap->getMapWidth()
-					|| current->position.y + y < 0 || current->position.y + y >= _tileMap->getMapHeight()); //Check out of bounds
-				else if (_tileMap->getTile(current->position.x + x, current->position.y + y) >= 0); //Check for obstacles
+				if (current->position.x + x < 0 || current->position.x + x >= tileMap->getMapWidth()
+					|| current->position.y + y < 0 || current->position.y + y >= tileMap->getMapHeight()); //Check out of bounds
+				else if (tileMap->getTile(current->position.x + x, current->position.y + y) >= 0); //Check for obstacles
 				else
 				{
 					bool exists = false;

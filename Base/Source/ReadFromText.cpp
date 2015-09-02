@@ -1,6 +1,5 @@
 #include "ReadFromText.h"
 
-
 ReadFromText::ReadFromText() :KeyPressed(false), talking(false)
 {
 	LineParagraph = 0;
@@ -15,7 +14,6 @@ ReadFromText::ReadFromText() :KeyPressed(false), talking(false)
 
 ReadFromText::~ReadFromText()
 {
-	
 }
 
 void ReadFromText::Textfile(const char* filename, bool Character)

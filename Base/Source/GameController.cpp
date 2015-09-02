@@ -59,20 +59,6 @@ void GameController::Update()
 		keypressed = true;
 	}
 
-	/*if (IsKeyPressed('1') && modelkey)
-	{
-		modelkey = false;
-		model->setCommands(GameModel::COMMANDS::MODEL_UP);
-	}
-	else if (IsKeyPressed('2') && modelkey)
-	{
-		modelkey = false;
-		model->setCommands(GameModel::COMMANDS::MODEL_DOWN);
-	}
-
-	if (!IsKeyPressed('1') && !IsKeyPressed('2') && !modelkey)
-		modelkey = true;*/
-
 	if (IsKeyPressed(VK_UP))
 		model->setCommands(GameModel::COMMANDS::IDLE_UP);
 	if (IsKeyPressed(VK_DOWN))

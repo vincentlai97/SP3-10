@@ -4,20 +4,17 @@
 #include "MainMenuView.h"
 
 
-class CMainMenuController :
-	public Controller
+class CMainMenuController : public Controller
 {
 private:
 	void Update();
+
 	bool down;
 	int index;
 
 public:
-
 	CMainMenuController(Model* model, View* view);
 	~CMainMenuController();
-
-
 
 };
 

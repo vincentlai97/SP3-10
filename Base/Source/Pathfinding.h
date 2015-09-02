@@ -29,7 +29,7 @@ struct PathfindingNode
 class Pathfinding
 {
 private:
-	static void Search();
+	static void Search(const TileMap* tileMap);
 	static void CreatePath();
 
 public:

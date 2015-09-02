@@ -1,13 +1,15 @@
 #include "Inventory.h"
 
-
 Inventory::Inventory(void)
 {
 }
 
-
 Inventory::~Inventory(void)
 {
+	for (int count = 0; count < 10; ++count)
+		delete PlayerInventory[count];
+	for (int count = 0; count < TOTAL_ITEM; ++count)
+		delete meshlist[count];
 }
 
 void Inventory::Init()
@@ -15,11 +17,6 @@ void Inventory::Init()
 	for(int i = 0 ; i < 10; i++)
 	{
 		PlayerInventory[i] = new Item();
-	}
-
-	for(int i = 0 ; i < 4 ; i++)
-	{
-		meshlist[i] = new Mesh("null");
 	}
 
 	meshlist[MIRROR] = MeshBuilder::GenerateText("border",1,1);
@@ -161,6 +158,7 @@ bool Inventory::UseItem(int num)
 
 		if(PlayerInventory[num]->getCount() == 0)
 		{
+			delete PlayerInventory[num];
 			for(int i = 0 ; PlayerInventory[num+i]->getID() != -1 ; i++)
 			{
 				PlayerInventory[num+i] = PlayerInventory[num+i+1];
