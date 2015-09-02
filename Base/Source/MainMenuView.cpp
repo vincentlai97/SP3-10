@@ -64,6 +64,7 @@ void CMainMenuView::RenderButton()
 			{
 				Render2DMesh(model->getMesh(i + 4), false);
 				modelStack.Scale(1.2, 1.2, 1);
+
 			}
 			else
 				Render2DMesh(model->getMesh(i + 1), false);
@@ -108,10 +109,10 @@ void CMainMenuView::RenderLevel()
 
 			if (model->getCount() == i)
 			{
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 0, 0), 35, 590, 400 - i * 50, 10);
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 0, 0), 35, 590, 350 - i * 50, 10);
 			}
 			else
-				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 600, 400 - i * 50, 10);
+				RenderTextOnScreen(model->getTextMesh(), ss.str(), Color(1, 1, 0), 30, 600, 350 - i * 50, 10);
 			modelStack.PopMatrix();
 		}
 	} modelStack.PopMatrix();
@@ -148,9 +149,9 @@ void CMainMenuView::RenderHighScore()
 			nextcolumn = i  / max;
 			modelStack.PushMatrix();
 			if (highscores[i] == ss.str())
-				RenderTextOnScreen(model->getTextMesh(), "-----", Color(1, 0, 0), 35, 100 + nextcolumn * 300, 750 - (i- nextcolumn * max) * 30, 10);
+				RenderTextOnScreen(model->getTextMesh(), "-----", Color(1, 0, 0), 35, 100 + nextcolumn * 300, 720 - (i- nextcolumn * max) * 30, 10);
 			else
-				RenderTextOnScreen(model->getTextMesh(), highscores[i], Color(1, 0, 0), 35, 100 + nextcolumn * 300, 750 - (i - nextcolumn * max) * 30, 10);
+				RenderTextOnScreen(model->getTextMesh(), highscores[i], Color(1, 0, 0), 35, 100 + nextcolumn * 300, 720 - (i - nextcolumn * max) * 30, 10);
 			modelStack.PopMatrix();
 		}
 	} modelStack.PopMatrix();

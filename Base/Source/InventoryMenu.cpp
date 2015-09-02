@@ -51,7 +51,7 @@ void InventoryMenu::Update()
 
 void InventoryMenu::MoveUp()
 {
-	if (InvCount < 3) InvCount -= 4;
+	if (InvCount > 3) InvCount -= 4;
 }
 
 void InventoryMenu::MoveDown()
